@@ -1,0 +1,23 @@
+Tables we need to link records:
+
+	Genotype / collection site info
+
+	Garden- Plot - Treatment 
+
+	PlantID - Garden - Year - Genotype - Plot - X - Y
+
+Raw data tables:
+
+	For each garden:
+		-individual growth and phenology
+		-individual harvest info (biomass, seed counts)
+
+Derived output:
+	
+	-individual growth x year x Julian day (long or wide?)
+
+	-individual phenology x year x Julian day (long or wide?)
+
+	-individual x year x biomass/fecundity (long)
+
+	
