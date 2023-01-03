@@ -1,0 +1,116 @@
+genotypeID,Site.code,Plant.ID,batch
+g1,AAFC04,C,reno2020
+g2,AAFC05,A,reno2020
+g3,AAFC06,A,reno2020
+g4,AAFC07,A,reno2020
+g5,AAFC08,A,reno2020
+g6,AAFC09,A,reno2020
+g7,AAFC10,C,reno2020
+g8,Blumenthal01,B,reno2020
+g9,Adler05,C,reno2020
+g10,Eshleman1,A,reno2020
+g11,Adler09,B,reno2020
+g12,Schupp02,A,reno2020
+g13,Schupp01,B,reno2020
+g14,Adler13,C,reno2020
+g15,Adler14,C,reno2020
+g16,Adler16,A,reno2020
+g17,Adler17,C,reno2020
+g18,Adler18,A,reno2020
+g19,Barnett01,A,reno2020
+g20,Baughman3,A,reno2020
+g21,Baughman2,A,reno2020
+g22,Baughman5,B,reno2020
+g23,Hufbauer01,A,reno2020
+g24,Blumenthal08,A,reno2020
+g25,Symstad6,A,reno2020
+g26,Chynoweth01,A,reno2020
+g27,Board1,A,reno2020
+g28,Bradford01,A,reno2020
+g29,Chambers01,A,reno2020
+g30,Chambers02,A,reno2020
+g31,Urza01,B,reno2020
+g32,Chambers04,A,reno2020
+g33,Chambers05,A,reno2020
+g34,Chambers06,A,reno2020
+g35,Chambers07,B,reno2020
+g36,Chambers08,A,reno2020
+g37,Chambers09,C,reno2020
+g38,Copeland01,A,reno2020
+g39,Copeland05,A,reno2020
+g40,Copeland09,B,reno2020
+g41,Copeland10,B,reno2020
+g42,Downs 01,A,reno2020
+g43,Downs 02,A,reno2020
+g44,Downs 03,A,reno2020
+g45,Fleishman_01,C,reno2020
+g46,Fleishman_05,B,reno2020
+g47,Fleishman_07,B,reno2020
+g48,Getts1,A,reno2020
+g49,Getts3,A,reno2020
+g50,Getts4,C,reno2020
+g51,Holdrege1,C,reno2020
+g52,Hufft01,A,reno2020
+g53,Hufft02,A,reno2020
+g54,JackieOtt1,A,reno2020
+g55,JackieOtt2,C,reno2020
+g56,JackieOtt5,C,reno2020
+g57,JackieOtt6,B,reno2020
+g58,JackieOtt7,A,reno2020
+g59,Lavin01,B,reno2020
+g60,Lavin02,C,reno2020
+g61,Lee 01,A,reno2020
+g62,Lee 02,A,reno2020
+g63,Lee 03,A,reno2020
+g64,Lee 04,A,reno2020
+g65,Leger 1,A,reno2020
+g66,Maron1,A,reno2020
+g67,Maron2,A,reno2020
+g68,Porensky01,C,reno2020
+g69,Porensky17,A,reno2020
+g70,Porensky12,B,reno2020
+g71,Porensky30,A,reno2020
+g72,Pyke 03,C,reno2020
+g73,Pyke 08,A,reno2020
+g74,Pyke 21,C,reno2020
+g75,Pyle01,A,reno2020
+g76,Pyle09,C,reno2020
+g77,Pyle10,A,reno2020
+g78,Pyle12,C,reno2020
+g79,Pyle15,B,reno2020
+g80,Pyle16,B,reno2020
+g81,Pyle17,B,reno2020
+g82,Pyle19,B,reno2020
+g83,Reed01,A,reno2020
+g84,Reed03,B,reno2020
+g85,Rinella01,C,reno2020
+g86,Schupp03,B,reno2020
+g87,Schupp04,A,reno2020
+g88,Schupp05,C,reno2020
+g89,Symstad1,B,reno2020
+g90,Symstad2,A,reno2020
+g91,Symstad3,A,reno2020
+g92,Symstad4,B,reno2020
+g93,Urza02,A,reno2020
+g94,Urza03,A,reno2020
+g95,Wilcox02,C,reno2020
+g96,Chynoweth02,A,reno2020
+g97,Chynoweth03,A,reno2020
+g98,Chynoweth05,C,reno2020
+g99,Chynoweth07,B,reno2020
+g100,Chynoweth08,A,reno2020
+g101,Shriver01,B,reno2020
+g102,Shriver02,B,reno2020
+g103,Davies03,C,reno2020
+g104,Germino BOP 01,B,reno2020
+g105,Blumenthal10,A,reno2020
+g150,Mancillas01,B,logan2021
+g151,Rinella01,B,logan2021
+g152,Copeland,C,logan2021
+g153,Fredericksburg1,,logan2022
+g154,Clark Island1,,logan2022
+g155,Glyndon1,,logan2022
+g156,Edmonton1,,logan2022
+g157,Ice Caves,,logan2022
+g158,DocEnlgishbluffER1,,logan2022
+g159,Konza Prairie,,logan2022

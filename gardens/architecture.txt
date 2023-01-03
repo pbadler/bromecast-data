@@ -1,4 +1,6 @@
 Tables we need to link records:
+	
+	Garden info
 
 	Genotype / collection site info
 

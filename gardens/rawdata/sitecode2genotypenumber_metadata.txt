@@ -1,0 +1,8 @@
+This table links each genotype used in the common garden experiments 
+to the site where it was collected and site and year where seeds were multiplied.
+Contents of each column described below.
+
+genotypeID: unique code assigned to each genotype 
+Site.code: Seed collection site	
+Plant.ID: Identifies which of the three collected plants was grown out (A, B, or C)	
+batch: Year and location of greenhouse seed grow out
