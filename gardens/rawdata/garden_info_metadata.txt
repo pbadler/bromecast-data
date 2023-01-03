@@ -1,0 +1,5 @@
+garden_name: descriptive name of common garden site
+garden_code: abbreviated code	
+garden_nickname: alternative descriptive name	
+garden_lat: latitude
+garden_lon: longitude
