@@ -54,3 +54,43 @@ pgD$jday <- ifelse(pgD$jday < 270, pgD$jday, pgD$jday-365)
 pgD <- dplyr::select(pgD, -date) # drop date column
 pgD <- pgD[,c(1,10,2:9)] # reorder columns
 pgD <- pgD[order(pgD$plantID,pgD$jday),] # sort by plantID then Julian day
+
+# check for bad "live" values
+table(pgD$live) # missing, N, Y 
+pgD[pgD$live=="missing",]
+
+# check for bad "v" values
+table(pgD$v)  # looks good except for "missing"
+
+# check for bad length values
+# first turn missing values into NAs then make length numeric
+pgD$length_mm[pgD$length_mm=="missing"] <- NA
+pgD$length_mm <- as.numeric(pgD$length_mm)
+hist(pgD$length_mm) # looks good
+min(pgD$length_mm,na.rm=T) # looks good
+
+# compile notes
+tmp <- pgD$notes
+tmp[tmp==""] <- NA
+tmp <- tmp[!is.na(tmp)]
+tmp <- unique(tmp,MARGIN=2)
+tmp <- data.frame(notes=tmp,action=NA)
+write.csv(tmp,file=paste0("../deriveddata/",dosite,doyear,"_notes.csv"),row.names=F)
+# open as a spreadsheet, fill in action column by hand
+
+rm(rawD)
+
+###
+### Flag suspicious records
+###
+
+# set up dataframe to hold flags
+tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),header=T)
+flagD <- data.frame(plantID = tmp$plantID,
+                    resurrection=NA,
+                    herbivory=NA,
+                    frost_heave=NA,
+                    pheno_regress=NA,
+                    missing=NA)
+rm(tmp)
+
