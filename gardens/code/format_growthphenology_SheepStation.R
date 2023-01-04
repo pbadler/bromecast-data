@@ -1,17 +1,5 @@
 
-# start clean
-rm(list=ls())
 
-# To use relative paths, we need to set working directory to source file location 
-# (this method only works on Rstudio)
-library(rstudioapi)
-current_path <- getActiveDocumentContext()$path 
-setwd(dirname(current_path )) # set working directory to location of this file
-
-# load packages
-library(tidyr)
-library(dplyr)
-library(lubridate)
 
 doyear <- 2022 # growing season to do
 dosite <- "SS" # code for focal site
@@ -57,14 +45,18 @@ pgD <- pgD[order(pgD$plantID,pgD$jday),] # sort by plantID then Julian day
 
 # check for bad "live" values
 table(pgD$live) # missing, N, Y 
-pgD[pgD$live=="missing",]
+pgD[pgD$live=="missing",] 
+# PBA: I inspected each plant with one or more missing 
+# values, decided that cleanest solution is to simply
+# remove all missing records (dates). Most occur at
+# first visit or after a plant had already died.
+pgD <- subset(pgD,live!="missing")
 
 # check for bad "v" values
-table(pgD$v)  # looks good except for "missing"
+table(pgD$v)  # looks good 
 
 # check for bad length values
 # first turn missing values into NAs then make length numeric
-pgD$length_mm[pgD$length_mm=="missing"] <- NA
 pgD$length_mm <- as.numeric(pgD$length_mm)
 hist(pgD$length_mm) # looks good
 min(pgD$length_mm,na.rm=T) # looks good
@@ -80,17 +72,5 @@ write.csv(tmp,file=paste0("../deriveddata/",dosite,doyear,"_notes.csv"),row.name
 
 rm(rawD)
 
-###
-### Flag suspicious records
-###
-
-# set up dataframe to hold flags
-tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),header=T)
-flagD <- data.frame(plantID = tmp$plantID,
-                    resurrection=NA,
-                    herbivory=NA,
-                    frost_heave=NA,
-                    pheno_regress=NA,
-                    missing=NA)
-rm(tmp)
-
+# write pgD to file
+write.csv(pgD,file=paste0("../deriveddata/",dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)
