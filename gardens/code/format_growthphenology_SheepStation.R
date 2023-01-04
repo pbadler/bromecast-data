@@ -10,6 +10,7 @@ setwd(dirname(current_path )) # set working directory to location of this file
 
 # load packages
 library(tidyr)
+library(dplyr)
 library(lubridate)
 
 doyear <- 2022 # growing season to do
@@ -18,14 +19,14 @@ dosite <- "SS" # code for focal site
 # import raw growth and phenology data
 rawD <- read.csv("../rawdata/phenology_Sheep_Station_2021-2022_MASTER.csv",header=T)
 
-# put Date in date format
-rawD$Date <- mdy(rawD$Date)
-
 # remove capital letters from column headers 
 # (this will make it easier to harmonize data across sites)
 names(rawD) <- tolower(names(rawD))
 
-# reformat continuous plot numbering to block and subplot
+# change date field from character to date format
+rawD$date <- mdy(rawD$date)
+
+# IF plots are numbered 1 to 40, reformat to block and subplot 
 names(rawD)[which(names(rawD)=="plot")] <- "cum_plot"
 tmp <- data.frame(block=sort(rep(1:10,4)),
                   plot=rep(1:4,10),
@@ -34,8 +35,22 @@ rawD<-merge(rawD,tmp)
 rm(tmp)
 
 # assign each individual plant a unique ID, link to grid positions
-tmp <- rawD[,c("site","block","plot","x","y")]
-plant_key <- unique(tmp,MARGIN=2)
+plant_key <- rawD[,c("site","block","plot","x","y")]
+plant_key <- unique(plant_key,MARGIN=2)
 plant_key$plantID <- paste0(dosite,doyear,"_",1:nrow(plant_key))
 rawD <- merge(rawD,plant_key)
-#write.csv(plant_key,...)
+plant_key$site <- dosite
+plant_key$year <- doyear
+plant_key <- plant_key[,c(6,1,7,2:5)]
+write.csv(plant_key,file=paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),row.names=F)
+rm(plant_key)
+
+# pull out and format phenology and growth data and notes for each plant
+pgD <- rawD[,c("plantID","date","live","v","length_mm","herbivory","frost_heave","tillers","harvested","notes")]
+# get Julian day
+pgD$jday <-yday(pgD$date)
+# make fall days negative
+pgD$jday <- ifelse(pgD$jday < 270, pgD$jday, pgD$jday-365)
+pgD <- dplyr::select(pgD, -date) # drop date column
+pgD <- pgD[,c(1,10,2:9)] # reorder columns
+pgD <- pgD[order(pgD$plantID,pgD$jday),] # sort by plantID then Julian day
