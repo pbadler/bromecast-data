@@ -16,8 +16,22 @@ flagD <- data.frame(plantID = tmp$plantID,
                     frostheave_pregerm=NA,
                     frostheave_postgerm=NA,
                     pheno_regress=NA,
+                    growth_regress=NA,
                     bad_position=NA)
 rm(tmp)
+
+# get list of phenological stages, and assign numeric order
+phenoD <- data.frame("v"=sort(unique(pgD$v)))
+phenoD$v_numeric <- NA
+phenoD$v_numeric[phenoD$v=="V0"] <- 1
+phenoD$v_numeric[phenoD$v=="V1"] <- 2
+phenoD$v_numeric[phenoD$v=="V2"] <- 3
+phenoD$v_numeric[phenoD$v=="V3"] <- 4
+phenoD$v_numeric[phenoD$v=="V3+"] <- 5
+phenoD$v_numeric[phenoD$v=="BS"] <- 6
+phenoD$v_numeric[phenoD$v=="FG"] <- 7
+#check!
+print(phenoD)
 
 # loop through plantIDs and check for each flag
 for(i in 1:nrow(flagD)){
@@ -38,8 +52,13 @@ for(i in 1:nrow(flagD)){
     
     flagD$late_emergence[i] <- flag_lateemergence(dodata)
     
+    flagD$resurrection[i] <- flag_resurrection(dodata)
+    
+    flagD$pheno_regress[i] <- flag_phenoregress(dodata,phenoD)
+    
+    flagD$growth_regress[i] <- flag_growthregress(dodata)
     
   } # end if else
   
-}
+} # next i
 
