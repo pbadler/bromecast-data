@@ -18,6 +18,30 @@ flag_lateemergence <- function(plant_data){
   }
 }
 
+get_emergence_date <- function(plant_data){
+  # date of first presence
+  if(sum(plant_data$live=="Y")==0){
+    return(NA)  # never emerged
+  }else{
+    # return date of first presence
+    tmp <- which(plant_data$live=="Y")
+    if(length(tmp)>1) tmp <- tmp[1] 
+    return(plant_data$jday[tmp])
+  }
+}
+
+get_death_date <- function(plant_data){
+  # date of first absence after a presence
+  out <- NA  # death not observed
+  tmp <- ifelse(plant_data$live=="Y",1,0) 
+  tmp <- diff(tmp)
+  deaths <- which(tmp==-1)
+  if(length(deaths)>0){
+      out <- plant_data$jday[1+min(deaths)]
+  }
+  return(out)
+}
+
 flag_resurrection <- function(plant_data){
   # was plant observed alive after being observed dead?
   out <- NA
@@ -53,6 +77,30 @@ flag_growthregress <- function(plant_data){
     if(sum(!is.na(tmp)>0)){
        if(min(tmp,na.rm=T)<0) out <- min(tmp,na.rm=T)
     }
+  }
+  return(out)
+}
+
+flag_frostheave <- function(plant_data){
+  out <- NA
+  # date of first frost heave
+  tmp <- which(plant_data$frost_heave=="Y")
+  # return date 
+  if(length(tmp)>1){
+    tmp <- min(tmp)
+    out <- plant_data$jday[tmp]
+  }
+  return(out)
+}
+
+flag_herbivory <- function(plant_data){
+  out <- NA
+  # date of first herbivory observation
+  tmp <- which(plant_data$herbivory=="Y")
+  # return date 
+  if(length(tmp)>1){
+    tmp <- min(tmp)
+    out <- plant_data$jday[tmp]
   }
   return(out)
 }

@@ -10,13 +10,13 @@ pgD <- pgD[order(pgD$plantID,pgD$jday),] # ensure chronological order
 tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),header=T)
 flagD <- data.frame(plantID = tmp$plantID,
                     missing_plant=NA,
-                    late_emergence=NA,
-                    resurrection=NA,
-                    herbivory=NA,
-                    frostheave_pregerm=NA,
-                    frostheave_postgerm=NA,
+                    emergence_date=NA,
+                    death_date=NA,
+                    resurrection_date=NA,
                     pheno_regress=NA,
-                    growth_regress=NA,
+                    growth_regress_mm=NA,
+                    herbivory_date=NA,
+                    frostheave_date=NA,  # at SS, frost heaving not tracked til day 122
                     bad_position=NA)
 rm(tmp)
 
@@ -28,8 +28,9 @@ phenoD$v_numeric[phenoD$v=="V1"] <- 2
 phenoD$v_numeric[phenoD$v=="V2"] <- 3
 phenoD$v_numeric[phenoD$v=="V3"] <- 4
 phenoD$v_numeric[phenoD$v=="V3+"] <- 5
-phenoD$v_numeric[phenoD$v=="BS"] <- 6
-phenoD$v_numeric[phenoD$v=="FG"] <- 7
+phenoD$v_numeric[phenoD$v=="BS"] <- 6  # boot stage
+phenoD$v_numeric[phenoD$v=="FG"] <- 7 # flowering green
+phenoD <- phenoD[order(phenoD$v_numeric),]
 #check!
 print(phenoD)
 
@@ -50,13 +51,19 @@ for(i in 1:nrow(flagD)){
     
     check_chronology(dodata)
     
-    flagD$late_emergence[i] <- flag_lateemergence(dodata)
+    flagD$emergence_date[i] <- get_emergence_date(dodata)
     
-    flagD$resurrection[i] <- flag_resurrection(dodata)
+    flagD$death_date[i] <- get_death_date(dodata)
+    
+    flagD$resurrection_date[i] <- flag_resurrection(dodata)
     
     flagD$pheno_regress[i] <- flag_phenoregress(dodata,phenoD)
     
-    flagD$growth_regress[i] <- flag_growthregress(dodata)
+    flagD$growth_regress_mm[i] <- flag_growthregress(dodata)
+    
+    flagD$frostheave_date[i] <- flag_frostheave(dodata)
+    
+    flagD$herbivory_date[i] <- flag_herbivory(dodata)
     
   } # end if else
   
