@@ -4,7 +4,16 @@
 
 # import formatted growth and phenology data
 pgD <- read.csv(paste0("../deriveddata/",dosite,doyear,"_growthphenology_by_plantID.csv"),header=T)
-pgD <- pgD[order(pgD$plantID,pgD$jday),] # ensure chronological order
+
+# import and merge standardized notes
+tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_notes_actions.csv"),header=T)
+tmp <- subset(tmp, action=="flag")  # drop "ignore" records
+tmp <- tmp[,c("notes","standard_note")] # drop "action" column
+pgD <- merge(pgD,tmp,all.x=T)
+pgD <- pgD[,c(2:ncol(pgD),1)] # reorder columns, put raw notes last
+
+# ensure chronological order
+pgD <- pgD[order(pgD$plantID,pgD$jday),] 
 
 # import plantID list and set up dataframe to hold flags
 tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),header=T)
@@ -16,8 +25,9 @@ flagD <- data.frame(plantID = tmp$plantID,
                     pheno_regress=NA,
                     growth_regress_mm=NA,
                     herbivory_date=NA,
-                    frostheave_date=NA,  # at SS, frost heaving not tracked til day 122
-                    bad_position=NA)
+                    frostheave_date=NA,  # at SS, frost heaving not tracked til day 122 in 2022
+                    bad_position=NA,
+                    other=NA)
 rm(tmp)
 
 # get list of phenological stages, and assign numeric order
@@ -61,11 +71,18 @@ for(i in 1:nrow(flagD)){
     
     flagD$growth_regress_mm[i] <- flag_growthregress(dodata)
     
+    flagD$herbivory_date[i] <- flag_herbivory(dodata)
+    
     flagD$frostheave_date[i] <- flag_frostheave(dodata)
     
-    flagD$herbivory_date[i] <- flag_herbivory(dodata)
+    flagD$bad_position[i] <- flag_badposition(dodata)
+    
+    flagD$other[i] <- flag_other(dodata)
     
   } # end if else
   
 } # next i
+
+# write flags to file
+write.csv(flagD,file=paste0("../deriveddata/",dosite,doyear,"_flags.csv"),row.names=F)
 

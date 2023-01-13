@@ -85,8 +85,10 @@ flag_frostheave <- function(plant_data){
   out <- NA
   # date of first frost heave
   tmp <- which(plant_data$frost_heave=="Y")
+  # add notes about herbivory
+  tmp <- c(tmp,which(plant_data$standard_note=="frostheave"))
   # return date 
-  if(length(tmp)>1){
+  if(length(tmp)>0){
     tmp <- min(tmp)
     out <- plant_data$jday[tmp]
   }
@@ -97,10 +99,40 @@ flag_herbivory <- function(plant_data){
   out <- NA
   # date of first herbivory observation
   tmp <- which(plant_data$herbivory=="Y")
+  # add notes about herbivory
+  tmp <- c(tmp,which(plant_data$standard_note=="herbivory"))
   # return date 
-  if(length(tmp)>1){
+  if(length(tmp)>0){
     tmp <- min(tmp)
     out <- plant_data$jday[tmp]
+  }
+  return(out)
+}
+
+flag_badposition <- function(plant_data){
+  out <- NA
+  # date of bad position observation
+  tmp <- which(plant_data$standard_note=="badposition")
+  if(length(tmp)>0){
+    tmp <- min(tmp)
+    out <- plant_data$jday[tmp]
+  }
+  return(out)
+}
+
+flag_other <- function(plant_data){
+  out <- NA
+  # include other consequential notes
+  tmp <- which(!is.na(plant_data$standard_note))
+  if(length(tmp)>0){
+    # remove frostheave, herbivory and badposition (these dealt with separately)
+    tmp <- plant_data$standard_note[tmp]
+    notes <- tmp[which(tmp != "herbivory" & tmp != "frostheave" & tmp != "badposition")]
+    if(length(notes)>0){
+      notes <- unique(notes)  # prevent duplicates
+      notes <- paste(notes,collapse='-') # if multiple notes, combine
+      out <- notes
+    }
   }
   return(out)
 }
