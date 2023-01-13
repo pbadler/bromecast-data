@@ -1,0 +1,7 @@
+Field notes about individual plants. Notes are compiled and then written
+to a file in the derrived data directory. We then went through that 
+file by hand, adding new columns for actions to take.
+
+notes: original note recorded in field
+action: ignore or flag
+standard_note: translation of the original note into a few categories to match existing flags

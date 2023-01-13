@@ -1,5 +1,0 @@
-Field notes about individual plants
-
-notes: original note recorded in field
-action: ignore or flag
-standard_note: translation of the original note into a few categories to match existing flags
