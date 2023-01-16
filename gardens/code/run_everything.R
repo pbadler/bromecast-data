@@ -34,3 +34,13 @@ source("flag_growthphenology.R")
 ###
 ### 3. Combine growth and phenology data from all sites and years
 ###
+
+# to do
+
+###
+### 4. Put everything back together to do an analysis
+###
+
+source("example_analyses.R")
+
+

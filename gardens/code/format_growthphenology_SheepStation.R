@@ -23,13 +23,13 @@ rawD<-merge(rawD,tmp)
 rm(tmp)
 
 # assign each individual plant a unique ID, link to grid positions
-plant_key <- rawD[,c("site","block","plot","x","y")]
+plant_key <- rawD[,c("site","block","plot","x","y","genotype","growout")]
 plant_key <- unique(plant_key,MARGIN=2)
 plant_key$plantID <- paste0(dosite,doyear,"_",1:nrow(plant_key))
 rawD <- merge(rawD,plant_key)
 plant_key$site <- dosite
 plant_key$year <- doyear
-plant_key <- plant_key[,c(6,1,7,2:5)]
+plant_key <- plant_key[,c(8,1,9,2:7)]
 write.csv(plant_key,file=paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),row.names=F)
 rm(plant_key)
 

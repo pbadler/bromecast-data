@@ -1,0 +1,65 @@
+
+###
+###  Assemble complete data set
+###
+
+# import formatted growth and phenology data
+pgD <- read.csv(paste0("../deriveddata/",dosite,doyear,"_growthphenology_by_plantID.csv"),header=T)
+
+# import and join individual plant info
+tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),header=T)
+pgD <- merge(pgD,tmp)
+
+# import and join treatment data
+tmp <- read.csv(paste0("../rawdata/garden_treatments.csv"),header=T)
+names(tmp)[which(names(tmp)=="garden")] <- "site"  # rename 
+tmp <- tmp[,-which(names(tmp)=="cum_plot")]  # drop column
+pgD <- merge(pgD,tmp)
+
+# import and join flags
+tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_flags.csv"),header=T)
+pgD <- merge(pgD,tmp)
+
+rm(tmp)
+
+# cut missing plants and plants with suspicious positions
+sum(!is.na(pgD$missing_plant))  # no missing plants in this data set
+sum(!is.na(pgD$bad_position)) 
+pgD[which(!is.na(pgD$bad_position)),] # these do look bad!
+pgD <- subset(pgD,is.na(pgD$bad_position))
+
+###
+### Analyze time to flowering
+###
+
+emergD <- group_by(pgD,plantID) %>% summarise(emerged=sum(live=="Y"))
+emergD$emerged <- ifelse(emergD$emerged<1,0,1)
+
+# get treatment info and relevant flags for each plant
+tmp <- unique(pgD[,c("site","year","plantID","block","plot","density",
+              "gravel","genotype","growout","emergence_date","frostheave_date")],
+              MARGIN=2)
+
+emergD <- merge(emergD,tmp)
+
+# remove plants affected by frostheave BEFORE germination
+drop <- which(emergD$frostheave_date<emergD$emergence_date)
+emergD <- emergD[-drop,]
+
+# total emergence probabiliy
+sum(emergD$emerged)/nrow(emergD)
+
+# do simple glm, no random effects (plot within block should be included)
+m1 <- glm(emerged ~ gravel*density, family="binomial",data=emergD)
+summary(m1)
+
+###
+### Analyze time to flowering
+###
+
+# Only work with plants that made it to "FG" (flowering green) 
+# Not sure how to handle plants that emerged and survived but never flowered
+
+tmp <- pgD[,c("plantID","v")]
+tmp <- tmp[tmp$v=="FG",]
+tmp <- unique(tmp, MARGIN=2)

@@ -1,0 +1,8 @@
+Treatment info for each common garden (data for Cheyenne currently missing).
+
+garden: Which common garden (codes)
+density: Planting density (hi or lo)
+gravel: gravel color (black or white)
+block: Planting block
+plot: plot number (within block)
+cum_plot: plot number 1-40
