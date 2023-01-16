@@ -60,6 +60,30 @@ summary(m1)
 # Only work with plants that made it to "FG" (flowering green) 
 # Not sure how to handle plants that emerged and survived but never flowered
 
+# get list of plants that made it to FG
 tmp <- pgD[,c("plantID","v")]
 tmp <- tmp[tmp$v=="FG",]
 tmp <- unique(tmp, MARGIN=2)
+
+# subset full data set to these plants
+keep <- which(pgD$plantID %in% tmp$plantID)
+flowerD <- pgD[keep,]
+
+# keep earliest flowering data
+flowerD <- flowerD %>% group_by(plantID) %>% summarise(flowerday = min(jday[v=="FG"]))
+
+# get treatment info and relevant flags for each plant
+tmp <- unique(pgD[,c("site","year","plantID","block","plot","density",
+                     "gravel","genotype","growout","resurrection_date", "pheno_regress",    
+                     "growth_regress_mm", "herbivory_date", "frostheave_date")],
+              MARGIN=2)
+
+flowerD <- merge(flowerD,tmp)
+
+flowerD$genotype <- as.factor(flowerD$genotype)
+
+# do simple linear model (no random effects) with no filtering of flagged records
+m1 <- lm(flowerday ~ gravel*density + genotype,data=flowerD)
+summary(m1)
+
+
