@@ -53,12 +53,16 @@ sum(emergD$emerged)/nrow(emergD)
 m1 <- glm(emerged ~ gravel*density, family="binomial",data=emergD)
 summary(m1)
 
+rm(emergD)
+
 ###
 ### Analyze time to flowering
 ###
 
 # Only work with plants that made it to "FG" (flowering green) 
 # Not sure how to handle plants that emerged and survived but never flowered
+
+library(lme4) # should switch to mgcv
 
 # get list of plants that made it to FG
 tmp <- pgD[,c("plantID","v")]
@@ -70,7 +74,7 @@ keep <- which(pgD$plantID %in% tmp$plantID)
 flowerD <- pgD[keep,]
 
 # keep earliest flowering data
-flowerD <- flowerD %>% group_by(plantID) %>% summarise(flowerday = min(jday[v=="FG"]))
+flowerD <- flowerD %>% group_by(plantID) %>% summarise(flowerday = min(jday[v=="FG"],na.rm=T))
 
 # get treatment info and relevant flags for each plant
 tmp <- unique(pgD[,c("site","year","plantID","block","plot","density",
@@ -82,8 +86,35 @@ flowerD <- merge(flowerD,tmp)
 
 flowerD$genotype <- as.factor(flowerD$genotype)
 
-# do simple linear model (no random effects) with no filtering of flagged records
-m1 <- lm(flowerday ~ gravel*density + genotype,data=flowerD)
-summary(m1)
+# drop plants that "resurrect" before flowering
+drop <- which(flowerD$flowerday>flowerD$resurrection_date)
+flowerD <- flowerD[-drop,]
 
+# do linear model, ignoring the rest of the flags
+m1 <- lmer(flowerday ~ gravel*density + (1| block) + (1|genotype),data=flowerD)
+summary(m1)
+VarCorr(m1)
+
+### repeat, with extremely conservative data set, drop all flags
+drop <- which(flowerD$pheno_regress<0 | !is.na(flowerD$herbivory_date) |
+                !is.na(flowerD$frostheave_date) )
+flowerD2 <- flowerD[drop,]  # lose almost half the data
+m2 <- lmer(flowerday ~ gravel*density + (1| block) + (1|genotype),data=flowerD2)
+summary(m2)
+VarCorr(m2)
+
+### A less extreme approach to filtering
+
+# Let's ignore frostheaving--if it killed the plant, plant wouldn't
+# be in the flowering dataset.
+# Next, drop records that reverse 2 or more phenophases
+drop <- which(flowerD$pheno_regress<1) 
+flowerD3 <- flowerD[-drop,]
+# Next, drop records where herbivory occurs 
+# AND large growth regression occurs (e.g., serious herbivory)
+drop <- which(!is.na(flowerD3$herbivory_date) &  flowerD3$growth_regress_mm < -15 )
+flowerD3 <- flowerD3[-drop,]
+m3 <- lmer(flowerday ~ gravel*density + (1|block) + (1|genotype),data=flowerD3)
+summary(m3)
+VarCorr(m3)
 
