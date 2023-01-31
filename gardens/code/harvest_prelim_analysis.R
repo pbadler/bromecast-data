@@ -26,4 +26,4 @@ D$seed_mass_sub <- as.numeric(D$seed_mass_sub) # one string left, replaced by NA
 
 # scale up subsampled seed count
 tmp <- which(D$subsampled==T)
-D$seed_count_whole[tmp] <- D$seed_mass_sub[tmp]*(D$inflor_mass[tmp]/(D$biomass_sub[tmp] + D$seed_mass_sub[tmp]))
+D$seed_count_whole[tmp] <- D$seed_count_sub[tmp]*(D$inflor_mass[tmp]/(D$biomass_sub[tmp] + D$seed_mass_sub[tmp]))
