@@ -29,7 +29,7 @@ pgD[which(!is.na(pgD$bad_position)),] # these do look bad!
 pgD <- subset(pgD,is.na(pgD$bad_position))
 
 ###
-### Analyze time to flowering
+### Analyze emergence probability
 ###
 
 emergD <- group_by(pgD,plantID) %>% summarise(emerged=sum(live=="Y"))
@@ -46,7 +46,7 @@ emergD <- merge(emergD,tmp)
 drop <- which(emergD$frostheave_date<emergD$emergence_date)
 emergD <- emergD[-drop,]
 
-# total emergence probabiliy
+# total emergence probability
 sum(emergD$emerged)/nrow(emergD)
 
 # do simple glm, no random effects (plot within block should be included)

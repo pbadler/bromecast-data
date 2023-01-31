@@ -1,0 +1,29 @@
+
+# start clean
+rm(list=ls())
+
+# To use relative paths, we need to set working directory to source file location 
+# (this method only works on Rstudio)
+library(rstudioapi)
+current_path <- getActiveDocumentContext()$path 
+setwd(dirname(current_path )) # set working directory to location of this file
+
+library(ggplot2)
+library(dplyr)
+library(ggnewscale)
+library(cowplot)
+
+D <- read.csv(file = "../rawdata/Sheep_Station_CG2022_harvest_1-30-23.csv") 
+D$treatment <- paste(D$Density, D$Albedo)
+
+# get rid of dead plants (with no seeds)
+D <- subset(D,D$Live=="Y")
+D$subsampled <- ifelse(is.na(D$seed_count_sub),F,T) 
+
+# fix missing values in seed_mass_sub
+D$seed_mass_sub[D$subsampled==F] <- NA
+D$seed_mass_sub <- as.numeric(D$seed_mass_sub) # one string left, replaced by NA here
+
+# scale up subsampled seed count
+tmp <- which(D$subsampled==T)
+D$seed_count_whole[tmp] <- D$seed_mass_sub[tmp]*(D$inflor_mass[tmp]/(D$biomass_sub[tmp] + D$seed_mass_sub[tmp]))
