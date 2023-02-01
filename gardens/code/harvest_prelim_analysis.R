@@ -18,12 +18,21 @@ D$treatment <- paste(D$Density, D$Albedo)
 
 # get rid of dead plants (with no seeds)
 D <- subset(D,D$Live=="Y")
-D$subsampled <- ifelse(is.na(D$seed_count_sub),F,T) 
 
-# fix missing values in seed_mass_sub
+# fill empty values in V (phenology)
+D$V[D$V==""] <- "NOFLOWERS"
+D$seed_count_whole[D$V=="NOFLOWERS"] <- 0
+
+# identify subsampled plants
+D$subsampled <- ifelse(is.na(D$seed_count_whole),T,F) 
+
+# fix empty string values ("") in seed_mass_sub
 D$seed_mass_sub[D$subsampled==F] <- NA
 D$seed_mass_sub <- as.numeric(D$seed_mass_sub) # one string left, replaced by NA here
 
 # scale up subsampled seed count
 tmp <- which(D$subsampled==T)
 D$seed_count_whole[tmp] <- D$seed_count_sub[tmp]*(D$inflor_mass[tmp]/(D$biomass_sub[tmp] + D$seed_mass_sub[tmp]))
+
+# remove plants with no seeds
+D <-  subset(D,-D$seed_count_whole==0)
