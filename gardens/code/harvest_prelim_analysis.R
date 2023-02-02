@@ -40,21 +40,43 @@ D <-  subset(D,D$seed_count_whole!=0)
 # remove plants with missing seed counts
 D <-  subset(D,!is.na(D$seed_count_whole))
 
+# remove plants that dropped seeds
+tmp <- grep("DROP",D$notes)
+D <- D[-tmp,]
+D <- subset(D, D$drop_seed=="N")
+
+# remove plants with smut
+D <- subset(D,D$notes != "smut")
+D <- subset(D,D$notes != "SMUT")
+
+# lots more cleaning to do, broken tillers, etc. ...
 
 ### look for relationships with whole samples
 
-plot(D$biomass_whole,D$seed_count_whole)
-plot(sqrt(D$biomass_whole),sqrt(D$seed_count_whole))
+# biomass
+plot(D$biomass_whole,D$seed_count_whole,xlab="biomass",ylab="seeds",col=as.numeric(as.factor(D$treatment)))
+legend("topleft",unique(D$treatment),pch=1,col=unique(as.numeric(as.factor(D$treatment))))
 
-plot(D$inflor_mass,D$seed_count_whole)
-plot(sqrt(D$inflor_mass),sqrt(D$seed_count_whole))
+mBio <- lm(seed_count_whole~biomass_whole*Density*Albedo,data=D,na.action=na.omit)
+summary(mBio)
+        
+plot(sqrt(D$biomass_whole),sqrt(D$seed_count_whole),xlab="sqrt(biomass)",ylab="sqrt(seeds)",col=as.numeric(as.factor(D$treatment)))
+legend("topleft",unique(D$treatment),pch=1,col=unique(as.numeric(as.factor(D$treatment))))
 
-# try again with cleaner data set
-D_clean <- subset(D, D$drop_seed=="N")
+mBio_sqrt <- lm(sqrt(seed_count_whole)~I(sqrt(biomass_whole))*Density*Albedo,data=D,na.action=na.omit)
+summary(mBio_sqrt)
 
-plot(D_clean$biomass_whole,D_clean$seed_count_whole)
-plot(sqrt(D_clean$biomass_whole),sqrt(D_clean$seed_count_whole))
+# inflorescence
+plot(D$inflor_mass,D$seed_count_whole,xlab="infl mass",ylab="seeds",col=as.numeric(as.factor(D$treatment)))
+legend("topleft",unique(D$treatment),pch=1,col=unique(as.numeric(as.factor(D$treatment))))
 
-plot(D$inflor_mass,D$seed_count_whole)
-plot(sqrt(D_clean$inflor_mass),sqrt(D_clean$seed_count_whole))
+mInfl <- lm(seed_count_whole~inflor_mass*Density*Albedo,data=D)
+summary(mInfl)
 
+plot(sqrt(D$inflor_mass),sqrt(D$seed_count_whole),xlab="sqrt(infl mass)",ylab="sqrt(seeds)",col=as.numeric(as.factor(D$treatment)))
+legend("topleft",unique(D$treatment),pch=1,col=unique(as.numeric(as.factor(D$treatment))))
+
+mInfl_sqrt <- lm(sqrt(seed_count_whole)~I(sqrt(inflor_mass))*Density*Albedo,data=D)
+summary(mInfl_sqrt)
+
+### look for relationships within subsamples
