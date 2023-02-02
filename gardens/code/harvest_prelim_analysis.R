@@ -35,4 +35,26 @@ tmp <- which(D$subsampled==T)
 D$seed_count_whole[tmp] <- D$seed_count_sub[tmp]*(D$inflor_mass[tmp]/(D$biomass_sub[tmp] + D$seed_mass_sub[tmp]))
 
 # remove plants with no seeds
-D <-  subset(D,-D$seed_count_whole==0)
+D <-  subset(D,D$seed_count_whole!=0)
+
+# remove plants with missing seed counts
+D <-  subset(D,!is.na(D$seed_count_whole))
+
+
+### look for relationships with whole samples
+
+plot(D$biomass_whole,D$seed_count_whole)
+plot(sqrt(D$biomass_whole),sqrt(D$seed_count_whole))
+
+plot(D$inflor_mass,D$seed_count_whole)
+plot(sqrt(D$inflor_mass),sqrt(D$seed_count_whole))
+
+# try again with cleaner data set
+D_clean <- subset(D, D$drop_seed=="N")
+
+plot(D_clean$biomass_whole,D_clean$seed_count_whole)
+plot(sqrt(D_clean$biomass_whole),sqrt(D_clean$seed_count_whole))
+
+plot(D$inflor_mass,D$seed_count_whole)
+plot(sqrt(D_clean$inflor_mass),sqrt(D_clean$seed_count_whole))
+
