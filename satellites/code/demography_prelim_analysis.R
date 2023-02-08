@@ -14,6 +14,20 @@ setwd(dirname(current_path )) # set working directory to location of this file
 # load packages
 library(dplyr)
 
+# confirm log approach works when competition has 
+# multiplicative effect on performance 
+
+removal <- c(0.1,1,2,4,8,16)
+control <- 0.5*removal
+
+plot(removal,control,type="l",col="red")
+abline(0,1)
+
+plot(log(removal),log(control),type="l",col="red")
+abline(0,1)
+
+rm(removal,control)
+
 # import data
 
 D <- read.csv("../rawdata/Satellite_demography_2021-2022.csv",header=T)
@@ -54,10 +68,16 @@ D$Reproduced <- as.numeric(as.factor(D$Reproduced))-1
 prob_reprod <- D %>% group_by(SiteCode,Treatment) %>%
                 summarize(mean=mean(Reproduced),sd=sd(Reproduced) )
 
-plot(prob_reprod$mean[prob_reprod$Treatment=="control"],
-     prob_reprod$mean[prob_reprod$Treatment=="removal"],
-     ylab="Removal",xlab="Control", xlim=c(0,1), ylim=c(0,1),main="Probability of reproduction")
-abline(0,1)
+plot(prob_reprod$mean[prob_reprod$Treatment=="removal"],
+     prob_reprod$mean[prob_reprod$Treatment=="control"],
+     xlab="Removal",ylab="Control", xlim=c(0,1), ylim=c(0,1),main="Probability of reproduction")
+abline(0,1,lty="dotted")
+
+# # site level analysis (better to do GLM on individual data)
+# # is slope different from 1?
+# m1 <- lm(prob_reprod$mean[prob_reprod$Treatment=="control"] ~ prob_reprod$mean[prob_reprod$Treatment=="removal"])
+# abline(m1,col="red")
+# summary(m1)
 
 ###
 ### model fecundity, conditional on seed production
@@ -71,10 +91,25 @@ fecD <- subset(fecD, fecD$SiteCode!="OttS1")
 mean_fecundity <- fecD %>% group_by(SiteCode,Treatment) %>%
   summarize(mean=mean(log(Fecundity)),q05=quantile(log(Fecundity),0.05),q95=quantile(log(Fecundity),0.95) )
 
-plot(mean_fecundity$mean[mean_fecundity$Treatment=="control"],
-     mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
-     ylab="Removal",xlab="Control", xlim=c(0,4), ylim=c(0,4),main="log Fecundity")
-abline(0,1)
+plot(mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
+     mean_fecundity$mean[mean_fecundity$Treatment=="control"],
+     xlab="Removal",ylab="Control", xlim=c(0,6), ylim=c(0,6),pch=16,main="log Fecundity")
+# removals confidence intervals
+arrows(x0=mean_fecundity$q05[mean_fecundity$Treatment=="removal"],
+       y0=mean_fecundity$mean[mean_fecundity$Treatment=="control"],
+       x1=mean_fecundity$q95[mean_fecundity$Treatment=="removal"],
+       y1=mean_fecundity$mean[mean_fecundity$Treatment=="control"],angle=90,length=0,code=3)
+# controls confidence intervals
+arrows(x0=mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
+       y0=mean_fecundity$q05[mean_fecundity$Treatment=="control"],
+       x1=mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
+       y1=mean_fecundity$q95[mean_fecundity$Treatment=="control"],angle=90,length=0,code=3)
+
+
+abline(0,1,lty="dotted")
+
+# fixed effects approach
+m2 <- glm(log(Fecundity) ~ Treatment*SiteCode, data = fecD)
 
 ###
 ### combine models
