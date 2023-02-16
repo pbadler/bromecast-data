@@ -1,0 +1,8 @@
+Lasky pulled the Aridity index from the CHELSA dataset. 
+
+‘AI’ is the annual aridity index. ‘gs.AI’ is the estimated growing 
+season aridity index. ‘gs.lst.AI’ is the estimated growing season’s 
+last month’s aridity index
+
+The growing season model is as described in the Brachy paper 
+except I reduced the threshold for prec./pet to 0.2

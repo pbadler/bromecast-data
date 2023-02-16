@@ -59,6 +59,10 @@ D <- subset(D,!is.na(D$Fecundity))
 D <- subset(D,!is.na(D$Reproduced))
 
 ###
+### pull climate data for each site
+###
+
+###
 ### analyze probability of producing seeds
 ###
 
