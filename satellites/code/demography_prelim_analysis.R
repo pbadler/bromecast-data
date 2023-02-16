@@ -13,6 +13,7 @@ setwd(dirname(current_path )) # set working directory to location of this file
 
 # load packages
 library(dplyr)
+library(tidyr)
 
 # confirm log approach works when competition has 
 # multiplicative effect on performance 
@@ -61,6 +62,13 @@ D <- subset(D,!is.na(D$Reproduced))
 ###
 ### pull climate data for each site
 ###
+
+# Use aridity index from CHELSA
+aridD <- read.csv("../deriveddata/aridity_index_feb2023_btclim.csv",header=T)
+
+aridD <- aridD[,c("Site.code","Latitude","Longitude","AI","gs.AI")]
+names(aridD)[1] <- "SiteCode"
+
 
 ###
 ### analyze probability of producing seeds
@@ -111,6 +119,19 @@ arrows(x0=mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
 
 
 abline(0,1,lty="dotted")
+
+# link site means to aridity data
+# first go from long to wide
+mean_fecundity <- mean_fecundity %>% pivot_wider(names_from=Treatment, values_from=c(mean, q05, q95))
+# now merge Aridity index
+mean_fecundity <- merge(mean_fecundity, aridD, all.x=T)
+mean_fecundity$logratio <- mean_fecundity$mean_control - mean_fecundity$mean_removal
+
+# try a few plots
+plot(mean_fecundity$gs.AI, mean_fecundity$mean_removal, pch=16, col="blue")
+points(mean_fecundity$gs.AI, mean_fecundity$mean_control, pch=16, col="red")
+
+plot(mean_fecundity$gs.AI, mean_fecundity$logratio)
 
 # fixed effects approach
 m2 <- glm(log(Fecundity) ~ Treatment*SiteCode, data = fecD)
