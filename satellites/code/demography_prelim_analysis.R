@@ -66,9 +66,12 @@ D <- subset(D,!is.na(D$Reproduced))
 # Use aridity index from CHELSA
 aridD <- read.csv("../deriveddata/aridity_index_feb2023_btclim.csv",header=T)
 
-aridD <- aridD[,c("Site.code","Latitude","Longitude","AI","gs.AI")]
+aridD <- aridD[,c("Site.code","Latitude","Longitude","AI","gs.AI","Alt","Ann.Prc","gs.length")]
 names(aridD)[1] <- "SiteCode"
 
+# get resistance and resilience classifications
+rrD <- read.csv("../deriveddata/R&R_2021-2022.csv",header=T)
+names(rrD)[1] <- "SiteCode"
 
 ###
 ### analyze probability of producing seeds
@@ -84,6 +87,9 @@ plot(prob_reprod$mean[prob_reprod$Treatment=="removal"],
      prob_reprod$mean[prob_reprod$Treatment=="control"],
      xlab="Removal",ylab="Control", xlim=c(0,1), ylim=c(0,1),main="Probability of reproduction")
 abline(0,1,lty="dotted")
+
+prob_reprod <- prob_reprod %>% pivot_wider(names_from=Treatment, values_from=c(mean, sd))
+
 
 # # site level analysis (better to do GLM on individual data)
 # # is slope different from 1?
@@ -136,7 +142,26 @@ plot(mean_fecundity$gs.AI, mean_fecundity$logratio)
 # fixed effects approach
 m2 <- glm(log(Fecundity) ~ Treatment*SiteCode, data = fecD)
 
+## look at R & R classes
+mean_fecundity <- merge(mean_fecundity,rrD,all.x=T)
+plot(as.numeric(as.factor(mean_fecundity$RR_Class)),mean_fecundity$logratio)
+
 ###
 ### combine models
 ###
 
+names(prob_reprod)[2:3] <- paste0("pr_",names(prob_reprod)[2:3])
+fitD <- merge(prob_reprod, mean_fecundity)
+
+fitD$fit_control <- fitD$pr_mean_control*fitD$mean_control
+fitD$fit_removal <- fitD$pr_mean_removal*fitD$mean_removal
+
+plot(fitD$fit_removal,fitD$fit_control)
+abline(0,1)
+
+plot(as.numeric(as.factor(fitD$gs.AI)),fitD$fit_removal)
+
+# not sure this is really the log ratio:
+
+fitD$fit_ratio <- fitD$fit_control - fitD$fit_removal
+plot(as.numeric(as.factor(fitD$gs.AI)),fitD$fit_ratio)
