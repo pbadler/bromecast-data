@@ -43,9 +43,8 @@ names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 
 # fix bad values
 D$Treatment[D$Treatment=="removal "] <- "removal"
-
-# remove Boise sites (no harvest data)
-D <- subset(D,D$SiteCode!="Boise High" & D$SiteCode!="Boise Low")
+D$Treatment[D$Treatment=="Removal"] <- "removal"
+D$Treatment[D$Treatment=="Control"] <- "control"
 
 # replace NAs with real zeros
 # TO DO: use notes column to find and retain "real" NAs (missing plants),
