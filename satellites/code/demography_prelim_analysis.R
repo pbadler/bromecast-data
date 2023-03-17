@@ -14,6 +14,7 @@ setwd(dirname(current_path )) # set working directory to location of this file
 # load packages
 library(dplyr)
 library(tidyr)
+library(maps)
 
 # confirm log approach works when competition has 
 # multiplicative effect on performance 
@@ -36,8 +37,6 @@ abline(0,1,lty="dashed")
 
 plot(log(removal),log(control),type="l",col="black")
 abline(0,1)
-
-rm(removal,control)
 
 # effect of removal decreases with removal
 control <- removal*c(0.1,0.2,0.3,0.4,0.5,0.6)
@@ -91,18 +90,21 @@ D <- subset(D,!is.na(D$Fecundity))
 D <- subset(D,!is.na(D$Reproduced))
 
 ###
-### pull climate data for each site
+### import site info
 ###
-# 
-# # Use aridity index from CHELSA
-# aridD <- read.csv("../deriveddata/aridity_index_feb2023_btclim.csv",header=T)
-# 
-# aridD <- aridD[,c("Site.code","Latitude","Longitude","AI","gs.AI","Alt","Ann.Prc","gs.length")]
-# names(aridD)[1] <- "SiteCode"
-# 
-# # get resistance and resilience classifications
-# rrD <- read.csv("../deriveddata/R&R_2021-2022.csv",header=T)
-# names(rrD)[1] <- "SiteCode"
+
+siteD <- read.csv("../rawdata/SiteInfo_2021-2022.csv",header=T)
+names(siteD)[1:3] <- c("SiteCode" ,"Lat","Lon")
+
+# make site SiteCodes match those in the demography file
+siteD$SiteCode[siteD$SiteCode=="EnsingS1_SuRDC"] <- "EnsingS1 SuRDC"
+siteD$SiteCode[siteD$SiteCode=="EnsingS2_SumPrinceRd"] <- "EnsingS2 Summerland-Princeton"
+siteD$SiteCode[siteD$SiteCode=="EnsingS3_BearCreek"] <- "EnsingS3 Bear Creek"
+siteD$SiteCode[siteD$SiteCode=="EnsingS4_LDBM"] <- "EnsingS4 Lundbom"
+siteD$SiteCode[siteD$SiteCode=="SymstadS1"] <- "Symstad1"
+siteD$SiteCode[siteD$SiteCode=="SymstadS2"] <- "Symstad2"
+tmp <- grep("Ensing", siteD$SiteCode)
+siteD$SiteCode[tmp] <- gsub("_"," ",siteD$SiteCode[tmp])
 
 ###
 ### analyze probability of producing seeds
@@ -170,8 +172,9 @@ mean_fecundity <- mean_fecundity %>% pivot_wider(names_from=Treatment, values_fr
 
 mean_fecundity$logratio <- mean_fecundity$mean_control - mean_fecundity$mean_removal
 
-plot(mean_fecundity$mean_removal,mean_fecundity$logratio)
-
+plot(mean_fecundity$mean_removal,mean_fecundity$logratio, 
+     xlab="log Fecundity in Removals",ylab="log(Control/Removal)")
+abline(h=0,lty="dashed")
 
 # # link site means to aridity data
 # mean_fecundity <- merge(mean_fecundity, aridD, all.x=T)
@@ -197,8 +200,50 @@ fitD <- merge(prob_reprod, mean_fecundity)
 fitD$fit_control <- log(fitD$pr_mean_control) + fitD$mean_control
 fitD$fit_removal <- log(fitD$pr_mean_removal) + fitD$mean_removal
 
-plot(fitD$fit_removal,fitD$fit_control)
-abline(0,1)
+plot(fitD$fit_removal,fitD$fit_control,xlab="Removals",ylab="Controls",main="Fitness")
+abline(0,1,lty="dashed")
 
 fitD$fit_ratio <- fitD$fit_control - fitD$fit_removal
-plot(fitD$fit_removal,fitD$fit_ratio)
+plot(fitD$fit_removal,fitD$fit_ratio,xlab="log Fitness in Removals",
+     ylab="log(Control/Removal)")
+abline(h=0,lty="dashed")
+
+###
+### plot on map
+###
+
+# merge Lat lons
+fitD <- merge(fitD,siteD[,1:3],all.x=T)
+
+par(mfrow=c(1,2))
+
+# removal fecundity
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+title("Fitness")
+#symbols(x=fitD$Lon,y=fitD$Lat,circles=fitD$mean_removal,inches=0.4,add=T)
+symbols(x=fitD$Lon,y=fitD$Lat,circles=sqrt(exp(fitD$fit_removal)),inches=0.4,add=T)
+
+# log ratio control/removal
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+title("log(Control/Removal)")
+tmp <- which(fitD$logratio<0)
+symbols(x=fitD$Lon[tmp],y=fitD$Lat[tmp],circles=abs(fitD$logratio[tmp]),inches=0.4,add=T,fg="red")
+tmp <- which(fitD$logratio>0)
+symbols(x=fitD$Lon[tmp],y=fitD$Lat[tmp],circles=fitD$logratio[tmp],inches=0.4,add=T,fg="blue")
+
+
+#OLD
+###
+### pull climate data for each site
+###
+# 
+# # Use aridity index from CHELSA
+# aridD <- read.csv("../deriveddata/aridity_index_feb2023_btclim.csv",header=T)
+# 
+# aridD <- aridD[,c("Site.code","Latitude","Longitude","AI","gs.AI","Alt","Ann.Prc","gs.length")]
+# names(aridD)[1] <- "SiteCode"
+# 
+# # get resistance and resilience classifications
+# rrD <- read.csv("../deriveddata/R&R_2021-2022.csv",header=T)
+# names(rrD)[1] <- "SiteCode"
+
