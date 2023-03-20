@@ -103,8 +103,6 @@ siteD$SiteCode[siteD$SiteCode=="EnsingS3_BearCreek"] <- "EnsingS3 Bear Creek"
 siteD$SiteCode[siteD$SiteCode=="EnsingS4_LDBM"] <- "EnsingS4 Lundbom"
 siteD$SiteCode[siteD$SiteCode=="SymstadS1"] <- "Symstad1"
 siteD$SiteCode[siteD$SiteCode=="SymstadS2"] <- "Symstad2"
-tmp <- grep("Ensing", siteD$SiteCode)
-siteD$SiteCode[tmp] <- gsub("_"," ",siteD$SiteCode[tmp])
 
 ###
 ### analyze probability of producing seeds
@@ -232,18 +230,31 @@ tmp <- which(fitD$logratio>0)
 symbols(x=fitD$Lon[tmp],y=fitD$Lat[tmp],circles=fitD$logratio[tmp],inches=0.4,add=T,fg="blue")
 
 
-#OLD
+
 ###
 ### pull climate data for each site
 ###
-# 
-# # Use aridity index from CHELSA
-# aridD <- read.csv("../deriveddata/aridity_index_feb2023_btclim.csv",header=T)
-# 
-# aridD <- aridD[,c("Site.code","Latitude","Longitude","AI","gs.AI","Alt","Ann.Prc","gs.length")]
-# names(aridD)[1] <- "SiteCode"
-# 
-# # get resistance and resilience classifications
-# rrD <- read.csv("../deriveddata/R&R_2021-2022.csv",header=T)
-# names(rrD)[1] <- "SiteCode"
+ 
+# Daymet means for fall through spring
+climD <- read.csv("../deriveddata/Satellites_daymet_Fall2Spr_means.csv",header=T)
+climD <- subset(climD, climD$climYr==2022)
+# make site SiteCodes match those in the demography file
+climD$SiteCode[climD$SiteCode=="EnsingS1_SuRDC"] <- "EnsingS1 SuRDC"
+climD$SiteCode[climD$SiteCode=="EnsingS2_SumPrinceRd"] <- "EnsingS2 Summerland-Princeton"
+climD$SiteCode[climD$SiteCode=="EnsingS3_BearCreek"] <- "EnsingS3 Bear Creek"
+climD$SiteCode[climD$SiteCode=="EnsingS4_LDBM"] <- "EnsingS4 Lundbom"
+climD$SiteCode[climD$SiteCode=="SymstadS1"] <- "Symstad1"
+climD$SiteCode[climD$SiteCode=="SymstadS2"] <- "Symstad2"
+
+# merge to demography site means
+fitD <- merge(fitD,climD,all.x=T)
+
+plot(fitD$prcp,fitD$fit_removal)
+plot(fitD$swe_mean,fitD$fit_removal)
+plot(fitD$tmean,fitD$fit_removal)
+plot(fitD$prcp/fitD$tmean,fitD$fit_removal)
+
+plot(fitD$swe_mean,fitD$prcp)
+symbols(x=fitD$swe_mean,y=fitD$prcp,circles=fitD$fit_removal+1,inches=0.4,add=T,fg="blue")
+
 

@@ -61,7 +61,7 @@ Fa2SprD$tavg <- (Fa2SprD$tmax + Fa2SprD$tmin)/2
 annD <- Fa2SprD %>% group_by(SiteCode,climYr) %>%
             summarise(prcp=sum(prcp),
                       tmean=mean(tavg),
-                      swe_max=max(swe))
+                      swe_mean=mean(swe))
 
 # save annual data to file
 write.csv(annD,"../deriveddata/Satellites_daymet_Fall2Spr_means.csv",row.names=F)
