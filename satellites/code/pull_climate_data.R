@@ -15,6 +15,7 @@ names(siteD) <- c("SiteCode" ,"Lat","Lon")
 tmp <- grep("LEHN", siteD$SiteCode)
 siteD <- siteD[-tmp,]
 
+# this takes a few minutes
 for(i in 1:nrow(siteD)){
   tmp <- download_daymet(site = siteD$SiteCode[i],
                           lat = siteD$Lat[i],
@@ -61,7 +62,8 @@ Fa2SprD$tavg <- (Fa2SprD$tmax + Fa2SprD$tmin)/2
 annD <- Fa2SprD %>% group_by(SiteCode,climYr) %>%
             summarise(prcp=sum(prcp),
                       tmean=mean(tavg),
-                      swe_mean=mean(swe))
+                      swe_mean=mean(swe),
+                      swe_days=sum(swe>0))
 
 # save annual data to file
 write.csv(annD,"../deriveddata/Satellites_daymet_Fall2Spr_means.csv",row.names=F)

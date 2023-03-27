@@ -254,7 +254,7 @@ plot(fitD$swe_mean,fitD$fit_removal)
 plot(fitD$tmean,fitD$fit_removal)
 plot(fitD$prcp/fitD$tmean,fitD$fit_removal)
 
-plot(fitD$swe_mean,fitD$prcp)
+plot(fitD$swe_mean,fitD$fit_removal)
 symbols(x=fitD$swe_mean,y=fitD$prcp,circles=fitD$fit_removal+1,inches=0.4,add=T,fg="blue")
 
 
