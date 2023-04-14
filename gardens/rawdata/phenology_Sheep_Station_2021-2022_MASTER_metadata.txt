@@ -1,7 +1,7 @@
 This file contains all the phenology and growth observations for 
 the Sheep Station common garden in 2021-2022 growing season.
 
-Update MLV 14 April 2023
+Update MLV (mlvahsen@gmail.com) 14 April 2023
 
 Site = unique site ID (categorical, 1 level; ["SheepStation"])
 Date = date of measurement (MM/DD/YYYY)
