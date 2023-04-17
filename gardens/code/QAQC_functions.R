@@ -85,7 +85,7 @@ flag_frostheave <- function(plant_data){
   out <- NA
   # date of first frost heave
   tmp <- which(plant_data$frost_heave=="Y")
-  # add notes about herbivory
+  # add notes about frost heave
   tmp <- c(tmp,which(plant_data$standard_note=="frostheave"))
   # return date 
   if(length(tmp)>0){

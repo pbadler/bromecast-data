@@ -5,7 +5,7 @@ doyear <- 2022 # growing season to do
 dosite <- "SS" # code for focal site
 
 # import raw growth and phenology data
-rawD <- read.csv("../rawdata/phenology_Sheep_Station_2021-2022_MASTER.csv",header=T)
+rawD <- read.csv(here("gardens/rawdata/phenology_Sheep_Station_2021-2022_MASTER.csv"),header=T)
 
 # remove capital letters from column headers 
 # (this will make it easier to harmonize data across sites)
@@ -30,7 +30,7 @@ rawD <- merge(rawD,plant_key)
 plant_key$site <- dosite
 plant_key$year <- doyear
 plant_key <- plant_key[,c(8,1,9,2:7)]
-write.csv(plant_key,file=paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),row.names=F)
+write.csv(plant_key,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_plantID.csv"),row.names=F)
 rm(plant_key)
 
 # pull out and format phenology and growth data and notes for each plant
@@ -67,10 +67,10 @@ tmp[tmp==""] <- NA
 tmp <- tmp[!is.na(tmp)]
 tmp <- unique(tmp,MARGIN=2)
 tmp <- data.frame(notes=tmp,action=NA)
-write.csv(tmp,file=paste0("../deriveddata/",dosite,doyear,"_notes.csv"),row.names=F)
+write.csv(tmp,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_notes.csv"),row.names=F)
 # open as a spreadsheet, fill in action column by hand
 
 rm(rawD)
 
 # write pgD to file
-write.csv(pgD,file=paste0("../deriveddata/",dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)
+write.csv(pgD,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)

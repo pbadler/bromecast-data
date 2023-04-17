@@ -1,0 +1,469 @@
+---
+title: "Phenology Flagging"
+author: "Megan Vahsen"
+date: "2023-04-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Description
+
+This document details the code that informs how phenology data from the Bromecast 2022 experiments are flagged. The functions that are used to flag the phenology data are in the file "QAQC_functions.R" and are described in detail below.
+
+```{r datamanip, echo = F, message = F}
+# Load libraries
+library(tidyverse)
+library(here)
+library(patchwork)
+
+# Read in derived phenology data
+phen <- read_csv(here("gardens/deriveddata/SS2022_growthphenology_by_plantID.csv"))
+# Read in plant ID info
+ids <- read_csv(here("gardens/deriveddata/SS2022_plantID.csv"))
+# Read in garden treatment info
+gardens <-read_csv(here("gardens/rawdata/garden_treatments.csv"))
+# Read in flagging data
+flags <- read_csv(here("gardens/deriveddata/SS2022_flags.csv"))
+
+# Merge together datasets
+phen_id <- merge(phen, ids)
+
+# Rename 'garden' column and remove cum_plot column
+gardens %>% 
+  mutate(site = garden) %>% 
+  select(-cum_plot, -garden) -> gardens_sub
+
+# Merge together datasets
+phen_id_garden <- merge(phen_id, gardens_sub)
+
+# Bring in flag data
+flags <- read_csv(here("gardens/deriveddata/SS2022_flags.csv"))
+
+# Merge together datasets
+phen <- merge(phen_id_garden, flags)
+```
+
+
+1. **Late emergence**: Notes if the plant emerged after the first date plants were assessed for emergence, and if so, records the date of the visit where emergence was first observed. NAs for plants with recorded emergence on the first visit and for plants that never emerged.
+```{r flag_lateemergence, eval = F}
+flag_lateemergence <- function(plant_data){
+  # was plant absent first visit, later present?
+  if(plant_data$live[1]=="Y"){
+    return(NA)  # emergence on first visit
+  }else if(sum(plant_data$live=="Y")==0){
+    return(NA)  # never emerged
+  }else{
+    # return date of first recorded presence
+    tmp <- which(plant_data$live=="Y")
+    if(length(tmp)>1) tmp <- tmp[1] 
+    return(plant_data$jday[tmp])
+  }
+}
+```
+
+2. **Emergence date**: Records emergence date. NAs for plants that never emerged.
+
+```{r get_emergence_date, eval = F}
+get_emergence_date <- function(plant_data){
+  # date of first presence
+  if(sum(plant_data$live=="Y")==0){
+    return(NA)  # never emerged
+  }else{
+    # return date of first presence
+    tmp <- which(plant_data$live=="Y")
+    if(length(tmp)>1) tmp <- tmp[1] 
+    return(plant_data$jday[tmp])
+  }
+}
+```
+
+```{r emergence, echo = F, warning=F, fig.width=6, fig.height=4, fig.align='center'}
+# 1. Late emergence / emergence date
+phen %>% 
+  select(plantID, emergence_date) %>% 
+  distinct() %>% 
+  group_by(emergence_date) %>% 
+  summarize(n = n()) -> emergence_summary
+
+# Calculate proportion of NAs
+emergence_summary %>% 
+  mutate(is_complete = ifelse(is.na(emergence_date), 0, 1)) %>% 
+  group_by(is_complete) %>% 
+  summarize(n = sum(n)) %>% 
+  mutate(prop = n * 100 / sum(n)) %>% 
+  filter(is_complete == 0) %>% 
+  pull(prop) %>% round(2) -> emergence_NAs
+
+# Create plot of data (remove NAs)
+emergence_summary %>% 
+  ggplot(aes(x = emergence_date, y = n)) +
+  geom_bar(stat="identity", width = 1, fill = "gray47") +
+  geom_rug(sides = "b") +
+  theme_classic(base_size = 14) +
+  xlab("emergence date") +
+  annotate("text", x = Inf, y = Inf, label = paste(emergence_NAs, "% NAs", sep = ""),
+           vjust = 2, hjust = 1.1, size = 8) -> emergence
+
+emergence
+```
+
+3. **Death date**: Records first date for which there absence recorded following a presence being recorded. Returns NAs if plants were alive and never died or if plants never emerged to begin with.
+```{r, eval = F}
+get_death_date <- function(plant_data){
+  # date of first absence after a presence
+  out <- NA  # death not observed
+  tmp <- ifelse(plant_data$live=="Y",1,0) 
+  tmp <- diff(tmp)
+  deaths <- which(tmp==-1)
+  if(length(deaths)>0){
+      out <- plant_data$jday[1+min(deaths)]
+  }
+  return(out)
+}
+```
+
+```{r death, fig.width=6, fig.height=4, fig.align='center', echo = F, warning = F}
+# Get summary stats
+phen %>% 
+  select(plantID, death_date) %>% 
+  distinct() %>%
+  group_by(death_date) %>% 
+  summarize(n = n()) -> death_summary
+
+# Calculate proportion of NAs
+death_summary %>% 
+  mutate(is_complete = ifelse(is.na(death_date), 0, 1)) %>% 
+  group_by(is_complete) %>% 
+  summarize(n = sum(n)) %>% 
+  mutate(prop = n * 100 / sum(n)) %>% 
+  filter(is_complete == 0) %>% 
+  pull(prop) %>% round(2) -> death_NAs
+
+# Create plot of data (remove NAs)
+death_summary %>% 
+  ggplot(aes(x = death_date, y = n)) +
+  geom_bar(stat="identity", width = 1, fill = "gray47") +
+  geom_rug(sides = "b") +
+  theme_classic(base_size = 14) +
+  xlab("death date") +
+  annotate("text", x = Inf, y = Inf, label = paste(death_NAs, "% NAs", sep = ""),
+           vjust = 2, hjust = 1.1, size = 8) -> death
+
+death
+
+```
+
+4. **Resurrection**: Records if plant was recorded as being present after previously being recorded as absent. Returns NAs if plants were never recorded as absent after being present or if plants never emerged to being with.
+
+```{r, flag_resurrection, eval = F}
+flag_resurrection <- function(plant_data){
+  # was plant observed alive after being observed dead?
+  out <- NA
+  tmp <- ifelse(plant_data$live=="Y",1,0) 
+  tmp <- diff(tmp)
+  births <- which(tmp==1)
+  deaths <- which(tmp==-1)
+  if(length(births)>0 & length(deaths)>0){
+    if(max(births)>min(deaths)){
+      out <- plant_data$jday[1+max(births)]
+    }
+  }
+  return(out)
+}
+```
+
+```{r resurrection, fig.width=6, fig.height=4, fig.align='center', warning = F, echo = F}
+# Get summary stats
+phen %>% 
+  select(plantID, resurrection_date) %>% 
+  distinct() %>%
+  group_by(resurrection_date) %>% 
+  summarize(n = n()) -> resurrection_summary
+
+# Calculate proportion of NAs
+resurrection_summary %>% 
+  mutate(is_complete = ifelse(is.na(resurrection_date), 0, 1)) %>% 
+  group_by(is_complete) %>% 
+  summarize(n = sum(n)) %>% 
+  mutate(prop = n * 100 / sum(n)) %>% 
+  filter(is_complete == 0) %>% 
+  pull(prop) %>% round(2) -> resurrection_NAs
+
+# Create plot of data (remove NAs)
+resurrection_summary %>% 
+  ggplot(aes(x = resurrection_date, y = n)) +
+  geom_bar(stat="identity", width = 1, fill = "gray47") +
+  geom_rug(sides = "b") +
+  theme_classic(base_size = 14) +
+  xlab("resurrection date") +
+  annotate("text", x = Inf, y = Inf, label = paste(resurrection_NAs, "% NAs", sep = ""),
+           vjust = 2, hjust = 1.1, size = 8) -> resurrection
+
+resurrection
+```
+
+5. **Phenological regression**: Determines if phenology goes backwards through time (*e.g.*, V1 recorded after a previously recorded V2) and if so, records the maximum number of stages of regression for each plant. Returns NAs if phenological regression doesn't happen or if the plant never emerged to being with.
+
+```{r flag_phenoregress, eval = F}
+flag_phenoregress <- function(plant_data,pheno_table){
+  # does phenology go backwards? returns how # of stages of regression
+  out <- NA
+  if(sum(plant_data$live=="Y")>1){
+    plant_data <- merge(plant_data,pheno_table)
+    plant_data <- plant_data[order(plant_data$jday),]
+    tmp <- diff(plant_data$v_numeric)
+    if(min(tmp)<0) out <- min(tmp)
+  }
+  return(out)
+}
+```
+
+```{r phenoregress, fig.width=6, fig.height=4, fig.align='center', warning = F, echo = F}
+phen %>% select(plantID, pheno_regress) %>% 
+  distinct() %>%
+  group_by(pheno_regress) %>% 
+  summarize(n = n()) -> phenoregress_summary
+
+# Calculate proportion of NAs
+phenoregress_summary %>% 
+  mutate(is_complete = ifelse(is.na(pheno_regress), 0, 1)) %>% 
+  group_by(is_complete) %>% 
+  summarize(n = sum(n)) %>% 
+  mutate(prop = n * 100 / sum(n)) %>% 
+  filter(is_complete == 0) %>% 
+  pull(prop) %>% round(2) -> phenoregress_NAs
+
+# Create plot of data (remove NAs)
+phenoregress_summary %>% 
+  ggplot(aes(x = pheno_regress, y = n)) +
+  geom_bar(stat="identity", width = 1, fill = "gray47") +
+  geom_rug(sides = "b") +
+  theme_classic(base_size = 14) +
+  xlab("phenological regression max. difference (# stages)") +
+  annotate("text", x = Inf, y = Inf, label = paste(phenoregress_NAs, "% NAs", sep = ""),
+           vjust = 2, hjust = 1.1, size = 8) -> phenoregress
+
+phenoregress
+```
+
+6. **Growth regression**: Determines if the leaf length of the plant goes backwards through time and if so, records the maximum amount of shrinkage in millimeters. Records NAs if there is no growth regression or if plant did not emerge to begin with.
+```{r flag_growthregress, eval = F}
+flag_growthregress <- function(plant_data){
+  # does leaf length go backwards? return max mm of shrinkage
+  out <- NA
+  if(sum(!is.na(plant_data$length_mm)>1)){
+    tmp <- diff(plant_data$length_mm)
+    if(sum(!is.na(tmp)>0)){
+       if(min(tmp,na.rm=T)<0) out <- min(tmp,na.rm=T)
+    }
+  }
+  return(out)
+}
+```
+
+```{r growthregress, fig.width=6, fig.height=4, fig.align='center', warning = F, echo = F}
+phen %>% select(plantID, growth_regress_mm) %>% 
+  distinct() %>% 
+  group_by(growth_regress_mm) %>% 
+  summarize(n = n()) -> growthregress_summary
+
+# Calculate proportion of NAs
+growthregress_summary %>% 
+  mutate(is_complete = ifelse(is.na(growth_regress_mm), 0, 1)) %>% 
+  group_by(is_complete) %>% 
+  summarize(n = sum(n)) %>% 
+  mutate(prop = n * 100 / sum(n)) %>% 
+  filter(is_complete == 0) %>% 
+  pull(prop) %>% round(2) -> growthregress_NAs
+
+# Create plot of data (remove NAs)
+growthregress_summary %>% 
+  ggplot(aes(x = growth_regress_mm, y = n)) +
+  geom_bar(stat="identity", width = 1, fill = "gray47") +
+  geom_rug(sides = "b") +
+  theme_classic(base_size = 14) +
+  xlab("growth regression max. difference (mm)") +
+  annotate("text", x = Inf, y = Inf, label = paste(growthregress_NAs, "% NAs", sep = ""),
+           vjust = 2, hjust = 1.1, size = 8) -> growthregress
+
+growthregress
+```
+
+7. **Frost heave**: Determines if there was frost heave recorded for the plant and if so, returns the date of first recorded frost heave. Returns NAs if no frost heave recorded for the plant or if the plant never emerged to begin with. Also adds notes to observation about frost heave.
+
+```{r flag_frostheave, eval = F}
+flag_frostheave <- function(plant_data){
+  out <- NA
+  # date of first frost heave
+  tmp <- which(plant_data$frost_heave=="Y")
+  # add notes about frostheave
+  tmp <- c(tmp,which(plant_data$standard_note=="frostheave"))
+  # return date 
+  if(length(tmp)>0){
+    tmp <- min(tmp)
+    out <- plant_data$jday[tmp]
+  }
+  return(out)
+}
+```
+
+```{r frostheave, fig.width=6, fig.height=4, fig.align='center', warning = F, echo = F}
+# Get summary stats
+phen %>% 
+  select(plantID, frostheave_date) %>% 
+  distinct() %>%
+  group_by(frostheave_date) %>% 
+  summarize(n = n()) -> frostheave_summary
+
+# Calculate proportion of NAs
+frostheave_summary %>% 
+  mutate(is_complete = ifelse(is.na(frostheave_date), 0, 1)) %>% 
+  group_by(is_complete) %>% 
+  summarize(n = sum(n)) %>% 
+  mutate(prop = n * 100 / sum(n)) %>% 
+  filter(is_complete == 0) %>% 
+  pull(prop) %>% round(2) -> frostheave_NAs
+
+# Create plot of data (remove NAs)
+frostheave_summary %>% 
+  ggplot(aes(x = frostheave_date, y = n)) +
+  geom_bar(stat="identity", width = 1, fill = "gray47") +
+  geom_rug(sides = "b") +
+  theme_classic(base_size = 14) +
+  xlab("frost heave date") +
+  annotate("text", x = Inf, y = Inf, label = paste(frostheave_NAs, "% NAs", sep = ""),
+           vjust = 2, hjust = 1.1, size = 8) -> frostheave
+
+frostheave
+```
+
+8. **Herbivory**: Determines if there was herbivory recorded for the plant and if so, returns the date for which herbivory was first recorded. Returns NAs if there was no herbivory recorded or if plants never emerged to begin with. Also adds notes to observation about herbivory.
+```{r, flag_herbivory, eval = F}
+flag_herbivory <- function(plant_data){
+  out <- NA
+  # date of first herbivory observation
+  tmp <- which(plant_data$herbivory=="Y")
+  # add notes about herbivory
+  tmp <- c(tmp,which(plant_data$standard_note=="herbivory"))
+  # return date 
+  if(length(tmp)>0){
+    tmp <- min(tmp)
+    out <- plant_data$jday[tmp]
+  }
+  return(out)
+}
+```
+
+```{r herbivory, fig.width=6, fig.height=4, fig.align='center', warning = F, echo = F}
+# Get summary stats
+phen %>% 
+  select(plantID, herbivory_date) %>% 
+  distinct() %>%
+  group_by(herbivory_date) %>% 
+  summarize(n = n()) -> herbivory_summary
+
+# Calculate proportion of NAs
+herbivory_summary %>% 
+  mutate(is_complete = ifelse(is.na(herbivory_date), 0, 1)) %>% 
+  group_by(is_complete) %>% 
+  summarize(n = sum(n)) %>% 
+  mutate(prop = n * 100 / sum(n)) %>% 
+  filter(is_complete == 0) %>% 
+  pull(prop) %>% round(2) -> herbivory_NAs
+
+# Create plot of data (remove NAs)
+herbivory_summary %>% 
+  ggplot(aes(x = herbivory_date, y = n)) +
+  geom_bar(stat="identity", width = 1, fill = "gray47") +
+  geom_rug(sides = "b") +
+  theme_classic(base_size = 14) +
+  xlab("herbivory date") +
+  annotate("text", x = Inf, y = Inf, label = paste(herbivory_NAs, "% NAs", sep = ""),
+           vjust = 2, hjust = 1.1, size = 8) -> herbivory
+
+herbivory
+```
+
+
+9. **Bad position**: Determines if the plant was not in the expected position and if so, returns the date for which "bad position" was first recorded. Returns NAs if there was no "bad position: recorded or if plants never emerged to begin with. Also adds notes to observation about bad positioning.
+```{r flag_badposition, eval = F}
+flag_badposition <- function(plant_data){
+  out <- NA
+  # date of bad position observation
+  tmp <- which(plant_data$standard_note=="badposition")
+  if(length(tmp)>0){
+    tmp <- min(tmp)
+    out <- plant_data$jday[tmp]
+  }
+  return(out)
+}
+```
+
+```{r badposition, fig.width=6, fig.height=4, fig.align='center', warning = F, echo = F}
+# Get summary stats
+phen %>% 
+  select(plantID, bad_position) %>% 
+  distinct() %>%
+  group_by(bad_position) %>% 
+  summarize(n = n()) -> bad_position_summary
+
+# Calculate proportion of NAs
+bad_position_summary %>% 
+  mutate(is_complete = ifelse(is.na(bad_position), 0, 1)) %>% 
+  group_by(is_complete) %>% 
+  summarize(n = sum(n)) %>% 
+  mutate(prop = n * 100 / sum(n)) %>% 
+  filter(is_complete == 0) %>% 
+  pull(prop) %>% round(2) -> bad_position_NAs
+
+# Create plot of data (remove NAs)
+bad_position_summary %>% 
+  ggplot(aes(x = bad_position, y = n)) +
+  geom_bar(stat="identity", width = 1, fill = "gray47") +
+  geom_rug(sides = "b") +
+  theme_classic(base_size = 14) +
+  xlab("bad position date") +
+  annotate("text", x = Inf, y = Inf, label = paste(bad_position_NAs, "% NAs", sep = ""),
+           vjust = 2, hjust = 1.1, size = 8) -> bad_position
+
+bad_position
+```
+
+10. **Other notes**: Determines if there are other standardized notes that are important to add to the derived data that are not herbivory, frost heave, or bad positioning, and if so, records them. If there are multiple notes, these are combined together. Returns NAs if there are no other notes.
+
+```{r flag_other, eval = F}
+flag_other <- function(plant_data){
+  out <- NA
+  # include other consequential notes
+  tmp <- which(!is.na(plant_data$standard_note))
+  if(length(tmp)>0){
+    # remove frostheave, herbivory and badposition (these dealt with separately)
+    tmp <- plant_data$standard_note[tmp]
+    notes <- tmp[which(tmp != "herbivory" & tmp != "frostheave" & tmp != "badposition")]
+    if(length(notes)>0){
+      notes <- unique(notes)  # prevent duplicates
+      notes <- paste(notes,collapse='-') # if multiple notes, combine
+      out <- notes
+    }
+  }
+  return(out)
+}
+```
+
+```{r, echo = F}
+# Print out proportion of plants with other notes
+phen %>% 
+  select(plantID, other) %>% 
+  distinct() %>% 
+  group_by(other) %>% 
+  summarize(n = n()) %>% 
+  mutate(percentage = round(n*100/sum(n),3))
+```
+
+
+
+
+

@@ -4,20 +4,20 @@
 ###
 
 # import formatted growth and phenology data
-pgD <- read.csv(paste0("../deriveddata/",dosite,doyear,"_growthphenology_by_plantID.csv"),header=T)
+pgD <- read.csv(paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),header=T)
 
 # import and join individual plant info
-tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),header=T)
+tmp <- read.csv(paste0(here("gardens/deriveddata/"),dosite,doyear,"_plantID.csv"),header=T)
 pgD <- merge(pgD,tmp)
 
 # import and join treatment data
-tmp <- read.csv(paste0("../rawdata/garden_treatments.csv"),header=T)
+tmp <- read.csv(here("gardens/rawdata/garden_treatments.csv"),header=T)
 names(tmp)[which(names(tmp)=="garden")] <- "site"  # rename 
 tmp <- tmp[,-which(names(tmp)=="cum_plot")]  # drop column
 pgD <- merge(pgD,tmp)
 
 # import and join flags
-tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_flags.csv"),header=T)
+tmp <- read.csv(paste0(here("gardens/deriveddata/"),dosite,doyear,"_flags.csv"),header=T)
 pgD <- merge(pgD,tmp)
 
 rm(tmp)

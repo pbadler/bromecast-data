@@ -3,10 +3,10 @@
 ###
 
 # import formatted growth and phenology data
-pgD <- read.csv(paste0("../deriveddata/",dosite,doyear,"_growthphenology_by_plantID.csv"),header=T)
+pgD <- read.csv(paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),header=T)
 
 # import and merge standardized notes
-tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_notes_actions.csv"),header=T)
+tmp <- read.csv(paste0(here("gardens/deriveddata/"),dosite,doyear,"_notes_actions.csv"),header=T)
 tmp <- subset(tmp, action=="flag")  # drop "ignore" records
 tmp <- tmp[,c("notes","standard_note")] # drop "action" column
 pgD <- merge(pgD,tmp,all.x=T)
@@ -16,7 +16,7 @@ pgD <- pgD[,c(2:ncol(pgD),1)] # reorder columns, put raw notes last
 pgD <- pgD[order(pgD$plantID,pgD$jday),] 
 
 # import plantID list and set up dataframe to hold flags
-tmp <- read.csv(paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),header=T)
+tmp <- read.csv(paste0(here("gardens/deriveddata/"),dosite,doyear,"_plantID.csv"),header=T)
 flagD <- data.frame(plantID = tmp$plantID,
                     missing_plant=NA,
                     emergence_date=NA,
@@ -42,7 +42,7 @@ phenoD$v_numeric[phenoD$v=="BS"] <- 6  # boot stage
 phenoD$v_numeric[phenoD$v=="FG"] <- 7 # flowering green
 phenoD <- phenoD[order(phenoD$v_numeric),]
 #check!
-print(phenoD)
+#print(phenoD)
 
 # loop through plantIDs and check for each flag
 for(i in 1:nrow(flagD)){
@@ -84,5 +84,5 @@ for(i in 1:nrow(flagD)){
 } # next i
 
 # write flags to file
-write.csv(flagD,file=paste0("../deriveddata/",dosite,doyear,"_flags.csv"),row.names=F)
+write.csv(flagD,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_flags.csv"),row.names=F)
 

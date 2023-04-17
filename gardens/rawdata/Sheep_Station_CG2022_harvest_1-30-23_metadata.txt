@@ -27,4 +27,4 @@ biomass_sub = mass of non-seed part of spikelets in subsample (continuous, grams
 seed_count_sub = number of filled seeds selected for subsample (continuous, [0, 177] or NA)
 seed_mass_sub = mass of filled seeds selected for subsample (continuous, [0.00, 0.80] or NA)
 drop_seed = ? (categorical, 5 levels, ["N", "n", "Y", "y", NA])
-notes
+notes = notes on harvesting (categorical, 104 levels [e.g., "BROKEN TILLER", "FLOWERS BROKE OFF"])
