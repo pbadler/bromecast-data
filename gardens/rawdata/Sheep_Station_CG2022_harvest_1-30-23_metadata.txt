@@ -1,0 +1,30 @@
+2022 harvest data for Sheep Station common garden experiment.
+
+Update MLV (mlvahsen@gmail.com)	14 April 2023
+
+Site = unique site ID (categorical, 1 level; ["SheepStation"])
+Date = date of harvest (MM/DD/YYYY); left blank if missing or dead
+Plot = unique plot number (categorical, 40 levels; 1-40); DENSITY and ALBEDO treatments are assigned at the plot level 
+Density = density treatment, manipulating space between plants within a plot (categorical, 2 levels; ["high", "low"])
+Albedo = albedo treatment, manipulating gravel color on top of soil (categorical, 2 levels; ["black", "white"])
+x = x-coordinate of location of plant within a plot (continuous, [1-20]); for LOW density plots range is [1,20] and for HIGH density range is [1,10]
+y = y-coordinate of location of plant within a plot (continuous, [1-10]); for LOW density plots range is [1,5] and for HIGH density range is [1,10]
+genotype = unique genotype ID (categorical, 84 levels; ["1", "2", "5", ..., "105"]); see "sitecode2genotypenumber.csv" for genotype info)
+growout = location of greenhouse growout (categorical, 2 levels; ["Re", "Lo"]); Re = Reno NV, Lo = Logan UT 
+source = original seed collection site (categorical, 84 levels; [e.g., "Symstad6", "Chynoweth02"...]); unique source for each genotype 
+lat = latitude of source seed collection (continuous, [34.06, 50.09])
+lon = longitude of source seed collection (continuous, [-120.67, -101.94])
+Live = is plant alive for harvest? (categorical, 3 levels, ["missing", "N", "Y"]
+V = phenological stage (ordinal/categorical, 44 levels, [e.g., "NA", "missing", "FP_dead", "FP" > "FG" > "BS" > "V3+" > "V3" > "V2" > "V1" > "V0"]); FG = flowering green, BS = boot stage
+height = height of plant (continuous, centimeters, [0.1, 11.7] or NA); NAs for missing or dead stems and for live stems of all stages?
+Length_mm = height of plant (continuous, millimeters, [1, 117] or NA); same as HEIGHT column multiplied by 10
+tillers = number of tillers at harvest (continuous, [0.1, 28.0] or NA)
+biomass_whole = non-inflorescence biomass (continuous, grams, [0.00, 4.78] or NA); biomass_whole + inflor_mass = total mass of the plant
+seed_count_whole = total number of seeds (continuous, [0, 365] or NA)
+seed_mass_whole = total dried seed mass (continuous, grams, [0.00, 0.83] or NA)
+inflor_mass = mass of inflorescence (continuous, grams, [0.00, 6.58] or NA); biomass_whole + inflor_mass = total mass of the plant
+biomass_sub = mass of non-seed part of spikelets in subsample (continuous, grams, [0.00, 2.00] or NA)
+seed_count_sub = number of filled seeds selected for subsample (continuous, [0, 177] or NA)
+seed_mass_sub = mass of filled seeds selected for subsample (continuous, [0.00, 0.80] or NA)
+drop_seed = ? (categorical, 5 levels, ["N", "n", "Y", "y", NA])
+notes

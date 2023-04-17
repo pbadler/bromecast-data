@@ -11,12 +11,12 @@ Albedo = albedo treatment, manipulating gravel color on top of soil (categorical
 x = x-coordinate of location of plant within a plot (continuous, [1-20]); for LOW density plots range is [1,20] and for HIGH density range is [1,10]
 y = y-coordinate of location of plant within a plot (continuous, [1-10]); for LOW density plots range is [1,5] and for HIGH density range is [1,10]
 genotype = unique genotype ID (categorical, 84 levels; ["1", "2", "5", ..., "105"]); see "sitecode2genotypenumber.csv" for genotype info)
-growout = year of greenhouse growout (categorical, 2 levels; ["2020", "2021"] 
+growout = year of greenhouse growout (categorical, 2 levels; ["2020", "2021"]) 
 source = original seed collection site (categorical, 84 levels; [e.g., "Symstad6", "Chynoweth02"...]); unique source for each genotype
 lat = latitude of source seed collection (continuous, [34.06, 50.09])
 lon = longitude of source seed collection (continuous, [-120.67, -101.94])
 Live = is plant alive for measurement? (categorical, 3 levels, ["missing", "N", "Y"]
-V = phenology stage (ordinal/categorical, 9 levels, ["NA", "missing", "FG" > "BS" > "V3+" > "V3" > "V2" > "V1" > "V0"]); FG = flowering green, BS = boot stage
+V = phenological stage (ordinal/categorical, 9 levels, ["NA", "missing", "FG" > "BS" > "V3+" > "V3" > "V2" > "V1" > "V0"]); FG = flowering green, BS = boot stage
 height = height of plant (continuous, centimeters, [0.1, 11.7] OR NA); NAs for missing or dead stems and for live stems of all stages?
 Length_mm = height of plant (continuous, millimeters, [1, 117] OR NA); same as HEIGHT column multiplied by 10
 herbivory = evidence of herbivory on plant? (categorical, 3 levels; ["N", "Y", NA])
