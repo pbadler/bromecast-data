@@ -1,0 +1,19 @@
+notes,action,standard_note
+no seedhead,flag,missingseedhead
+"missing seedhead,resprouting",flag,missingseedhead
+missing seedhead,flag,missingseedhead
+one seedhead missing,flag,missingseedhead
+no seed,flag,missingseedhead
+"one no seedhead, resprouting in boot",flag,missingseedhead
+Germinant possibly incorrect coordinate position,flag,badposition
+"on te green side, may not be right plant",flag,badposition
+Illegible note,ignore,
+No tooth,ignore,
+seedheads gone,flag,missingseedhead
+this could be plant 6,ignore,
+Frost heaving,flag,frostheave
+Dead,ignore,
+Developing seed heads,ignore,
+"No V value recorded, V0 assumed",ignore,
+Leaf/phenology measurements do not match herbivory,flag,herbivory
+Seed head developing,ignore,
