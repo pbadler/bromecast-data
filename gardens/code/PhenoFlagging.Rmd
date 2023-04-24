@@ -2,14 +2,17 @@
 title: "Phenology Flagging"
 author: "Megan Vahsen"
 date: "2023-04-17"
-output: html_document
+output:
+  html_document:
+    toc: true
+    theme: yeti
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Description
+## Description of flags
 
 This document details the code that informs how phenology data from the Bromecast 2022 experiments are flagged. The functions that are used to flag the phenology data are in the file "QAQC_functions.R" and are described in detail below.
 
@@ -18,6 +21,9 @@ This document details the code that informs how phenology data from the Bromecas
 library(tidyverse)
 library(here)
 library(patchwork)
+library(lme4)
+library(mgcv); library(gratia)
+library(geomtextpath)
 
 # Read in derived phenology data
 phen <- read_csv(here("gardens/deriveddata/SS2022_growthphenology_by_plantID.csv"))
@@ -44,10 +50,21 @@ flags <- read_csv(here("gardens/deriveddata/SS2022_flags.csv"))
 
 # Merge together datasets
 phen <- merge(phen_id_garden, flags)
+
+# Set appropriate factors for variables
+phen %>% 
+  mutate(block = as.factor(block),
+         plot = as.factor(plot),
+         growout = as.factor(growout),
+         density = as.factor(density),
+         gravel = as.factor(gravel),
+         genotype = as.factor(genotype)) %>% 
+  mutate(plot_unique = as.factor(paste(block, plot, sep = "_")))-> phen
 ```
 
 
-1. **Late emergence**: Notes if the plant emerged after the first date plants were assessed for emergence, and if so, records the date of the visit where emergence was first observed. NAs for plants with recorded emergence on the first visit and for plants that never emerged.
+### Late emergence
+Notes if the plant emerged after the first date plants were assessed for emergence, and if so, records the date of the visit where emergence was first observed. NAs for plants with recorded emergence on the first visit and for plants that never emerged.
 ```{r flag_lateemergence, eval = F}
 flag_lateemergence <- function(plant_data){
   # was plant absent first visit, later present?
@@ -64,7 +81,8 @@ flag_lateemergence <- function(plant_data){
 }
 ```
 
-2. **Emergence date**: Records emergence date. NAs for plants that never emerged.
+### Emergence date
+Records emergence date. NAs for plants that never emerged.
 
 ```{r get_emergence_date, eval = F}
 get_emergence_date <- function(plant_data){
@@ -110,7 +128,8 @@ emergence_summary %>%
 emergence
 ```
 
-3. **Death date**: Records first date for which there absence recorded following a presence being recorded. Returns NAs if plants were alive and never died or if plants never emerged to begin with.
+### Death date
+Records first date for which there absence recorded following a presence being recorded. Returns NAs if plants were alive and never died or if plants never emerged to begin with.
 ```{r, eval = F}
 get_death_date <- function(plant_data){
   # date of first absence after a presence
@@ -156,7 +175,8 @@ death
 
 ```
 
-4. **Resurrection**: Records if plant was recorded as being present after previously being recorded as absent. Returns NAs if plants were never recorded as absent after being present or if plants never emerged to being with.
+### Resurrection
+Records if plant was recorded as being present after previously being recorded as absent. Returns NAs if plants were never recorded as absent after being present or if plants never emerged to being with.
 
 ```{r, flag_resurrection, eval = F}
 flag_resurrection <- function(plant_data){
@@ -205,7 +225,8 @@ resurrection_summary %>%
 resurrection
 ```
 
-5. **Phenological regression**: Determines if phenology goes backwards through time (*e.g.*, V1 recorded after a previously recorded V2) and if so, records the maximum number of stages of regression for each plant. Returns NAs if phenological regression doesn't happen or if the plant never emerged to being with.
+### Phenological regression
+Determines if phenology goes backwards through time (*e.g.*, V1 recorded after a previously recorded V2) and if so, records the maximum number of stages of regression for each plant. Returns NAs if phenological regression doesn't happen or if the plant never emerged to being with.
 
 ```{r flag_phenoregress, eval = F}
 flag_phenoregress <- function(plant_data,pheno_table){
@@ -249,7 +270,8 @@ phenoregress_summary %>%
 phenoregress
 ```
 
-6. **Growth regression**: Determines if the leaf length of the plant goes backwards through time and if so, records the maximum amount of shrinkage in millimeters. Records NAs if there is no growth regression or if plant did not emerge to begin with.
+### Growth regression
+Determines if the leaf length of the plant goes backwards through time and if so, records the maximum amount of shrinkage in millimeters. Records NAs if there is no growth regression or if plant did not emerge to begin with.
 ```{r flag_growthregress, eval = F}
 flag_growthregress <- function(plant_data){
   # does leaf length go backwards? return max mm of shrinkage
@@ -292,7 +314,8 @@ growthregress_summary %>%
 growthregress
 ```
 
-7. **Frost heave**: Determines if there was frost heave recorded for the plant and if so, returns the date of first recorded frost heave. Returns NAs if no frost heave recorded for the plant or if the plant never emerged to begin with. Also adds notes to observation about frost heave.
+### Frost heave
+Determines if there was frost heave recorded for the plant and if so, returns the date of first recorded frost heave. Returns NAs if no frost heave recorded for the plant or if the plant never emerged to begin with. Also adds notes to observation about frost heave.
 
 ```{r flag_frostheave, eval = F}
 flag_frostheave <- function(plant_data){
@@ -340,7 +363,8 @@ frostheave_summary %>%
 frostheave
 ```
 
-8. **Herbivory**: Determines if there was herbivory recorded for the plant and if so, returns the date for which herbivory was first recorded. Returns NAs if there was no herbivory recorded or if plants never emerged to begin with. Also adds notes to observation about herbivory.
+### Herbivory
+Determines if there was herbivory recorded for the plant and if so, returns the date for which herbivory was first recorded. Returns NAs if there was no herbivory recorded or if plants never emerged to begin with. Also adds notes to observation about herbivory.
 ```{r, flag_herbivory, eval = F}
 flag_herbivory <- function(plant_data){
   out <- NA
@@ -388,7 +412,8 @@ herbivory
 ```
 
 
-9. **Bad position**: Determines if the plant was not in the expected position and if so, returns the date for which "bad position" was first recorded. Returns NAs if there was no "bad position: recorded or if plants never emerged to begin with. Also adds notes to observation about bad positioning.
+### Bad position
+Determines if the plant was not in the expected position and if so, returns the date for which "bad position" was first recorded. Returns NAs if there was no "bad position: recorded or if plants never emerged to begin with. Also adds notes to observation about bad positioning.
 ```{r flag_badposition, eval = F}
 flag_badposition <- function(plant_data){
   out <- NA
@@ -432,7 +457,8 @@ bad_position_summary %>%
 bad_position
 ```
 
-10. **Other notes**: Determines if there are other standardized notes that are important to add to the derived data that are not herbivory, frost heave, or bad positioning, and if so, records them. If there are multiple notes, these are combined together. Returns NAs if there are no other notes.
+### Other notes
+Determines if there are other standardized notes that are important to add to the derived data that are not herbivory, frost heave, or bad positioning, and if so, records them. If there are multiple notes, these are combined together. Returns NAs if there are no other notes.
 
 ```{r flag_other, eval = F}
 flag_other <- function(plant_data){
@@ -463,7 +489,344 @@ phen %>%
   mutate(percentage = round(n*100/sum(n),3))
 ```
 
+## Running analyses to see the impact of flagging on inference
 
+### Assessing survival rates
+```{r, fig.height=6, fig.width = 12, fig.align='center', echo = F}
+phen %>% 
+  # Remove plants with bad position flags
+  filter(is.na(bad_position),
+         # Remove plants that were missing
+         is.na(missing_plant)) %>% 
+  # Create column to calculate difference between frost heave and emergence timing
+  mutate(frost_time = frostheave_date - emergence_date) %>% 
+  # Remove plants that had frost heave before emergence
+  filter(frost_time > 0 | is.na(frost_time)) -> phen_sub1
+
+# Create subsetted data that has one observation per plant
+phen_sub1 %>% 
+  group_by(plantID) %>% 
+  slice(which.max(jday)) %>% 
+  mutate(survived = ifelse(live == "Y", 1, 0)) %>%
+  select(plantID, site, block, plot, plot_unique, frostheave_date, density, gravel, genotype, survived) %>% 
+  distinct() -> phen_sub1_plant
+
+# Fit emergence model
+m1_gam <- gam(survived ~ density*gravel +
+                # Random intercept for block
+                s(block, bs = 're') + 
+                # Random intercept for plot nested within block
+                s(plot_unique, bs = 're') +
+                # Random intercept for genotype
+                s(genotype, bs = 're'),
+                # Random slope for density x genotype effects
+                #s(genotype, density, bs = 're')+
+                # Random slope for gravel x genotype effects
+                #s(genotype, gravel, bs = 're'),
+              data = phen_sub1_plant, method = 'REML', family = "binomial")
+
+# Get confidence intervals around variance components
+variance_comp(m1_gam)
+
+# Plot effects of genotype
+confint(m1_gam, parm = "s(genotype)") %>% 
+  ggplot(aes(x = reorder(genotype, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = genotype, xend = genotype)) +
+  xlab("genotype") +
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  ylim(-1.5, 1.5) +
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1))-> a
+
+# Plot effects of block
+confint(m1_gam, parm = "s(block)") %>% 
+  ggplot(aes(x = reorder(block, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = block, xend = block)) +
+  xlab("block")+
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  ylim(-1.5, 1.5)+
+  theme_bw(base_size = 14)-> b
+
+# Plot effects of unique plot
+confint(m1_gam, parm = "s(plot_unique)") %>% 
+  ggplot(aes(x = reorder(plot_unique, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = plot_unique, xend = plot_unique)) +
+  xlab("plot") +
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  ylim(-1.5, 1.5)+
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1))-> c
+
+a / b / c
+```
+
+Variation in likelihood of survival is mostly driven by small, plot-level variation rather than large, block-level variation or genotypic variation.  
+
+```{r, fig.height = 4, fig.width = 6, fig.align='center', echo = F}
+# Get predicted means of density:gravel treatments
+dg_means <- summary(emmeans::emmeans(m1_gam, ~density*gravel, non.nuis = c("density", "gravel"), type = "response"))
+
+# Plot density:gravel effects
+dg_means %>% 
+  mutate(survived = prob) %>% 
+  ggplot(aes(x = density, y = survived)) +
+  geom_point() +
+  geom_segment(aes(x = density, xend = density, y = lower.CL, yend = upper.CL)) +
+  geom_jitter(data = phen_sub1_plant, aes(x = density, y = survived),
+              height = 0.05, width = 0.3, alpha = 0.2, shape = 1) +
+  facet_wrap(~gravel) +
+  theme_bw(base_size = 14) +
+  ylab("probability of survival")
+```
+
+The likelihood of survival is higher at high density than at low density, and this effect is consistent across gravel types. 
+
+### Assessing flowering rates (i.e., if flowered or not, based on plants that survived)
+```{r, fig.align='center', fig.width=12, fig.height=6, echo = F}
+# Create column for if flowered during the course of the experiment. First get
+# plants that flowered at least once during the experiment but also survived
+phen_sub1_plant %>%
+  filter(survived == 1) %>% 
+  pull(plantID) -> survived_plants
+
+phen_sub1 %>% 
+  filter(v %in% c("FG") & plantID %in% survived_plants) %>% 
+  group_by(plantID) %>%
+  slice(which.min(jday)) %>% 
+  ungroup() %>% 
+  mutate(flowered = 1) -> flowered_plants
+
+# Subset to get plants that did not flower
+`%notin%` <- Negate(`%in%`) # Not in operator
+
+phen_sub1 %>% 
+  filter(plantID %in% survived_plants) %>% 
+  filter(plantID %notin% flowered_plants$plantID) %>%
+  group_by(plantID) %>% 
+  slice(which.min(jday)) %>% 
+  ungroup() %>% 
+  mutate(flowered = 0) -> unflowered_plants
+
+# Join together flowered and unflowered data sets
+phen_sub1_plant3 <- rbind(flowered_plants, unflowered_plants)
+
+# Fit flowering model
+m3_gam <- gam(flowered ~ density*gravel +
+                # Random intercept for block
+                s(block, bs = 're') + 
+                # Random intercept for plot nested within block
+                s(plot_unique, bs = 're') +
+                # Random intercept for genotype
+                s(genotype, bs = 're'),
+              data = phen_sub1_plant3, method = 'REML', family = "binomial")
+
+# Get confidence intervals around variance components
+variance_comp(m3_gam)
+
+# Plot effects of genotype
+confint(m3_gam, parm = "s(genotype)") %>% 
+  ggplot(aes(x = reorder(genotype, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = genotype, xend = genotype)) +
+  xlab("genotype") +
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1))-> h
+
+# Plot effects of block
+confint(m3_gam, parm = "s(block)") %>% 
+  ggplot(aes(x = reorder(block, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = block, xend = block)) +
+  xlab("block")+
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  theme_bw(base_size = 14)-> i
+
+# Plot effects of unique plot
+confint(m3_gam, parm = "s(plot_unique)") %>% 
+  ggplot(aes(x = reorder(plot_unique, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = plot_unique, xend = plot_unique)) +
+  xlab("plot") +
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1))-> j
+
+h / i / j
+  
+```
+Variation in likelihood of flower (given that a plant survived) is mostly driven by genotypic variation rather than plot- or block-level variation.   
+
+```{r, fig.height = 4, fig.width = 6, fig.align='center', echo = F}
+# Get predicted means of density:gravel treatments
+dg_means_flower <- summary(emmeans::emmeans(m3_gam, ~density*gravel, non.nuis = c("density", "gravel"), type = "response"))
+
+# Plot density:gravel effects
+dg_means_flower %>% 
+  mutate(flowered = prob) %>% 
+  ggplot(aes(x = density, y = flowered)) +
+  geom_point() +
+  geom_segment(aes(x = density, xend = density, y = lower.CL, yend = upper.CL)) +
+  #geom_jitter(data = phen_sub1_plant3, aes(x = density, y = flowered),
+              #height = 0.05, width = 0.3, alpha = 0.1, shape = 1) +
+  facet_wrap(~gravel) +
+  theme_bw(base_size = 14) +
+  ylab("probability of flowering (if survived)")
+```
+
+The probability of flowering is higher at high density than at low density and higher when the plant is in black gravel compared to white gravel.
+
+## Assessing time to flower
+```{r, fig.align='center', fig.width=12, fig.height=6, echo = F}
+# Calculate when the earliest flowering day is for each plant. This procedure
+# removes plants that do not flower of the course of the experiment.
+phen_sub1 %>%
+  filter(v == "FG") %>%
+  group_by(plantID) %>%
+  slice(which.min(jday)) -> phen_sub1_plant2
+
+# Get summary statistics
+# phen_sub1_plant2 %>% 
+#   group_by(jday) %>% 
+#   summarize(n = n())
+
+# Try fitting an ordered categorical model for the response variable (because sampled every 2 weeks)
+phen_sub1_plant2 %>% 
+  mutate(ord = case_when(jday %in% 123:125 ~ 1,
+                         jday %in% 138:140 ~ 2,
+                         jday %in% 151:154 ~ 3,
+                         jday %in% 165:166 ~ 4)) -> phen_sub1_plant2
+
+phen_sub1_plant2 %>% 
+  mutate(trt = factor(paste(density, gravel, sep = "_"))) -> phen_sub1_plant2
+
+m2_gam <- gam(ord ~ trt +
+              # Random intercept for block
+                s(block, bs = 're') + 
+                # Random intercept for plot nested within block
+                s(plot_unique, bs = 're') +
+                #s(genotype, bs = 're'),
+                # Random slope for genotype x density:gravel?
+                s(genotype, by = trt, bs = 're'),
+              family = ocat(R = 4),
+              data = phen_sub1_plant2)
+
+# Plot effects of genotype
+confint(m2_gam, parm = "s(genotype)") %>% 
+  ggplot(aes(x = reorder(genotype, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = genotype, xend = genotype)) +
+  xlab("genotype") +
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1))-> d
+
+# Plot effects of block
+confint(m2_gam, parm = "s(block)") %>% 
+  ggplot(aes(x = reorder(block, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = block, xend = block)) +
+  xlab("block")+
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  theme_bw(base_size = 14)-> e
+
+# Plot effects of unique plot
+confint(m1_gam, parm = "s(plot_unique)") %>% 
+  ggplot(aes(x = reorder(plot_unique, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = plot_unique, xend = plot_unique)) +
+  xlab("plot") +
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1))-> f
+
+d / e / f
+
+
+```
+
+Variation in the timing of flowering is mostly driven by genotypic variation, but also by small, plot-level variation.
+
+```{r, fig.align='center', fig.width=6, fig.height=5, echo = F}
+new_data <- expand.grid(density = unique(phen_sub1_plant2$density),
+                        plot_unique = unique(phen_sub1_plant2$plot_unique),
+                        genotype = unique(phen_sub1_plant2$genotype),
+                        gravel = unique(phen_sub1_plant2$gravel)) %>%
+  mutate(block = as.factor(str_extract(plot_unique, ".+?(?=_)")))
+
+# new_data <- expand.grid(trt = unique(phen_sub1_plant2$trt),
+#                         plot_unique = unique(phen_sub1_plant2$plot_unique),
+#                         genotype = unique(phen_sub1_plant2$genotype)) %>%
+#   mutate(block = as.factor(str_extract(plot_unique, ".+?(?=_)")))
+
+# Predict means across all possible combinations
+predict(m2_gam, newdata = new_data, type = "response") -> m2_preds
+# Group together with data
+new_data %>% 
+  mutate(prob1 = m2_preds[,1],
+         prob2 = m2_preds[,2],
+         prob3 = m2_preds[,3],
+         prob4 = m2_preds[,4]) -> pred_data
+# Average across combinations of interest
+pred_data %>% 
+  group_by(density, gravel) %>% 
+  summarize(across(where(is.numeric), mean)) %>% 
+  mutate(cum_prob_1 = prob1,
+         cum_prob_12 = prob1 + prob2,
+         cum_prob_123 = prob1 + prob2 + prob3,
+         cum_prob_1234 = 1) %>% 
+  gather(key = cat, value = cum_prob, cum_prob_1:cum_prob_1234) %>% 
+  mutate(jday = case_when(cat == "cum_prob_1" ~ 124,
+                          cat == "cum_prob_12" ~ 139,
+                          cat == "cum_prob_123" ~ 152,
+                          cat == "cum_prob_1234" ~ 165),
+         treatment = paste(density, gravel, sep = "_"),
+         density = ifelse(density == "hi", "high", "low")) %>% 
+  ggplot(aes(x = jday, y = cum_prob, group = treatment, color = gravel, shape = density, linetype = density)) +
+  geom_textline(aes(label = paste(density, gravel, sep = "-")), hjust = 0.42) +
+  geom_point(size = 3) +
+  ylab("cumulative probability of flowering by date") +
+  theme_classic(base_size = 14) +
+  xlab("julian day") +
+  scale_color_manual(values = c("black", "gray70")) +
+  scale_x_continuous(breaks = c(124,139,152,165)) +
+  theme(legend.position = "none")
+
+# pred_data %>% 
+#   group_by(genotype, trt) %>% 
+#   summarize(across(where(is.numeric), mean)) %>% 
+#   mutate(cum_prob_1 = prob1,
+#          cum_prob_12 = prob1 + prob2,
+#          cum_prob_123 = prob1 + prob2 + prob3,
+#          cum_prob_1234 = 1) %>% 
+#   gather(key = cat, value = cum_prob, cum_prob_1:cum_prob_1234) %>% 
+#   mutate(jday = case_when(cat == "cum_prob_1" ~ 124,
+#                           cat == "cum_prob_12" ~ 139,
+#                           cat == "cum_prob_123" ~ 152,
+#                           cat == "cum_prob_1234" ~ 165)) %>%
+#   filter(genotype %in% c("1", "2", "5", "6")) %>% 
+#   ggplot(aes(x = jday, y = cum_prob, group = genotype:trt, color = genotype)) +
+#   geom_line() +
+#   ylab("cumulative probability of flowering by date") +
+#   theme_classic(base_size = 14) +
+#   xlab("julian day") +
+#   scale_x_continuous(breaks = c(124,139,152,165))
+  
+```
+
+Plants flower earlier when at a higher density than at a lower density, and flower earlier in black gravel than in white gravel. The effect of density on flowering time is greater when plants are in black gravel than when plants are in white gravel. 
 
 
 

@@ -40,9 +40,11 @@ phenoD$v_numeric[phenoD$v=="V3"] <- 4
 phenoD$v_numeric[phenoD$v=="V3+"] <- 5
 phenoD$v_numeric[phenoD$v=="BS"] <- 6  # boot stage
 phenoD$v_numeric[phenoD$v=="FG"] <- 7 # flowering green
+phenoD$v_numeric[phenoD$v=="FP"] <- 8 # flowering purple
+phenoD$v_numeric[phenoD$v=="FB"] <- 9 # flowering brown
 phenoD <- phenoD[order(phenoD$v_numeric),]
 #check!
-#print(phenoD)
+print(phenoD)
 
 # loop through plantIDs and check for each flag
 for(i in 1:nrow(flagD)){

@@ -17,13 +17,13 @@
 #line 114 subset out bad length values (>250mm)
 ####################
 #library
-library(lubridate)
+library(lubridate); library(tidyverse)
 
 doyear <- 2022 # growing season to do
 dosite <- "Boise" # code for focal site
 
 # import raw growth and phenology data
-rawD <- read.csv("../rawdata/Phenology_BoiseSites_2021_2022_MASTER.csv",header=T)
+rawD <- read.csv(here("gardens/rawdata/Phenology_BoiseSites_2021_2022_MASTER.csv"),header=T)
 
 # remove capital letters from column headers 
 # (this will make it easier to harmonize data across sites)
@@ -33,15 +33,15 @@ names(rawD) <- tolower(names(rawD))
 rawD$plot<-rawD$subplot
 rawD$x<-rawD$x_coordinate
 rawD$y<-rawD$y_coordinate
-rawD$genotype<-rawD$genotypeid
+rawD$genotype<-parse_number(rawD$genotypeid)
 rawD$growout<-rawD$bulkyear
 rawD$date<-rawD$mondate
 rawD$live<-rawD$seedling_present.
 rawD$v<-rawD$phenology
 rawD$length_mm<-rawD$max_leaf_length_.mm.
-rawD$herbivory<-rawD$herbivory_present.
-rawD$frost_heave<-rawD$frost_heaved.
-rawD$harvested<-rawD$plant_harvested.
+rawD$herbivory<- ifelse(rawD$herbivory_present. == TRUE, "Y", "N") 
+rawD$frost_heave<-ifelse(rawD$frost_heaved. == TRUE, "Y", "N")
+rawD$harvested<- ifelse(rawD$plant_harvested. == TRUE, "Y", "N")
 
 
 #Replace site names with relative elevation
@@ -63,10 +63,10 @@ plant_key <- rawD[,c("site","block","plot","x","y","genotype","growout")]
 plant_key <- unique(plant_key,MARGIN=2)
 plant_key$plantID <- paste0(plant_key$site,doyear,"_",1:nrow(plant_key))
 rawD <- merge(rawD,plant_key)
-plant_key$site <- dosite
+#plant_key$site <- dosite
 plant_key$year <- doyear
 plant_key <- plant_key[,c(8,1,9,2:7)]
-write.csv(plant_key,file=paste0("../deriveddata/",dosite,doyear,"_plantID.csv"),row.names=F)
+write.csv(plant_key,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_plantID.csv"),row.names=F)
 rm(plant_key)
 
 # pull out and format phenology and growth data and notes for each plant
@@ -111,7 +111,7 @@ levels(pgD$v)[levels(pgD$v)=="BOOTSTAGE"] <- 'BS'
 pgD$length_mm <- as.numeric(pgD$length_mm)
 hist(pgD$length_mm) # a few very high values
 #subset out values less than 250
-pgD<-subset(pgD, pgD$length_mm<250)
+pgD<-subset(pgD, pgD$length_mm<250 | is.na(length_mm)) 
 min(pgD$length_mm,na.rm=T) # looks good
 
 # compile notes
@@ -120,10 +120,11 @@ tmp[tmp==""] <- NA
 tmp <- tmp[!is.na(tmp)]
 tmp <- unique(tmp,MARGIN=2)
 tmp <- data.frame(notes=tmp,action=NA)
-write.csv(tmp,file=paste0("../deriveddata/",dosite,doyear,"_notes.csv"),row.names=F)
+# write.csv(tmp,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_notes_actions.csv"),row.names=F)
 # open as a spreadsheet, fill in action column by hand
+# This has been edited as a raw file by MLV on 19 April 2023
 
 rm(rawD)
 
 # write pgD to file
-write.csv(pgD,file=paste0("../deriveddata/",dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)
+write.csv(pgD,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)
