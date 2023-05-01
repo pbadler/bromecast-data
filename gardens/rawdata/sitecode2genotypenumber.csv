@@ -29,7 +29,7 @@ g27,Board1,A,reno2020
 g28,Bradford01,A,reno2020
 g29,Chambers01,A,reno2020
 g30,Chambers02,A,reno2020
-g31,Urza01,B,reno2020
+g31,Urza1,B,reno2020
 g32,Chambers04,A,reno2020
 g33,Chambers05,A,reno2020
 g34,Chambers06,A,reno2020
@@ -40,9 +40,9 @@ g38,Copeland01,A,reno2020
 g39,Copeland05,A,reno2020
 g40,Copeland09,B,reno2020
 g41,Copeland10,B,reno2020
-g42,Downs 01,A,reno2020
-g43,Downs 02,A,reno2020
-g44,Downs 03,A,reno2020
+g42,Downs01,A,reno2020
+g43,Downs02,A,reno2020
+g44,Downs03,A,reno2020
 g45,Fleishman_01,C,reno2020
 g46,Fleishman_05,B,reno2020
 g47,Fleishman_07,B,reno2020
@@ -50,8 +50,8 @@ g48,Getts1,A,reno2020
 g49,Getts3,A,reno2020
 g50,Getts4,C,reno2020
 g51,Holdrege1,C,reno2020
-g52,Hufft01,A,reno2020
-g53,Hufft02,A,reno2020
+g52,Hufft1,A,reno2020
+g53,Hufft2,A,reno2020
 g54,JackieOtt1,A,reno2020
 g55,JackieOtt2,C,reno2020
 g56,JackieOtt5,C,reno2020
@@ -59,28 +59,28 @@ g57,JackieOtt6,B,reno2020
 g58,JackieOtt7,A,reno2020
 g59,Lavin01,B,reno2020
 g60,Lavin02,C,reno2020
-g61,Lee 01,A,reno2020
-g62,Lee 02,A,reno2020
-g63,Lee 03,A,reno2020
-g64,Lee 04,A,reno2020
+g61,Lee1,A,reno2020
+g62,Lee2,A,reno2020
+g63,Lee3,A,reno2020
+g64,Lee4,A,reno2020
 g65,Leger 1,A,reno2020
 g66,Maron1,A,reno2020
 g67,Maron2,A,reno2020
-g68,Porensky01,C,reno2020
+g68,Porensky1,C,reno2020
 g69,Porensky17,A,reno2020
 g70,Porensky12,B,reno2020
 g71,Porensky30,A,reno2020
-g72,Pyke 03,C,reno2020
-g73,Pyke 08,A,reno2020
-g74,Pyke 21,C,reno2020
-g75,Pyle01,A,reno2020
-g76,Pyle09,C,reno2020
-g77,Pyle10,A,reno2020
-g78,Pyle12,C,reno2020
-g79,Pyle15,B,reno2020
-g80,Pyle16,B,reno2020
-g81,Pyle17,B,reno2020
-g82,Pyle19,B,reno2020
+g72,Pyke3,C,reno2020
+g73,Pyke8,A,reno2020
+g74,Pyke21,C,reno2020
+g75,Pyke1,A,reno2020
+g76,Pyke9,C,reno2020
+g77,Pyke10,A,reno2020
+g78,Pyke12,C,reno2020
+g79,Pyke15,B,reno2020
+g80,Pyke16,B,reno2020
+g81,Pyke17,B,reno2020
+g82,Pyke19,B,reno2020
 g83,Reed01,A,reno2020
 g84,Reed03,B,reno2020
 g85,Rinella01,C,reno2020
@@ -91,8 +91,8 @@ g89,Symstad1,B,reno2020
 g90,Symstad2,A,reno2020
 g91,Symstad3,A,reno2020
 g92,Symstad4,B,reno2020
-g93,Urza02,A,reno2020
-g94,Urza03,A,reno2020
+g93,Urza2,A,reno2020
+g94,Urza3,A,reno2020
 g95,Wilcox02,C,reno2020
 g96,Chynoweth02,A,reno2020
 g97,Chynoweth03,A,reno2020
