@@ -63,3 +63,30 @@ merge(harvest, plantID) %>%
 
 # Figure out what possible phenology statuses there are
 unique(harvest_phen$v)
+
+# Rename harvest phenology into categories: grouping by latest stage if there
+# are multiple stages. If DEAD is listed with other stages, then I put it in the
+# last possible stage before DEAD.
+harvest_phen %>% 
+  mutate(v_new = case_when(v %in% c("FG_FP_FB", "FB") ~ "FB",
+                           v %in% c("FG", "BS_FG", "FG_BS", "FG_D",
+                                    "FG_FG", "FG_DEAD") ~ "FG",
+                           v %in% c(NA, "UN", "UNK", "UNL", "unknown", "DEAD", "missing") ~ NA,
+                           v == "V0" ~ "V0",
+                           v == "V1" ~ "V1",
+                           v == "V2" ~ "V2",
+                           v == "V3" ~ "V3",
+                           v == "V3+" ~ "V3+",
+                           v %in% c("BS/dead", "BS", "D_BS") ~ "BS",
+                           T ~ "FP")) %>% 
+  mutate(v = v_new) %>% 
+  select(-v_new) -> harvest_phen
+
+# Bring together phenology data set and harvest phenology
+rbind(phen, harvest_phen) -> all_phen
+
+# Write csv into derived dataset
+write_csv(all_phen,here("gardens/deriveddata/SS2022_growthphenology_with_harvest.csv"))
+
+
+

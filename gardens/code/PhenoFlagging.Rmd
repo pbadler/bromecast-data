@@ -26,7 +26,7 @@ library(mgcv); library(gratia)
 library(geomtextpath)
 
 # Read in derived phenology data
-phen <- read_csv(here("gardens/deriveddata/SS2022_growthphenology_by_plantID.csv"))
+phen <- read_csv(here("gardens/deriveddata/SS2022_growthphenology_with_harvest.csv"))
 # Read in plant ID info
 ids <- read_csv(here("gardens/deriveddata/SS2022_plantID.csv"))
 # Read in garden treatment info
@@ -596,7 +596,7 @@ phen_sub1_plant %>%
   pull(plantID) -> survived_plants
 
 phen_sub1 %>% 
-  filter(v %in% c("FG") & plantID %in% survived_plants) %>% 
+  filter(v %in% c("FG", "FP", "FB") & plantID %in% survived_plants) %>% 
   group_by(plantID) %>%
   slice(which.min(jday)) %>% 
   ungroup() %>% 
@@ -690,7 +690,7 @@ The probability of flowering is higher at high density than at low density and h
 # Calculate when the earliest flowering day is for each plant. This procedure
 # removes plants that do not flower of the course of the experiment.
 phen_sub1 %>%
-  filter(v == "FG") %>%
+  filter(v %in% c("FG", "FP", "FB")) %>%
   group_by(plantID) %>%
   slice(which.min(jday)) -> phen_sub1_plant2
 
@@ -704,20 +704,21 @@ phen_sub1_plant2 %>%
   mutate(ord = case_when(jday %in% 123:125 ~ 1,
                          jday %in% 138:140 ~ 2,
                          jday %in% 151:154 ~ 3,
-                         jday %in% 165:166 ~ 4)) -> phen_sub1_plant2
+                         jday %in% 165:166 ~ 4,
+                         jday %in% 182:195 ~ 5)) -> phen_sub1_plant2
 
 phen_sub1_plant2 %>% 
   mutate(trt = factor(paste(density, gravel, sep = "_"))) -> phen_sub1_plant2
 
-m2_gam <- gam(ord ~ trt +
+m2_gam <- gam(ord ~ density*gravel +
               # Random intercept for block
                 s(block, bs = 're') + 
                 # Random intercept for plot nested within block
                 s(plot_unique, bs = 're') +
-                #s(genotype, bs = 're'),
+                s(genotype, bs = 're'),
                 # Random slope for genotype x density:gravel?
-                s(genotype, by = trt, bs = 're'),
-              family = ocat(R = 4),
+                #s(genotype, by = trt, bs = 're'),
+              family = ocat(R = 5),
               data = phen_sub1_plant2)
 
 # Plot effects of genotype
@@ -778,7 +779,8 @@ new_data %>%
   mutate(prob1 = m2_preds[,1],
          prob2 = m2_preds[,2],
          prob3 = m2_preds[,3],
-         prob4 = m2_preds[,4]) -> pred_data
+         prob4 = m2_preds[,4],
+         prob5 = m2_preds[,5]) -> pred_data
 # Average across combinations of interest
 pred_data %>% 
   group_by(density, gravel) %>% 
@@ -786,12 +788,14 @@ pred_data %>%
   mutate(cum_prob_1 = prob1,
          cum_prob_12 = prob1 + prob2,
          cum_prob_123 = prob1 + prob2 + prob3,
-         cum_prob_1234 = 1) %>% 
-  gather(key = cat, value = cum_prob, cum_prob_1:cum_prob_1234) %>% 
+         cum_prob_1234 = prob1 + prob2 + prob3 + prob4,
+         cum_prob_12345 = 1) %>% 
+  gather(key = cat, value = cum_prob, cum_prob_1:cum_prob_12345) %>% 
   mutate(jday = case_when(cat == "cum_prob_1" ~ 124,
                           cat == "cum_prob_12" ~ 139,
                           cat == "cum_prob_123" ~ 152,
-                          cat == "cum_prob_1234" ~ 165),
+                          cat == "cum_prob_1234" ~ 165,
+                          cat == "cum_prob_12345" ~ 189),
          treatment = paste(density, gravel, sep = "_"),
          density = ifelse(density == "hi", "high", "low")) %>% 
   ggplot(aes(x = jday, y = cum_prob, group = treatment, color = gravel, shape = density, linetype = density)) +
@@ -801,7 +805,7 @@ pred_data %>%
   theme_classic(base_size = 14) +
   xlab("julian day") +
   scale_color_manual(values = c("black", "gray70")) +
-  scale_x_continuous(breaks = c(124,139,152,165)) +
+  scale_x_continuous(breaks = c(124,139,152,165, 189)) +
   theme(legend.position = "none")
 
 # pred_data %>% 
