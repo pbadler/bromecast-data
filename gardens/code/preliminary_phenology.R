@@ -6,11 +6,15 @@ library(here)
 library(patchwork)
 library(lme4)
 library(mgcv); library(gratia)
-library(geomtextpath)
+library(geomtextpath);
+library(dismo)
+
+# Source code that creates data frame with gps points of each genotype
+source(here("gardens/code/create_local_adapt_covariate.R"))
 
 ## Read in all Boise data ####
 # Read in derived phenology data
-phen <- read_csv(here("gardens/deriveddata/Boise2022_growthphenology_by_plantID.csv"))
+phen <- read_csv(here("gardens/deriveddata/Boise2022_growthphenology_with_harvest.csv"))
 # Read in plant ID info
 ids <- read_csv(here("gardens/deriveddata/Boise2022_plantID.csv"))
 # Read in garden treatment info
@@ -24,7 +28,7 @@ phen_id <- merge(phen, ids)
 # Rename 'garden' column and remove cum_plot column
 gardens %>% 
   mutate(site = garden) %>% 
-  select(-cum_plot, -garden) -> gardens_sub
+  dplyr::select(-cum_plot, -garden) -> gardens_sub
 
 # Merge together datasets
 phen_id_garden <- merge(phen_id, gardens_sub)
@@ -34,6 +38,7 @@ flags <- read_csv(here("gardens/deriveddata/Boise2022_flags.csv"))
 
 # Merge together datasets
 phen <- merge(phen_id_garden, flags)
+phen <- merge(phen, genotype_PCclimate)
 
 # Set appropriate factors for variables
 phen %>% 
@@ -49,11 +54,9 @@ phen %>%
 ## Read in Sheep Station data ####
 
 # Read in derived phenology data
-phen <- read_csv(here("gardens/deriveddata/SS2022_growthphenology_by_plantID.csv"))
+phen <- read_csv(here("gardens/deriveddata/SS2022_growthphenology_with_harvest.csv"))
 # Read in plant ID info
 ids <- read_csv(here("gardens/deriveddata/SS2022_plantID.csv"))
-# Read in garden treatment info
-gardens <-read_csv(here("gardens/rawdata/garden_treatments.csv"))
 # Read in flagging data
 flags <- read_csv(here("gardens/deriveddata/SS2022_flags.csv"))
 
@@ -63,7 +66,7 @@ phen_id <- merge(phen, ids)
 # Rename 'garden' column and remove cum_plot column
 gardens %>% 
   mutate(site = garden) %>% 
-  select(-cum_plot, -garden) -> gardens_sub
+  dplyr::select(-cum_plot, -garden) -> gardens_sub
 
 # Merge together datasets
 phen_id_garden <- merge(phen_id, gardens_sub)
@@ -73,6 +76,7 @@ flags <- read_csv(here("gardens/deriveddata/SS2022_flags.csv"))
 
 # Merge together datasets
 phen <- merge(phen_id_garden, flags)
+phen <- merge(phen, genotype_PCclimate)
 
 # Set appropriate factors for variables
 phen %>% 
@@ -85,16 +89,49 @@ phen %>%
   mutate(plot_unique = as.factor(paste(site, block, plot, sep = "_")),
          block_unique = as.factor(paste(site, block, sep = "_")))-> phen_SS
 
-## Bring together Sheep Station and Boise data sets ####
+## Read in Cheyenne data ####
+phen <- read_csv(here("gardens/deriveddata/CH2022_growthphenology_by_plantID.csv"))
+# Read in plant ID info
+ids <- read_csv(here("gardens/deriveddata/CH2022_plantID.csv"))
+
+# Merge together datasets
+phen_id <- merge(phen, ids)
+
+phen <- merge(phen_id, genotype_PCclimate)
+
+# Additional organizing to accommodate CH data (before data cleaning)
+phen %>% 
+  mutate(site = "CH",
+         missing_plant = NA,
+         emergence_date = NA,
+         death_date = NA,
+         resurrection_date = NA,
+         pheno_regress = NA,
+         growth_regress_mm = NA,
+         herbivory_date = NA,
+         frostheave_date = NA,
+         bad_position = NA,
+         other = NA)  %>% 
+  dplyr::select(names(phen_Boise)) -> phen
+
+# Set appropriate factors for variables
+phen %>% 
+  mutate(block = as.factor(block),
+         plot = as.factor(plot),
+         growout = as.factor(growout),
+         density = as.factor(density),
+         gravel = as.factor(gravel),
+         genotype = as.factor(genotype)) %>% 
+  mutate(plot_unique = as.factor(paste(site, block, plot, sep = "_")),
+         block_unique = as.factor(paste(site, block, sep = "_")))-> phen_CH
+
+
+## Bring together all data sets ####
 # Remove tillers for SS
 phen_SS %>% 
-  select(-tillers) -> phen_SS
-phen <- rbind(phen_Boise, phen_SS)
+  dplyr::select(-tillers) -> phen_SS
 
-
-phen %>% 
-  group_by(frost_heave) %>% 
-  summarize(n = n())
+phen <- rbind(phen_Boise, phen_SS, phen_CH)
 
 ## Survival model ####
 
@@ -103,7 +140,7 @@ phen %>%
   group_by(plantID) %>% 
   slice(which.max(jday)) %>% 
   mutate(survived = ifelse(live == "Y", 1, 0)) %>%
-  select(plantID, site, block, block_unique, plot, plot_unique, frostheave_date, density, gravel, genotype, survived) %>% 
+  dplyr::select(plantID, site, block, block_unique, plot, plot_unique, frostheave_date, density, gravel, genotype, survived) %>% 
   distinct() -> phen_sub1_plant
 
 sum(phen_sub1_plant$survived)
@@ -211,7 +248,7 @@ phen %>%
 phen_sub1_plant3 <- rbind(flowered_plants, unflowered_plants)
 
 # Fit flowering model
-m3_gam <- gam(flowered ~ density*gravel*site +
+m3_gam <- gam(flowered ~ density*gravel +
                 # Random intercept for block
                 s(block_unique, bs = 're') + 
                 # Random intercept for plot nested within block
@@ -294,17 +331,19 @@ phen %>%
 #   summarize(n = n())
 
 # Try fitting an ordered categorical model for the response variable (because sampled every 2 weeks)
-phen_sub1_plant2 %>% 
-  mutate(ord = case_when(jday %in% 108:109 ~ 1,
-                         jday %in% 115:116 ~ 2,
-                         jday %in% 123:125 ~ 3,
-                         jday %in% 130:132 ~ 4,
-                         jday %in% 138:140 ~ 5,
+phen_sub1_plant2 %>%
+  mutate(ord = case_when(jday %in% 108 ~ 1,
+                         jday %in% 123:125 ~ 2,
+                         jday %in% 130:131 ~ 3,
+                         jday %in% 138:140 ~ 4,
+                         jday %in% 144:147 ~ 5,
                          jday %in% 151:154 ~ 6,
                          jday %in% 165:166 ~ 7,
-                         jday %in% 179:181 ~ 8)) -> phen_sub1_plant2
+                         jday %in% 182 ~ 8,
+                         jday %in% 186:195 ~ 9)) -> phen_sub1_plant2
 
-m2_gam <- gam(ord ~ density*gravel*site +
+
+m2_gam <- gam(ord ~ density*gravel*site + pc1 + pc2 +
                 # Random intercept for block
                 s(block_unique, bs = 're') + 
                 # Random intercept for plot nested within block
@@ -312,7 +351,7 @@ m2_gam <- gam(ord ~ density*gravel*site +
                 s(genotype, bs = 're'),
               # Random slope for genotype x density:gravel?
               #s(genotype, by = trt, bs = 're'),
-              family = ocat(R = 8),
+              family = ocat(R = 9),
               data = phen_sub1_plant2)
 
 summary(m2_gam)
@@ -339,7 +378,7 @@ confint(m2_gam, parm = "s(block_unique)") %>%
   theme_bw(base_size = 14)-> e
 
 # Plot effects of unique plot
-confint(m1_gam, parm = "s(plot_unique)") %>% 
+confint(m2_gam, parm = "s(plot_unique)") %>% 
   ggplot(aes(x = reorder(plot_unique, est), y = est)) +
   geom_point() +
   geom_segment(aes(y = lower, yend = upper, x = plot_unique, xend = plot_unique)) +
@@ -359,8 +398,10 @@ new_data <- expand.grid(density = unique(phen_sub1_plant2$density),
                         gravel = unique(phen_sub1_plant2$gravel)) %>% 
   separate(plot_unique, c("site", "block", "plot"), "_", remove = FALSE) %>% 
   mutate(block_unique = factor(paste(site, block, sep = "_")),
-         site = as.factor(site)) %>% 
-  select(density, plot_unique, genotype, gravel, block_unique, site)
+         site = as.factor(site),
+         pc1 = mean(phen_sub1_plant2$pc1),
+         pc2 = mean(phen_sub1_plant2$pc2)) %>% 
+  dplyr::select(density, plot_unique, genotype, gravel, block_unique, site, pc1, pc2)
 
 # Predict means across all possible combinations
 predict(m2_gam, newdata = new_data, type = "response") -> m2_preds
@@ -373,7 +414,8 @@ new_data %>%
          prob5 = m2_preds[,5],
          prob6 = m2_preds[,6],
          prob7 = m2_preds[,7],
-         prob8 = m2_preds[,8]) -> pred_data
+         prob8 = m2_preds[,8],
+         prob9 = m2_preds[,9]) -> pred_data
 # Average across combinations of interest
 pred_data %>% 
   group_by(density, gravel, site) %>% 
@@ -385,16 +427,18 @@ pred_data %>%
          cum_prob_12345 = prob1 + prob2 + prob3 + prob4 + prob5,
          cum_prob_123456 = prob1 + prob2 + prob3 + prob4 + prob5 + prob6,
          cum_prob_1234567 = prob1 + prob2 + prob3 + prob4 + prob5 + prob6 + prob7,
-         cum_prob_12345678 = 1) %>% 
-  gather(key = cat, value = cum_prob, cum_prob_1:cum_prob_12345678) %>% 
+         cum_prob_12345678 = prob1 + prob2 + prob3 + prob4 + prob5 + prob6 + prob7 + prob8,
+         cum_prob_123456789 = 1) %>% 
+  gather(key = cat, value = cum_prob, cum_prob_1:cum_prob_123456789) %>% 
   mutate(jday = case_when(cat == "cum_prob_1" ~ 108,
-                          cat == "cum_prob_12" ~ 115,
-                          cat == "cum_prob_123" ~ 124,
-                          cat == "cum_prob_1234" ~ 131,
-                          cat == "cum_prob_12345" ~ 139,
-                          cat == "cum_prob_123456" ~ 152,
+                          cat == "cum_prob_12" ~ 123,
+                          cat == "cum_prob_123" ~ 130,
+                          cat == "cum_prob_1234" ~ 138,
+                          cat == "cum_prob_12345" ~ 144,
+                          cat == "cum_prob_123456" ~ 151,
                           cat == "cum_prob_1234567" ~ 165,
-                          cat == "cum_prob_12345678" ~ 180),
+                          cat == "cum_prob_12345678" ~ 182,
+                          cat == "cum_prob_123456789" ~ 186),
          treatment = paste(density, gravel, sep = "_"),
          density = ifelse(density == "hi", "high", "low")) %>% 
   ggplot(aes(x = jday, y = cum_prob, group = treatment, color = gravel, shape = density, linetype = density)) +
@@ -404,7 +448,7 @@ pred_data %>%
   theme_classic(base_size = 14) +
   xlab("julian day") +
   scale_color_manual(values = c("black", "gray70")) +
-  scale_x_continuous(breaks = c(108,115,124,131,139,152,165,180)) +
+  scale_x_continuous(breaks = c(108,123,130,138,144,151,165,182,186)) +
   theme(legend.position = "none") +
   facet_wrap(~site) -> fixed_timing
 
@@ -413,3 +457,154 @@ fixed_timing
 dev.off()
 
 anova(m2_gam)
+
+# Also just try with linear model
+
+phen_sub1_plant2$site <- as.factor(phen_sub1_plant2$site)
+phen_sub1_plant2$pc2 <- scale(phen_sub1_plant2$pc2)[,1]
+phen_sub1_plant2$pc1 <- scale(phen_sub1_plant2$pc1)[,1]
+
+gam_linear <- gam(jday ~ density*gravel*pc1 + density*gravel*pc2 + site*pc1 + site*pc2 + 
+                    # Random intercept for block
+                    s(block_unique, bs = 're') + 
+                    # Random intercept for plot nested within block
+                    s(plot_unique, bs = 're') +
+                    s(genotype, bs = 're') +
+                    s(genotype, density, bs = 're') +
+                    s(genotype, site, bs = 're') +
+                    s(genotype, gravel, bs = "re"), method = "REML", 
+                  data = phen_sub1_plant2)
+
+
+lmer_linear <- lmer(log(jday) ~ density*gravel*pc1 + density*gravel*pc2 + site*pc1 + site*pc2 + 
+                      # Random intercept for block
+                      #s(block_unique, bs = 're') + 
+                      # Random intercept for plot nested within block
+                      (1|plot_unique) + (site+density*gravel|genotype),
+                    data = phen_sub1_plant2)
+
+phen_sub1_plant2 %>% filter(genotype == 70)
+
+library(lmerTest)
+anova(lmer_linear)
+anova(gam_linear)
+appraise(gam_linear)
+
+# Plot effects of genotype
+confint(gam_linear, parm = "s(genotype)") %>% 
+  ggplot(aes(x = reorder(genotype, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = genotype, xend = genotype)) +
+  xlab("genotype") +
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1)) -> a
+
+# Plot effects of unique plot
+confint(gam_linear, parm = "s(plot_unique)") %>% 
+  ggplot(aes(x = reorder(plot_unique, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = plot_unique, xend = plot_unique)) +
+  xlab("plot") +
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1)) -> b
+
+confint(gam_linear, parm = "s(block_unique)") %>% 
+  ggplot(aes(x = reorder(block_unique, est), y = est)) +
+  geom_point() +
+  geom_segment(aes(y = lower, yend = upper, x = block_unique, xend = block_unique)) +
+  xlab("block") +
+  ylab("estimate") +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1)) -> c
+
+png("~/Desktop/re_pres.png", height = 8, res = 300, width = 11, units = "in")
+c/b/a
+dev.off()
+# Make fixed effects plot of density x gravel x pc1
+summary(emmeans(gam_linear, ~density:gravel:pc1, non.nuis = c("density", "gravel", "pc1"),
+                at = list(pc1 = seq(-2.5,2.5, 0.5)))) %>% 
+  mutate(jday = emmean) %>% 
+  ggplot(aes(x = pc1, y = jday, color = density)) +
+  geom_ribbon(aes(ymin=lower.CL, ymax=upper.CL), fill = "gray", alpha = 0.1) +
+  geom_textline(aes(group = density, label = density), linewidth = 2) +
+  geom_point(data = phen_sub1_plant2, alpha = 0.1) +
+  theme_bw(base_size = 14) +
+  scale_color_manual(values = c("darkblue", "dodgerblue")) +
+  theme(legend.position = "none") +
+  ylab("julian day") +
+  facet_wrap(~gravel) +
+  xlab("PC 1") -> int3
+
+png("~/Desktop/int3.png", height = 6.5, width = 8.5, res = 300, units = "in")
+int3
+dev.off()
+
+# Make fixed effects plot of pc2 x site
+summary(emmeans(gam_linear, ~site:pc2, non.nuis = c("site", "pc2"),
+                at = list(pc2 = seq(-2.3,1.9, 0.5)))) %>% 
+  mutate(jday = emmean) %>% 
+  ggplot(aes(x = pc2, y = jday, color = site)) +
+  geom_ribbon(aes(ymin=lower.CL, ymax=upper.CL), fill = "gray", alpha = 0.1) +
+  geom_textline(aes(group = site, label = site), linewidth = 2) +
+  geom_point(data = phen_sub1_plant2, alpha = 0.1) +
+  theme_bw(base_size = 14) +
+  scale_color_manual(values = c("#d95f02", "#7570b3")) +
+  theme(legend.position = "none") +
+  ylab("julian day") +
+  xlab("PC 2") -> sitepc2
+
+png("~/Desktop/sitepc2.png", height = 5.25, width = 5, res = 300, units = 'in')
+sitepc2
+dev.off()
+# Make fixed effects plot of pc1 x gravel
+summary(emmeans(gam_linear, ~site:pc1, non.nuis = c("gravel", "pc1"),
+                at = list(pc1 = seq(-2.5,2.5, 0.5)))) %>% 
+  mutate(jday = exp(emmean)) %>% 
+  ggplot(aes(x = pc1, y = jday, color = gravel)) +
+  geom_ribbon(aes(ymin=exp(lower.CL), ymax=exp(upper.CL)), fill = "gray", alpha = 0.1) +
+  geom_textline(aes(group = gravel, label = gravel), linewidth = 2) +
+  geom_point(data = phen_sub1_plant2, alpha = 0.1) +
+  theme_bw(base_size = 14) +
+  scale_color_manual(values = c("#1b9e77", "#7570b3")) +
+  theme(legend.position = "none") +
+  ylab("julian day") 
+
+
+confint(gam_linear, parm = "s(genotype)") %>% 
+  dplyr::select(genotype, mean = est) -> intercepts
+
+confint(gam_linear, parm = "s(genotype,site)") %>% 
+  dplyr::select(genotype, site, effect = est, lower, upper) -> slopes
+
+merge(intercepts, slopes)
+
+slopes %>% 
+  dplyr::select(genotype,site, effect) %>% 
+  spread(key = site, value = effect) %>% 
+  mutate(color_code = ifelse(SS > WI, "SS", "WI")) -> color_codes
+
+merge(slopes, color_codes) -> slopes_color_codes
+merge(slopes_color_codes, intercepts) %>% 
+  mutate(calc_intercept = mean + effect) -> plot_re
+
+plot_re %>% 
+  mutate(site = ifelse(site == "SS", "Sheep Station", "Wildcat (Boise Low)")) %>% 
+  mutate(color_code = ifelse(color_code == "SS", "SS > WI", "WI > SS")) %>% 
+  #filter(genotype %in% as.factor(c(6,13,14,81,79,2))) %>% 
+  ggplot(aes(x = site, y = calc_intercept, group = genotype, color = color_code, position_dodge())) +
+  geom_point(position = position_dodge(0.1)) + geom_line(position = position_dodge(0.1)) +
+  #geom_errorbar(aes(ymin = lower, ymax = upper), width = 0,position = position_dodge(0.2)) +
+  theme_bw(base_size = 14) +
+  theme(legend.position = "top") +
+  ylab("genotype effect on flowering time") +
+  scale_color_manual(values = c("#d95f02", "#7570b3")) +
+  labs(color = "") -> g_by_e
+
+png("~/Desktop/ge.png", height = 7, width = 5, res = 300, units = "in")
+g_by_e
+dev.off()
