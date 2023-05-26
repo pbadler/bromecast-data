@@ -17,13 +17,13 @@
 #line 114 subset out bad length values (>250mm)
 ####################
 #library
-library(lubridate); library(tidyverse)
+library(lubridate); library(tidyverse); library(here)
 
 doyear <- 2022 # growing season to do
 dosite <- "Boise" # code for focal site
 
 # import raw growth and phenology data
-rawD <- read.csv(here("gardens/rawdata/Phenology_BoiseSites_2021_2022_MASTER.csv"),header=T)
+rawD <- read.csv(here("gardens/rawdata/BromeCast_2021-2022_All_Idaho_Sites-Full_Dataset_Collated.xlsx - All Sites_All Data.csv"),header=T)
 
 # remove capital letters from column headers 
 # (this will make it easier to harmonize data across sites)
@@ -31,22 +31,22 @@ names(rawD) <- tolower(names(rawD))
 
 #rename column names to match sheepstation
 rawD$plot<-rawD$subplot
-rawD$x<-rawD$x_coordinate
-rawD$y<-rawD$y_coordinate
-rawD$genotype<-parse_number(rawD$genotypeid)
+rawD$x<-rawD$x.coordinate
+rawD$y<-rawD$y.coordinate
+rawD$genotype <- parse_number(rawD$genotypeid)
 rawD$growout<-rawD$bulkyear
-rawD$date<-rawD$mondate
-rawD$live<-rawD$seedling_present.
+rawD$live<-rawD$seedling.present.
 rawD$v<-rawD$phenology
-rawD$length_mm<-rawD$max_leaf_length_.mm.
-rawD$herbivory<- ifelse(rawD$herbivory_present. == TRUE, "Y", "N") 
-rawD$frost_heave<-ifelse(rawD$frost_heaved. == TRUE, "Y", "N")
-rawD$harvested<- ifelse(rawD$plant_harvested. == TRUE, "Y", "N")
+rawD$length_mm<-rawD$max.leaf.length..mm.
+rawD$herbivory<- ifelse(rawD$herbivory.present. == TRUE, "Y", "N") 
+rawD$frost_heave<-ifelse(rawD$frost.heaved. == TRUE, "Y", "N")
+rawD$harvested<- ifelse(rawD$plant.harvested. == TRUE, "Y", "N")
 
 
-#Replace site names with relative elevation
-rawD['site'][rawD['site'] == 'Wildcat'] <- 'WI'
-rawD['site'][rawD['site'] == 'Balzor'] <- 'BA'
+# Replace site names 
+rawD %>% 
+  mutate(site = case_when(site %in% c("Balzor", "Baltzor") ~ "BA",
+                          site == "Wildcat" ~ "WI")) -> rawD
 # change date field from character to date format
 rawD$date <- mdy(rawD$date)
 
@@ -58,12 +58,25 @@ rawD$date <- mdy(rawD$date)
 # rawD<-merge(rawD,tmp)
 # rm(tmp)
 
+unique(rawD$plot) # There's some issues with plot numbering in the entered data
+
+# Fix these manually
+rawD %>% 
+  mutate(plot = case_when(plot == 10 ~ 1,
+                          plot == 11 & block == 6 ~ 1,
+                          plot == 11 & block == 4 ~ 2,
+                          is.na(plot) ~ 1,
+                          T ~ plot)) -> rawD
+
+# Check to make sure that worked
+unique(rawD$plot) # All good
+
 # assign each individual plant a unique ID, link to grid positions
 plant_key <- rawD[,c("site","block","plot","x","y","genotype","growout")]
 plant_key <- unique(plant_key,MARGIN=2)
 plant_key$plantID <- paste0(plant_key$site,doyear,"_",1:nrow(plant_key))
 rawD <- merge(rawD,plant_key)
-#plant_key$site <- dosite
+plant_key$site <- dosite
 plant_key$year <- doyear
 plant_key <- plant_key[,c(8,1,9,2:7)]
 write.csv(plant_key,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_plantID.csv"),row.names=F)
@@ -105,6 +118,13 @@ pgD$v<-as.factor(pgD$v)
 levels(pgD$v)[levels(pgD$v)==""] <- 'NA'
 levels(pgD$v)[levels(pgD$v)==">V3"] <- 'V3+'
 levels(pgD$v)[levels(pgD$v)=="BOOTSTAGE"] <- 'BS'
+levels(pgD$v)[levels(pgD$v)=="FB "] <- 'FB'
+levels(pgD$v)[levels(pgD$v)=="FP "] <- 'FP'
+# There are also two "FL". For the phenology analyses we can change this to "FP"
+# without any consequence, but should check with ID folks (MLV)
+levels(pgD$v)[levels(pgD$v)=="FL"] <- 'FP'
+
+unique(pgD$v)
 
 # check for bad length values
 # first turn missing values into NAs then make length numeric
@@ -123,6 +143,7 @@ tmp <- data.frame(notes=tmp,action=NA)
 # write.csv(tmp,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_notes_actions.csv"),row.names=F)
 # open as a spreadsheet, fill in action column by hand
 # This has been edited as a raw file by MLV on 19 April 2023
+# MLV NEED TO REDO THIS FOR UPDATED DATA!!
 
 rm(rawD)
 
