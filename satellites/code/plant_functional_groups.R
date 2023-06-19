@@ -33,3 +33,20 @@ comp21 %>%
 # Figure out unique species for each data set
 unique(c(comp20$species, comp21$species)) %>% 
   sort() -> species_list
+
+# Write csv file to code these as functional groups manually and to fix any issues
+# write_csv(tibble(species = species_list), "satellites/deriveddata/species_list.csv")
+
+# Read in updated csv
+species_codes <- read_csv("satellites/deriveddata/species_list.csv")
+
+# Make updates to names when needed
+species_codes %>% 
+  mutate(species = case_when(complete.cases(update) ~ update,
+                             T ~ species)) %>% 
+  select(-update) %>% 
+  distinct() %>% 
+  arrange(species) -> species_codes_to_check
+
+# Write csv to check species codes
+write_csv(species_codes_to_check, "satellites/deriveddata/species_codes_to_check.csv")
