@@ -203,7 +203,7 @@ abline(0,1,lty="dashed")
 
 fitD$fit_ratio <- fitD$fit_control - fitD$fit_removal
 plot(fitD$fit_removal,fitD$fit_ratio,xlab="log Fitness in Removals",
-     ylab="log(Control/Removal)")
+     pch=16, ylab="Effect of competition")
 abline(h=0,lty="dashed")
 
 ###
@@ -217,7 +217,8 @@ par(mfrow=c(1,2))
 
 # removal fecundity
 map("state",xlim=c(-128,-95),ylim=c(30,52))
-title("Fitness")
+#title("Fitness")
+points(x=fitD$Lon,y=fitD$Lat,col="red")
 #symbols(x=fitD$Lon,y=fitD$Lat,circles=fitD$mean_removal,inches=0.4,add=T)
 symbols(x=fitD$Lon,y=fitD$Lat,circles=sqrt(exp(fitD$fit_removal)),inches=0.4,add=T)
 
@@ -249,9 +250,20 @@ climD$SiteCode[climD$SiteCode=="SymstadS2"] <- "Symstad2"
 # merge to demography site means
 fitD <- merge(fitD,climD,all.x=T)
 
-plot(fitD$prcp,fitD$fit_removal)
-plot(fitD$swe_mean,fitD$fit_removal)
-plot(fitD$tmean,fitD$fit_removal)
+png("abiotic_drivers.png",height=3,width=8,res=400,units="in")
+par(mfrow=c(1,3),mar=c(5,2,1,1),oma=c(4,2,0,0),
+    cex.lab=1.2)
+plot(fitD$prcp,fitD$fit_removal,pch=16,
+     xlab="Precipitation",ylab="")
+plot(fitD$tmean,fitD$fit_removal,pch=16,
+     xlab="Mean temperature",ylab="")
+plot(fitD$swe_mean,fitD$fit_removal,pch=16,
+     xlab="Mean snow water equivalent",ylab="")
+mtext("log Fitness in removals",2,outer=T,line=0.5,cex=0.8)
+dev.off()
+
+
+par(mfrow=c(1,1))
 plot(fitD$prcp/fitD$tmean,fitD$fit_removal)
 
 plot(fitD$swe_mean,fitD$fit_removal)
