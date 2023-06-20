@@ -34,6 +34,9 @@ comp21 %>%
 unique(c(comp20$species, comp21$species)) %>% 
   sort() -> species_list
 
+# Combine species observation lists
+comp_all <- rbind(comp20, comp21)
+
 # Write csv file to code these as functional groups manually and to fix any issues
 # write_csv(tibble(species = species_list), "satellites/deriveddata/species_list.csv")
 
@@ -48,5 +51,43 @@ species_codes %>%
   distinct() %>% 
   arrange(species) -> species_codes_to_check
 
+# Add information about where unknown coded species are from
+species_codes_to_check %>% 
+  filter(notes %in% c("not sure based on USDA database")) %>% 
+  filter(species != "Draba repens" & species != "Epilobium spp")-> coded_spp
+
+# Write a loop to go through coded species and figure out site
+site_codes <- NULL
+for (i in 1:nrow(coded_spp)){
+  spp_temp <- coded_spp$species[i]
+  site_temp <- comp_all %>% filter(species == spp_temp) %>% pull(sitecode)
+  if(length(site_codes > 1)){
+    site_codes[i] <- paste(unique(site_temp), sep = "_", collapse = "")
+  }else{
+    site_codes[i] <- site_temp
+  }
+}
+
+# Put site back onto coded species data frame
+coded_spp %>% 
+  mutate(sitecode = site_codes) -> coded_spp
+
+# Make %notin% operator
+`%notin%` <- Negate(`%in%`)
+
+# Add back the rest of the observations
+species_codes_to_check %>% 
+  mutate(sitecode = NA) %>% 
+  filter(species %notin% coded_spp$species) -> uncoded_spp
+
+species_codes_to_check <- rbind(coded_spp, uncoded_spp) %>% 
+  arrange(species)
+
 # Write csv to check species codes
-write_csv(species_codes_to_check, "satellites/deriveddata/species_codes_to_check.csv")
+#write_csv(species_codes_to_check, "satellites/deriveddata/species_codes_to_check.csv")
+
+# Get summary stats for groupings
+species_codes_to_check %>% 
+  group_by(type, duration, c3c4) %>% 
+  summarize(n = n())
+
