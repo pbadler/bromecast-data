@@ -1,19 +1,49 @@
 notes,action,standard_note
-no seedhead,flag,missingseedhead
-"missing seedhead,resprouting",flag,missingseedhead
-missing seedhead,flag,missingseedhead
-one seedhead missing,flag,missingseedhead
-no seed,flag,missingseedhead
-"one no seedhead, resprouting in boot",flag,missingseedhead
-Germinant possibly incorrect coordinate position,flag,badposition
-"on te green side, may not be right plant",flag,badposition
-Illegible note,ignore,
-No tooth,ignore,
-seedheads gone,flag,missingseedhead
-this could be plant 6,ignore,
+Found toothpick after pulling as unknown.,flag,badposition
+UNSURE IF RIGHT PLANT,flag,badposition
+dry,ignore,
+"harvested one dried stem, rest of plant is as listed",ignore,
+UNSURE,flag,badposition
+harvested too early by accident,flag,earlyharvest
+very purple,ignore,
+one infl is green,ignore,
+seed heads are missing,flag,physicaldamage
+one infl is brown,ignore,
+mostly green,ignore,
+no seed head,flag,physicaldamage
+collected 1 inflo,ignore,
 Frost heaving,flag,frostheave
 Dead,ignore,
-Developing seed heads,ignore,
-"No V value recorded, V0 assumed",ignore,
+Germinant possibly incorrect coordinate position,flag,badposition
+Missing stick,ignore,
+Illegible note,ignore,
+Frost heaving; possibly wrong coordinate position,flag,frostheave
+No tooth,ignore,
+toothpick found after plant pulled,ignore,
+UNCLEAR IF RIGHT PLANT,flag,badposition
+seess eaten,flag,herbivory
+seeds eaten,flag,herbivory
+seedd ezten,flag,herbivory
+Seeds eaten,flag,herbivory
+no seed heads,flag,physicaldamage
+no toothpick,ignore,
+2 stems completely eaten,flag,herbivory
+*,ignore,
+FL,ignore,
+B,ignore,
+Missing flower,flag,physicaldamage
+Herbivory,flag,herbivory
+Missing flowers,flag,physicaldamage
+"Very Dry, *",ignore,
+"Extra Tiller, *",ignore,
+Dry,ignore,
 Leaf/phenology measurements do not match herbivory,flag,herbivory
 Seed head developing,ignore,
+"No plant, misplaced herb measurement (Y1_X7?)",flag,badposition
+Developing seed heads,ignore,
+"No V value recorded, V0 assumed",ignore,
+None or Dead or Alive but screwed?,ignore,
+head smut,flag,smut
+--,ignore,
+appears to be previously harvested. one stem remaining.,ignore,
+smut,flag,smut
