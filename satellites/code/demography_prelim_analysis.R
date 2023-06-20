@@ -49,7 +49,65 @@ abline(0,1,lty="dashed")
 
 rm(removal,control)
 
-# import data
+###
+### import 2021 data ---------------------------------------------------
+###
+
+D <- read.csv("../rawdata/Satellite_demography_2020-2021.csv",header=T)
+
+print(unique(D$SiteCode))
+
+# rename some columns
+names(D)[which(names(D)=="Treatment..control.OR.removal.")] <- "Treatment"
+names(D)[which(names(D)=="Emerged..Y.or.No.")] <- "Emerged1"
+names(D)[which(names(D)=="Emerged..Y.or.No..1")] <- "Emerged2"
+names(D)[which(names(D)=="Seeds..Y.or.No.")] <- "Reproduced"
+names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
+names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
+names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+
+D$Year <- 2021
+
+# combine emergence columns
+D$Emerged <-ifelse(D$Emerged1=="Y" | D$Emerged2=="Y", "Y", "N")
+# fix NAs from missing second census
+D$Emerged[D$Emerged1=="N" & is.na(D$Emerged2)] <- "N"
+
+# # fix bad values
+# D$Treatment[D$Treatment=="removal "] <- "removal"
+# D$Treatment[D$Treatment=="Removal"] <- "removal"
+# D$Treatment[D$Treatment=="Control"] <- "control"
+
+#D$Fecundity[D$Fecundity=="unk"] <- NA
+#tmp <- which(D$Fecundity=="*seed head broke")
+#D$Fecundity[tmp] <- NA
+#D$Fecundity <- as.numeric(D$Fecundity)
+
+# replace NAs with real zeros
+# TO DO: use notes column to find and retain "real" NAs (missing plants),
+# in this version, those are included as zeros
+D$Reproduced[is.na(D$Reproduced) & D$Emerged=="N"] <- "N"
+D$Fecundity[is.na(D$Fecundity) & D$Reproduced=="N"] <- 0
+
+# fix some bad values
+D$Reproduced[D$Reproduced==""] <- "N"
+# fill NAs for "Reproduced" when we know fecundity > 0
+tmp <- which(is.na(D$Reproduced) & D$Fecundity > 0)
+D$Reproduced[tmp] <- "Y"
+
+# subset to complete observations
+D <- subset(D,!is.na(D$Fecundity))
+
+# remove and reorder columns
+D2021 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity")]
+
+sapply(D2021, function(x) sum(is.na(x)))
+
+rm(D)
+
+###
+### import 2022 data ---------------------------------------------------
+###
 
 D <- read.csv("../rawdata/Satellite_demography_2021-2022.csv",header=T)
 
@@ -60,6 +118,10 @@ names(D)[which(names(D)=="Treatment..control.OR.removal.")] <- "Treatment"
 names(D)[which(names(D)=="Emerged..Yes.or.No.")] <- "Emerged"
 names(D)[which(names(D)=="Seeds..Yes.or.No.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
+names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
+names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+
+D$Year <- 2022
 
 # fix bad values
 D$Treatment[D$Treatment=="removal "] <- "removal"
@@ -88,6 +150,12 @@ D <- subset(D,!is.na(D$Fecundity))
 
 # remove one more record with 0 for fecundity but NA for reproduced
 D <- subset(D,!is.na(D$Reproduced))
+
+# remove and reorder columns
+D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity")]
+
+sapply(D2022, function(x) sum(is.na(x)))
+
 
 ###
 ### import site info
