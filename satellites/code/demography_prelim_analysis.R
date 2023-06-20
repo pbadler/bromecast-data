@@ -156,13 +156,35 @@ D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Rep
 
 sapply(D2022, function(x) sum(is.na(x)))
 
+### COMBINE YEARS
+
+# make sure siteCodes match
+print(sort(unique(D2021$SiteCode)))
+print(sort(unique(D2022$SiteCode)))
+
+# fix one SiteCode
+D2021$SiteCode[D2021$SiteCode=="SymstadS1"] <- "Symstad1"
+
+D <- rbind(D2021,D2022)
+
+rm(D2021,D2022)
 
 ###
-### import site info
+### import site info -------------------------------------------------------------------
 ###
 
+# year 2021
+siteD1 <- read.csv("../rawdata/SiteInfo_2020-2021.csv",header=T)
+names(siteD1)[1:3] <- c("SiteCode" ,"Lat","Lon")
+siteD1$Year = 2021
+
+# make site SiteCodes match those in the demography file
+siteD$SiteCode[siteD$SiteCode=="SymstadS1"] <- "Symstad1"
+
+# year 2022
 siteD <- read.csv("../rawdata/SiteInfo_2021-2022.csv",header=T)
 names(siteD)[1:3] <- c("SiteCode" ,"Lat","Lon")
+siteD$Year = 2022
 
 # make site SiteCodes match those in the demography file
 siteD$SiteCode[siteD$SiteCode=="EnsingS1_SuRDC"] <- "EnsingS1 SuRDC"
@@ -172,6 +194,12 @@ siteD$SiteCode[siteD$SiteCode=="EnsingS4_LDBM"] <- "EnsingS4 Lundbom"
 siteD$SiteCode[siteD$SiteCode=="SymstadS1"] <- "Symstad1"
 siteD$SiteCode[siteD$SiteCode=="SymstadS2"] <- "Symstad2"
 
+# combine years into one data frame
+siteD <- rbind(siteD1[,c("SiteCode","Lat","Lon","Year")],siteD[,c("SiteCode","Lat","Lon","Year")])
+
+rm(siteD1)
+
+
 ###
 ### analyze probability of producing seeds
 ###
@@ -179,7 +207,7 @@ siteD$SiteCode[siteD$SiteCode=="SymstadS2"] <- "Symstad2"
 # convert N/Y to 0/1
 D$Reproduced <- as.numeric(as.factor(D$Reproduced))-1
 
-prob_reprod <- D %>% group_by(SiteCode,Treatment) %>%
+prob_reprod <- D %>% group_by(SiteCode,Year,Treatment) %>%
                 summarize(mean=mean(Reproduced),sd=sd(Reproduced) )
 
 plot(prob_reprod$mean[prob_reprod$Treatment=="removal"],
@@ -208,7 +236,11 @@ fecD <- subset(D,D$Fecundity>0)
 # OttS1 has no observations for removals, just 3 for controls, cut that site for now
 fecD <- subset(fecD, fecD$SiteCode!="OttS1")
 
-mean_fecundity <- fecD %>% group_by(SiteCode,Treatment) %>%
+#FtK sites produced no seeds in removals in 2021, WHAT DO WE DO?
+# fecD <- subset(fecD, fecD$SiteCode!="FtK_Cottonwood_Coulee")
+# fecD <- subset(fecD, fecD$SiteCode!="FtK_Lone_Pine")
+
+mean_fecundity <- fecD %>% group_by(SiteCode,Year,Treatment) %>%
   summarize(mean=mean(log(Fecundity)),q05=quantile(log(Fecundity),0.05),q95=quantile(log(Fecundity),0.95) )
 
 plot(mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
@@ -229,8 +261,8 @@ arrows(x0=mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
 abline(0,1,lty="dotted")
 
 # fixed effects approach
-m2 <- glm(log(Fecundity) ~ Treatment*SiteCode, data = fecD)
-
+m2 <- glm(Fecundity ~ Treatment, family="poisson",data = fecD)
+summary(m2)
 
 # play with site means
 # go from long to wide
