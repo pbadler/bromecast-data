@@ -179,7 +179,7 @@ names(siteD1)[1:3] <- c("SiteCode" ,"Lat","Lon")
 siteD1$Year = 2021
 
 # make site SiteCodes match those in the demography file
-siteD$SiteCode[siteD$SiteCode=="SymstadS1"] <- "Symstad1"
+siteD1$SiteCode[siteD1$SiteCode=="SymstadS1"] <- "Symstad1"
 
 # year 2022
 siteD <- read.csv("../rawdata/SiteInfo_2021-2022.csv",header=T)
@@ -233,12 +233,15 @@ summary(lm(x~1))
 
 fecD <- subset(D,D$Fecundity>0)
 
+# # get counts by site year treatment
+# tmp <- fecD %>% group_by(SiteCode,Year,Treatment) %>%mutate(count=1) %>% 
+#   summarize(sum(count))
 # OttS1 has no observations for removals, just 3 for controls, cut that site for now
 fecD <- subset(fecD, fecD$SiteCode!="OttS1")
-
-#FtK sites produced no seeds in removals in 2021, WHAT DO WE DO?
-# fecD <- subset(fecD, fecD$SiteCode!="FtK_Cottonwood_Coulee")
-# fecD <- subset(fecD, fecD$SiteCode!="FtK_Lone_Pine")
+# FtK Lone Pine has no obs for removals, 1 for controls, cut for now
+fecD <- subset(fecD, fecD$SiteCode!="FtK_Lone_Pine")
+# FtK Cottonwood has no obs for removals, 23 for controls, cut for now (but ouch)
+fecD <- subset(fecD, fecD$SiteCode!="FtK_Cottonwood_Coulee")
 
 mean_fecundity <- fecD %>% group_by(SiteCode,Year,Treatment) %>%
   summarize(mean=mean(log(Fecundity)),q05=quantile(log(Fecundity),0.05),q95=quantile(log(Fecundity),0.95) )
@@ -271,7 +274,7 @@ mean_fecundity <- mean_fecundity %>% pivot_wider(names_from=Treatment, values_fr
 mean_fecundity$logratio <- mean_fecundity$mean_control - mean_fecundity$mean_removal
 
 plot(mean_fecundity$mean_removal,mean_fecundity$logratio, 
-     xlab="log Fecundity in Removals",ylab="log(Control/Removal)")
+     xlab="log Fecundity in Removals",ylab="log(Control/Removal)",pch=16)
 abline(h=0,lty="dashed")
 
 # # link site means to aridity data
@@ -291,7 +294,7 @@ abline(h=0,lty="dashed")
 ### combine models
 ###
 
-names(prob_reprod)[2:3] <- paste0("pr_",names(prob_reprod)[2:3])
+names(prob_reprod)[3:4] <- paste0("pr_",names(prob_reprod)[3:4])
 fitD <- merge(prob_reprod, mean_fecundity)
 
 # combine on log scale
@@ -311,7 +314,7 @@ abline(h=0,lty="dashed")
 ###
 
 # merge Lat lons
-fitD <- merge(fitD,siteD[,1:3],all.x=T)
+fitD <- merge(fitD,siteD,all.x=T)
 
 par(mfrow=c(1,2))
 
@@ -338,7 +341,7 @@ symbols(x=fitD$Lon[tmp],y=fitD$Lat[tmp],circles=fitD$logratio[tmp],inches=0.4,ad
  
 # Daymet means for fall through spring
 climD <- read.csv("../deriveddata/Satellites_daymet_Fall2Spr_means.csv",header=T)
-climD <- subset(climD, climD$climYr==2022)
+
 # make site SiteCodes match those in the demography file
 climD$SiteCode[climD$SiteCode=="EnsingS1_SuRDC"] <- "EnsingS1 SuRDC"
 climD$SiteCode[climD$SiteCode=="EnsingS2_SumPrinceRd"] <- "EnsingS2 Summerland-Princeton"
@@ -348,6 +351,7 @@ climD$SiteCode[climD$SiteCode=="SymstadS1"] <- "Symstad1"
 climD$SiteCode[climD$SiteCode=="SymstadS2"] <- "Symstad2"
 
 # merge to demography site means
+names(climD)[which(names(climD)=="climYr")] <- "Year"
 fitD <- merge(fitD,climD,all.x=T)
 
 png("abiotic_drivers.png",height=3,width=8,res=400,units="in")
@@ -368,5 +372,28 @@ plot(fitD$prcp/fitD$tmean,fitD$fit_removal)
 
 plot(fitD$swe_mean,fitD$fit_removal)
 symbols(x=fitD$swe_mean,y=fitD$prcp,circles=fitD$fit_removal+1,inches=0.4,add=T,fg="blue")
+
+## this one is promising
+pdf("SWExLongitude.pdf",height=3, width=8.5)
+
+par(mfrow=c(1,3),mar=c(3,5,1,1),mgp=c(2,0.5,0))
+
+plot(fitD$Lon,fitD$swe_mean,xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Fitness in removals")
+symbols(x=fitD$Lon,y=fitD$swe_mean,circles=sqrt(exp(fitD$fit_removal)),inches=0.4,add=T,fg="blue")
+
+plot(fitD$Lon,fitD$swe_mean,xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Fitness in controls")
+symbols(x=fitD$Lon,y=fitD$swe_mean,circles=sqrt(exp(fitD$fit_control)),inches=0.4,add=T,fg="blue")
+
+plot(fitD$Lon,fitD$swe_mean,xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Effect of competition")
+tmp <- which(fitD$fit_ratio<0)
+symbols(x=fitD$Lon[tmp],y=fitD$swe_mean[tmp],circles=abs(fitD$fit_ratio[tmp]),inches=0.4,add=T,fg="red")
+tmp <- which(fitD$fit_ratio>0)
+symbols(x=fitD$Lon[tmp],y=fitD$swe_mean[tmp],circles=fitD$fit_ratio[tmp],inches=0.4,add=T,fg="blue")
+
+dev.off()
+
 
 

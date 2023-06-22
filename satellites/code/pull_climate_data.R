@@ -7,9 +7,20 @@ library(tidyr)
 ### Pull daymet data for satellite sites
 ###
 
+# import lat lons
 siteD <- read.csv("../rawdata/SiteInfo_2021-2022.csv",header=T)
 siteD <- siteD[,1:3]
 names(siteD) <- c("SiteCode" ,"Lat","Lon")
+
+tmp <- read.csv("../rawdata/SiteInfo_2020-2021.csv",header=T)
+tmp <- tmp[,1:3]
+names(tmp) <- c("SiteCode" ,"Lat","Lon")
+
+siteD <- rbind(siteD,tmp)
+
+# remove duplicates
+siteD <- unique(siteD, MARGIN=2)
+siteD <- siteD[-28,] # remove SymstadS1 w/ bad coords
 
 # drop Lehnoff sites (no data)
 tmp <- grep("LEHN", siteD$SiteCode)
