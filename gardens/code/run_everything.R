@@ -26,8 +26,10 @@ source(here("gardens/code/QAQC_functions.R"))
 
 # Sheep Station 2021-2022
 source(here("gardens/code/format_growthphenology_SheepStation.R"))
-source(here("gardens/code/format_growthphenology_Boise.R"))
 
+# Boise 2021-2022
+source(here("gardens/code/format_growthphenology_Boise.R"))
+# NA warning related to missing length values being turned into NAs
 
 ###
 ### 2. Flag suspicious growth and phenology data by site and year

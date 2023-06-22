@@ -22,8 +22,11 @@ library(lubridate); library(tidyverse); library(here)
 doyear <- 2022 # growing season to do
 dosite <- "Boise" # code for focal site
 
+# Create %notin% operator
+`%notin%` <- Negate(`%in%`)
+
 # import raw growth and phenology data
-rawD <- read.csv(here("gardens/rawdata/BromeCast_2021-2022_All_Idaho_Sites-Full_Dataset_Collated.xlsx - All Sites_All Data.csv"),header=T)
+rawD <- read.csv(here("gardens/rawdata/BromeCast_2021-2022_All_Idaho_Sites_MLVedits.csv"),header=T)
 
 # remove capital letters from column headers 
 # (this will make it easier to harmonize data across sites)
@@ -62,199 +65,53 @@ rawD$date <- mdy(rawD$date)
 # rawD<-merge(rawD,tmp)
 # rm(tmp)
 
-unique(rawD$plot) # There's some issues with plot numbering in the entered data
-
-# Fix these manually
-rawD %>% 
-  mutate(plot = case_when(plot == 10 ~ 1,
-                          plot == 11 & block == 6 ~ 1,
-                          plot == 11 & block == 4 ~ 2,
-                          is.na(plot) ~ 1,
-                          T ~ plot)) -> rawD
-
-# Check to make sure that worked
-unique(rawD$plot) # All good
+sort(unique(rawD$plot)) # All good
+sort(unique(rawD$block)) # All good
 
 # assign each individual plant a unique ID, link to grid positions
 plant_key <- rawD[,c("site","block","plot","x","y","gravel", "density")]
 plant_key %>% 
-  # Some genotype values are NA so need to fix this
-  #filter(complete.cases(genotype)) %>% 
   distinct(site, block, plot, gravel, density, x, y) -> plant_key
 
-# There are 8326 unique combinations of site, block, plot, gravel, density, x &
-# y (326 too many!!). MLV is fixing what we can manually but need to check in
-# with Boise folks
+nrow(plant_key)
+# There are 8011 unique combinations of site, block, plot, gravel, density, x &
+# y (11 too many). MLV is fixed what we could manually but there are 11
+# observations that I can't figure out.
 
 # Pull out times where there is just one observation of a unique ID
 rawD %>% 
   mutate(ids = paste(site, block, plot, gravel, density, x, y, sep = "_")) -> rawD 
-  
+
 rawD %>% 
   group_by(ids) %>% 
   summarize(n = n()) %>% 
-  filter(n < 3) %>% 
+  filter(n == 1) %>% 
   pull(ids) -> bad_ids
 
-
-## Fixing manually by date ####
-
-# Create datasets that do and don't include bad-ids
-`%notin%` <- Negate(`%in%`)
-
+# Remove remaining bad_ids that I can't figure out from the dataset
 rawD %>% 
-  filter(ids %notin% bad_ids) -> rawD_good
+  filter(ids %notin% bad_ids) -> rawD
 
+# Check to see how many unique plants there are
+length(unique(rawD$ids))
+
+# Get genotypes for each observation
 rawD %>% 
-  filter(ids %in% bad_ids) -> rawD_bad
+  filter(complete.cases(genotype)) %>% 
+  dplyr::select(site, block, plot, x, y, genotype) %>% 
+  distinct() %>% 
+  ungroup() -> genotype_assign
 
-# 05/18/2022
-rawD_bad_0518 <- rawD_bad %>% filter(date == "2022-05-18")
-rawD_bad_0518 %>% 
-  filter(complete.cases(x,y)) %>% 
-  mutate(x = 2) -> rawD_good_0518
+# Format IDs to be the same as Sheep Station
+plant_key <- rawD[,c("site","block","plot","x","y")]
+plant_key <- merge(plant_key, genotype_assign)
 
-# 05/23/2022
-rawD_bad_0523 <- rawD_bad %>% filter(date == "2022-05-23")
-rawD_bad_0523 %>% 
-  mutate(density = "Low",
-         plot = 2) -> rawD_good_0523
-
-# 05/24/2022
-rawD_good_0524 <- rawD_bad %>% filter(date == "2022-05-24")
-# In block 2 plot 3, some should be high white but can't tell which easily
-
-# 05/25/2022
-rawD_bad_0525 <- rawD_bad %>% filter(date == "2022-05-25")
-
-rawD_bad_0525[which(rawD_bad_0525$block == 5 & rawD_bad_0525$plot == 2), "x"] <- 19
-rawD_bad_0525[which(rawD_bad_0525$block == 5 & rawD_bad_0525$plot == 2), "y"] <- 3
-rawD_bad_0525[which(rawD_bad_0525$block == 5 & rawD_bad_0525$plot == 3), "plot"] <- 2
-rawD_bad_0525[which(rawD_bad_0525$block == 10 & rawD_bad_0525$plot == 3), "x"] <- 6
-rawD_bad_0525[which(rawD_bad_0525$block == 10 & rawD_bad_0525$plot == 3), "y"] <- 10
-
-# Still need to fix stuff
-rawD_bad_0525 -> rawD_good_0525
-
-# 05/27/2022
-rawD_bad_0527 <- rawD_bad %>% filter(date == "2022-05-27")
-
-rawD_bad_0527[which(rawD_bad_0527$block == 3 & rawD_bad_0527$plot == 4), "x"] <- 3
-rawD_bad_0527[which(rawD_bad_0527$block == 3 & rawD_bad_0527$plot == 4), "y"] <- 4
-rawD_bad_0527[which(rawD_bad_0527$block == 7 & rawD_bad_0527$plot == 2), "density"] <- rep("Low", 3)
-rawD_bad_0527[which(rawD_bad_0527$block == 8 & rawD_bad_0527$plot == 1), "y"] <- 2
-
-rawD_bad_0527 %>% 
-  filter(block != 8 | plot != 4) -> rawD_good_0527
-
-# 05/31/2022
-# Still can't figure these out
-rawD_good_0531 <- rawD_bad %>% filter(date == "2022-05-31")
-
-# 06/02/2022
-rawD_bad_0602 <- rawD_bad %>% filter(date == "2022-06-02")
-
-rawD_bad_0602[which(rawD_bad_0602$block == 3 & rawD_bad_0602$plot == 4), "density"] <- rep("Low", 14)
-rawD_bad_0602[which(rawD_bad_0602$block == 3 & rawD_bad_0602$plot == 1), "density"] <- rep("High", 58)
-rawD_bad_0602[which(rawD_bad_0602$block == 9 & rawD_bad_0602$plot == 4), "density"] <- rep("High", 41)
-
-rawD_good_0602 <- rawD_bad_0602
-
-# 06/03/2022
-rawD_bad_0603 <- rawD_bad %>% filter(date == "2022-06-03")
-
-rawD_bad_0603[which(rawD_bad_0603$block == 1 & rawD_bad_0603$plot == 2), "x"][1] <- 10
-rawD_bad_0603[which(rawD_bad_0603$block == 1 & rawD_bad_0603$plot == 2), "y"][1] <- 4
-rawD_bad_0603[which(rawD_bad_0603$block == 8 & rawD_bad_0603$plot == 4), "x"] <- 8
-rawD_bad_0603[which(rawD_bad_0603$block == 8 & rawD_bad_0603$plot == 4), "y"] <- 2
-rawD_bad_0603[which(rawD_bad_0603$block == 9 & rawD_bad_0603$plot == 2), "gravel"] <- "Black"
-
-rawD_bad_0603 %>% 
-  filter(block != 8 | plot != 3 | x !=3) -> rawD_good_0603
-
-# 06/23/2022
-rawD_bad_0623 <- rawD_bad %>% filter(date == "2022-06-23")
-rawD_bad_0623[which(rawD_bad_0623$x == 7), "x"] <- 1
-
-rawD_good_0623 <- rawD_bad_0623
-
-# 06/28/2022
-# Still can't figure out
-rawD_good_0628 <- rawD_bad %>% filter(date == "2022-06-28")
-
-# 06/29/2022
-rawD_bad %>% 
-  filter(date == "2022-06-29") %>% 
-  filter(block != 1 | plot != 1 | x != 5) -> rawD_good_0629
-
-# 06/30/2022
-rawD_bad_0630 <- rawD_bad %>% filter(date == "2022-06-30")
-rawD_bad_0630$density <- rep("Low", 7)
-rawD_good_0630 <- rawD_bad_0630
-
-# 07/07/2022
-# Still can't figure out
-rawD_good_0707 <- rawD_bad %>% filter(date == "2022-07-07")
-
-# 07/08/2022
-# Still can't figure out
-rawD_good_0708 <- rawD_bad %>% filter(date == "2022-07-08")
-
-# Bind together all the 'good' datasets
-rbind(rawD_good_0518,
-      rawD_good_0523,
-      rawD_good_0524,
-      rawD_good_0525,
-      rawD_good_0527,
-      rawD_good_0602,
-      rawD_good_0603,
-      rawD_good_0623,
-      rawD_good_0628,
-      rawD_good_0629,
-      rawD_good_0630,
-      rawD_good_0707,
-      rawD_good_0708) -> updated_rawD_bad
-
-rbind(rawD_good, updated_rawD_bad) %>% 
-  mutate(ids = paste(site, block, plot, gravel, density, x, y, sep = "_")) %>% 
-  group_by(ids) %>% 
-  summarize(n = n()) %>% 
-  filter(n == 1) %>% pull(ids) -> bad_ids_left
-
-rawD %>% 
-  filter(ids %in% bad_ids_left) -> to_check_Boise
-
-write_csv(to_check_Boise,"gardens/deriveddata/bad_ids_Boise.csv")
-
-plant_key$plantID <- paste0(plant_key$site,doyear,"_",1:nrow(plant_key))
-# This is still dropping 100+ observations... why???
-rawD <- merge(rawD, plant_key %>% select(-genotype))
-
-rawD_test <- merge(rawD, plant_key %>% select(-genotype), all.x = T)
-rawD_test %>% 
-  filter(site == "BA" & date == "2022-05-24") %>% 
-  group_by(block, plot) %>% 
-  summarize(n = n()) %>% 
-  arrange(block, plot) %>% 
-  print(n = Inf)
-
-rawD_test %>% 
-  filter(site == "WI" & block == 7 & plot == 2)%>% 
-  group_by(density, gravel.color,date) %>% 
-  summarize(n = n()) %>% 
-  print(n = Inf)
-
-rawD_test %>% 
-  filter(site == "BA" & block == 3 & plot == 4 & date == "2022-07-07") %>% 
-  select(x,y)
-
-rawD_test %>% 
-  group_by(site, block, plot, density, gravel.color) %>% 
-  summarize(n = n()) %>% 
-  print(n = Inf)
+plant_key <- unique(plant_key,MARGIN=2)
+plant_key$plantID <- paste0(dosite,doyear,"_",1:nrow(plant_key))
+rawD <- merge(rawD,plant_key)
 
 plant_key$year <- doyear
-plant_key <- plant_key %>% select(plantID, site, year, block, plot, x, y, genotype)
+plant_key <- plant_key %>% dplyr::select(plantID, site, year, block, plot, x, y, genotype)
 write.csv(plant_key,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_plantID.csv"),row.names=F)
 rm(plant_key)
 
@@ -317,12 +174,9 @@ tmp <- tmp[!is.na(tmp)]
 tmp <- unique(tmp,MARGIN=2)
 tmp <- data.frame(notes=tmp,action=NA)
 # write.csv(tmp,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_notes_actions.csv"),row.names=F)
-# open as a spreadsheet, fill in action column by hand
-# This has been edited as a raw file by MLV on 19 April 2023
-# MLV NEED TO REDO THIS FOR UPDATED DATA!!
+# Mlva updated on 22 June 2023
 
 rm(rawD)
-
 
 # write pgD to file
 write.csv(pgD,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)

@@ -1,49 +1,49 @@
 notes,action,standard_note
-Found toothpick after pulling as unknown.,flag,badposition
-UNSURE IF RIGHT PLANT,flag,badposition
-dry,ignore,
-"harvested one dried stem, rest of plant is as listed",ignore,
-UNSURE,flag,badposition
-harvested too early by accident,flag,earlyharvest
-very purple,ignore,
-one infl is green,ignore,
-seed heads are missing,flag,physicaldamage
-one infl is brown,ignore,
-mostly green,ignore,
-no seed head,flag,physicaldamage
-collected 1 inflo,ignore,
+seess eaten,flag,seedheadmissing
+seeds eaten,flag,seedheadmissing
+seedd ezten,flag,seedheadmissing
+Seeds eaten,flag,seedheadmissing
+no seed heads,flag,seedheadmissing
 Frost heaving,flag,frostheave
-Dead,ignore,
 Germinant possibly incorrect coordinate position,flag,badposition
+Found toothpick after pulling as unknown.,ignore,
+toothpick found after plant pulled,ignore,
+UNSURE IF RIGHT PLANT,ignore,
+UNCLEAR IF RIGHT PLANT,ignore,
+collected 1 inflo,ignore,
 Missing stick,ignore,
 Illegible note,ignore,
+harvested too early by accident,ignore,
+very purple,ignore,
 Frost heaving; possibly wrong coordinate position,flag,frostheave
+one infl is green,ignore,
+Dead,ignore,
 No tooth,ignore,
-toothpick found after plant pulled,ignore,
-UNCLEAR IF RIGHT PLANT,flag,badposition
-seess eaten,flag,herbivory
-seeds eaten,flag,herbivory
-seedd ezten,flag,herbivory
-Seeds eaten,flag,herbivory
-no seed heads,flag,physicaldamage
-no toothpick,ignore,
-2 stems completely eaten,flag,herbivory
+no seed head,flag,seedheadmissing
+seed heads are missing,flag,seedheadmissing
+one infl is brown,ignore,
+mostly green,ignore,
 *,ignore,
-FL,ignore,
-B,ignore,
-Missing flower,flag,physicaldamage
-Herbivory,flag,herbivory
-Missing flowers,flag,physicaldamage
-"Very Dry, *",ignore,
-"Extra Tiller, *",ignore,
-Dry,ignore,
-Leaf/phenology measurements do not match herbivory,flag,herbivory
-Seed head developing,ignore,
-"No plant, misplaced herb measurement (Y1_X7?)",flag,badposition
-Developing seed heads,ignore,
-"No V value recorded, V0 assumed",ignore,
-None or Dead or Alive but screwed?,ignore,
+no toothpick,ignore,
 head smut,flag,smut
+B,ignore,
+Missing flower,flag,seedheadmissing
+Herbivory,flag,herbivory
+"No plant, misplaced herb measurement (Y1_X7?)",flag,badposition
+None or Dead or Alive but screwed?,ignore,
+"No V value recorded, V0 assumed",ignore,
+Missing flowers,flag,seedheadmissing
+dry,ignore,
+"Very Dry, *",ignore,
+2 stems completely eaten,flag,herbivory
 --,ignore,
 appears to be previously harvested. one stem remaining.,ignore,
+"harvested one dried stem, rest of plant is as listed",ignore,
+UNSURE,ignore,
+Leaf/phenology measurements do not match herbivory,ignore,
 smut,flag,smut
+Seed head developing,ignore,
+FL,ignore,
+Dry,ignore,
+"Extra Tiller, *",ignore,
+Developing seed heads,ignore,

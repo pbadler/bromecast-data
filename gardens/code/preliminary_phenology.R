@@ -14,7 +14,7 @@ source(here("gardens/code/create_local_adapt_covariate.R"))
 
 ## Read in all Boise data ####
 # Read in derived phenology data
-phen <- read_csv(here("gardens/deriveddata/Boise2022_growthphenology_with_harvest.csv"))
+phen <- read_csv(here("gardens/deriveddata/Boise2022_growthphenology_by_plantID.csv"))
 # Read in plant ID info
 ids <- read_csv(here("gardens/deriveddata/Boise2022_plantID.csv"))
 # Read in garden treatment info
@@ -44,7 +44,7 @@ phen <- merge(phen, genotype_PCclimate)
 phen %>% 
   mutate(block = as.factor(block),
          plot = as.factor(plot),
-         growout = as.factor(growout),
+         growout = NA,
          density = as.factor(density),
          gravel = as.factor(gravel),
          genotype = as.factor(genotype)) %>% 
@@ -131,7 +131,7 @@ phen %>%
 phen_SS %>% 
   dplyr::select(-tillers) -> phen_SS
 
-phen <- rbind(phen_Boise, phen_SS, phen_CH)
+phen <- rbind(phen_Boise, phen_SS)
 
 ## Survival model ####
 
