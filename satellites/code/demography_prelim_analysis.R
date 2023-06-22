@@ -373,4 +373,27 @@ plot(fitD$prcp/fitD$tmean,fitD$fit_removal)
 plot(fitD$swe_mean,fitD$fit_removal)
 symbols(x=fitD$swe_mean,y=fitD$prcp,circles=fitD$fit_removal+1,inches=0.4,add=T,fg="blue")
 
+## this one is promising
+pdf("SWExLongitude.pdf",height=3, width=8.5)
+
+par(mfrow=c(1,3),mar=c(3,5,1,1),mgp=c(2,0.5,0))
+
+plot(fitD$Lon,fitD$swe_mean,xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Fitness in removals")
+symbols(x=fitD$Lon,y=fitD$swe_mean,circles=sqrt(exp(fitD$fit_removal)),inches=0.4,add=T,fg="blue")
+
+plot(fitD$Lon,fitD$swe_mean,xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Fitness in controls")
+symbols(x=fitD$Lon,y=fitD$swe_mean,circles=sqrt(exp(fitD$fit_control)),inches=0.4,add=T,fg="blue")
+
+plot(fitD$Lon,fitD$swe_mean,xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Effect of competition")
+tmp <- which(fitD$fit_ratio<0)
+symbols(x=fitD$Lon[tmp],y=fitD$swe_mean[tmp],circles=abs(fitD$fit_ratio[tmp]),inches=0.4,add=T,fg="red")
+tmp <- which(fitD$fit_ratio>0)
+symbols(x=fitD$Lon[tmp],y=fitD$swe_mean[tmp],circles=fitD$fit_ratio[tmp],inches=0.4,add=T,fg="blue")
+
+dev.off()
+
+
 
