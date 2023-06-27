@@ -28,6 +28,10 @@ dosite <- "Boise" # code for focal site
 # import raw growth and phenology data
 rawD <- read.csv(here("gardens/rawdata/BromeCast_2021-2022_All_Idaho_Sites_MLVedits.csv"),header=T)
 
+# import additional phenology data that has April dates the previous
+# sheet doesn't have
+
+
 # remove capital letters from column headers 
 # (this will make it easier to harmonize data across sites)
 names(rawD) <- tolower(names(rawD))
@@ -95,23 +99,60 @@ rawD %>%
 # Check to see how many unique plants there are
 length(unique(rawD$ids))
 
-# Get genotypes for each observation
+## Fix coordinate switching that happened after the first census ####
+
+# Get the first census for each plant position that has the CORRECT genotype
 rawD %>% 
-  filter(complete.cases(genotype)) %>% 
-  dplyr::select(site, block, plot, x, y, genotype) %>% 
-  distinct() %>% 
-  ungroup() -> genotype_assign
+  filter(year(date) == 2021) -> rawD_survey1
+
+# Create data frame of just positions and correct genotype codes
+rawD_survey1 %>% 
+  select(site, block, plot, density, gravel, x, y, genotype, source) -> genotype_codes_correct
+
+# Get the rest of the data
+rawD %>% 
+  filter(year(date) != 2021) -> rawD_surveyrest
+
+# For the rest of the data, need to switch direction of the Y coordinates
+rawD_surveyrest %>% 
+  mutate(y= case_when(density == "Low" & y == 1 ~ 5,
+                       density == "Low" & y == 2 ~ 4,
+                       density == "Low" & y == 4 ~ 2,
+                       density == "Low" & y == 5 ~ 1,
+                       density == "Low" & y == 3 ~ 3,
+                       density == "High" & y == 1 ~ 10,
+                       density == "High" & y == 2 ~ 9,
+                       density == "High" & y == 3 ~ 8,
+                       density == "High" & y == 4 ~ 7,
+                       density == "High" & y == 5 ~ 6,
+                       density == "High" & y == 6 ~ 5,
+                       density == "High" & y == 7 ~ 4,
+                       density == "High" & y == 8 ~ 3,
+                       density == "High" & y == 9 ~ 2,
+                       density == "High" & y == 10 ~ 1)) -> rawD_surveyrest
+
+# Reset y column and remove genotype and source columns
+rawD_surveyrest %>% 
+  dplyr::select(-genotype, -source) -> rawD_surveyrest
+
+# Merge dataset with genotype information
+merge(rawD_surveyrest, genotype_codes_correct) -> rawD_surveyrest
+
+# Put two datasets back together
+rawD_surveyrest %>% 
+  select(names(rawD_survey1)) %>% 
+  rbind(rawD_survey1) %>% 
+  arrange(site, block, plot, x, y, date) -> rawD
 
 # Format IDs to be the same as Sheep Station
-plant_key <- rawD[,c("site","block","plot","x","y")]
-plant_key <- merge(plant_key, genotype_assign)
+plant_key <- rawD_survey1[,c("site","block","plot","x","y", "genotype")]
 
-plant_key <- unique(plant_key,MARGIN=2)
 plant_key$plantID <- paste0(dosite,doyear,"_",1:nrow(plant_key))
 rawD <- merge(rawD,plant_key)
 
 plant_key$year <- doyear
 plant_key <- plant_key %>% dplyr::select(plantID, site, year, block, plot, x, y, genotype)
+
 write.csv(plant_key,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_plantID.csv"),row.names=F)
 rm(plant_key)
 

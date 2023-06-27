@@ -6,6 +6,7 @@ doyear <- 2022 # growing season to do
 dosite <- "CH" # code for focal site
 
 # Read in data
+juneB <- read_csv("gardens/rawdata/WY_census_data_June22b.csv")
 juneA <- read_csv("gardens/rawdata/WY_census_data_June22a.csv")
 mayB <- read_csv("gardens/rawdata/WY_census_data_May22b.csv")
 mayA <- read_csv("gardens/rawdata/WY_census_data_May22a.csv")
@@ -15,13 +16,12 @@ marB <- read_csv("gardens/rawdata/WY_census_data_March22b.csv")
 marA <- read_csv("gardens/rawdata/WY_census_data_March22a.csv")
 
 # Create a list of data
-all_phen <- list(juneA, mayB, mayA, aprB, aprA, marB, marA)
+all_phen <- list(juneB, juneA, mayB, mayA, aprB, aprA, marB, marA)
 
 # Create vector of days (these are just placeholders for now)
-jdays <- c(152, 135, 121, 105, 91, 74, 60)
-dates <- c("juneA", "mayB", "mayA", "aprB", "aprA", "marB", "marA")
+dates <- c("juneB", "juneA", "mayB", "mayA", "aprB", "aprA", "marB", "marA")
 
-for(i in 1:length(jdays)){
+for(i in 1:length(dates)){
   
   # Set temp data name
   rawD <- all_phen[[i]]
@@ -91,9 +91,9 @@ for(i in 1:length(jdays)){
   merge(deriveD, plot_info) %>% 
     arrange(block, plot, x, y) %>% 
     mutate(plantID = paste(dosite, doyear, 1:nrow(deriveD), sep = "_"),
-           live = ifelse(complete.cases(plant_length) & v != "H", "Y", "N"),
-           # Placeholder June 1st until we figure out what the real date is
-           jday = jdays[i]) %>% 
+           live = ifelse(complete.cases(v), "Y", "N"),
+           jday = yday(mdy(date))) %>% 
+    mutate(jday = ifelse(jday < 270, jday, jday-365)) %>% 
     dplyr::select(plantID, density, gravel = albedo, block, plot, x, y, jday, live, v, length_mm = plant_length, notes) -> phen_sample
   
   assign(paste0(dates[i], sep = "_", "phen"), phen_sample)
@@ -118,10 +118,41 @@ phen_WY %>%
          harvested = case_when(v == "H" ~ "Y",
                                T ~ "N"),
          v = case_when(v == "IB" ~ "BS",
-                       v %in% c("H", "?") ~ NA,
+                       v == "?" ~ NA,
                        T ~ v)) %>% 
   dplyr::select(plantID, jday, live, v, length_mm, herbivory, frost_heave, tillers, harvested, notes) -> phen_WY_format
-  
+
+
+`%notin%` <- Negate(`%in%`)
+
+phen_WY_format %>% 
+  filter(v %in% c("FG", "FB", "FP")) %>% 
+  group_by(plantID) %>%
+  slice(which.min(jday)) %>% 
+  ungroup() %>% 
+  pull(plantID) -> flowered
+
+phen_WY_format %>% 
+  filter(plantID %notin% flowered) %>% 
+  group_by(plantID) %>% 
+  slice(which.max(jday)) %>% 
+  filter(live == "Y")
+
+phen_WY_format %>% 
+  group_by(plantID) %>% 
+  slice(which.max(jday)) %>% 
+  mutate(survived = ifelse(live == "Y", 1, 0)) -> out
+
+harvest <- read_csv("gardens/rawdata/WY_harvest_matrix.csv")
+
+# This code figures out which plants weren't harvested by the end of the experiment because they didn't flower (I think)
+harvest %>% 
+  filter(check %notin% c("FG", "FB", "FP", 0, "H")) %>% 
+  gather(key = date, value = harvested, `5/9/22`:`7/27/22`) %>% 
+  group_by(block, density, albedo, X, Y, genotype) %>% 
+  summarize(harvested_yes = length(which(complete.cases(harvested)))) %>% 
+  filter(harvested_yes == 0)
+
 # Write phenology data to file
 write.csv(phen_WY_format,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)
 
