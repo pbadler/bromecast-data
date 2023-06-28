@@ -1,0 +1,214 @@
+species,fgroup,duration,duration2,type,type2,c3c4,notes,sitecode
+ERPU,NA,NA,NA,NA,NA,NA,not sure based on USDA database,Boise_High
+LARA,NA,NA,NA,NA,NA,NA,not sure based on USDA database,Boise_High
+PHAC,NA,NA,NA,NA,NA,NA,not sure based on USDA database,Boise_High
+SATR,NA,NA,NA,NA,NA,NA,not sure based on USDA database,Boise_Low
+ANDI,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+ANMI,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+ASSC,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+ERCO,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+ERFI,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+GADE,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+LEPU,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+LESB,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+LSB,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+SEIN,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+ZIPA,NA,NA,NA,NA,NA,NA,not sure based on USDA database,CaseAoyamaS1
+SPCR,NA,NA,NA,NA,NA,NA,not sure based on USDA database,FtK_Cottonwood_Coulee
+Achillea millefolium,perforb,perennial,NA,forb,NA,NA,NA,NA
+Achnatherum thurberianum,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Aegilops cylindrica,anngrass,annual,NA,grass,NA,NA,NA,NA
+Agoseris glauca,perforb,perennial,NA,forb,shrub,NA,NA,NA
+Agropyron cristatum,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Agropyron smithii,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Allium spp,perforb,perennial,NA,forb,NA,NA,NA,NA
+Allium textile,perforb,perennial,NA,forb,NA,NA,NA,NA
+Alyssum alyssoides,yuaforb,annual,biennial,forb,NA,NA,NA,NA
+Alyssum desertorum,annforb,annual,NA,forb,NA,NA,NA,NA
+Ambrosia psilostachya,buaforb,annual,perennial,forb,NA,NA,NA,NA
+Androsace occidentalis,annforb,annual,NA,forb,NA,NA,NA,NA
+Androsace spp,annforb,annual,NA,forb,NA,NA,NA,NA
+Annual forb,annforb,annual,NA,forb,NA,NA,NA,NA
+Annual grass,annfons,annual,NA,grass,NA,NA,NA,NA
+Antennaria dimorpha,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Anternnaria spp,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Apera interrupta,annfons,annual,NA,grass,NA,NA,NA,NA
+Arabis puberula,annforb,biennial,perennial,forb,NA,NA,NA,NA
+Arabis spp,annforb,biennial,perennial,forb,NA,NA,NA,NA
+Arenaria serpyllifolia,annforb,annual,NA,forb,NA,NA,NA,NA
+Arnica fulgens,perforb,perennial,NA,forb,NA,NA,NA,NA
+Artemisia dracunculus,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Artemisia frigida,perforb,perennial,NA,subshrub,NA,NA,NA,NA
+Artemisia tridentata,shrub,perennial,NA,shrub,NA,NA,NA,NA
+Artemisia tridentata wyomingensis,shrub,perennial,NA,shrub,NA,NA,NA,NA
+Asclepias pumila,perforb,perennial,NA,forb,NA,NA,NA,NA
+Astragalus americanus,perforb,perennial,NA,forb,NA,NA,NA,NA
+Astragalus convallarius,perforb,perennial,NA,forb,NA,NA,NA,NA
+Astragalus filipes,perforb,perennial,NA,forb,NA,NA,NA,NA
+Astragalus inflexus,perforb,perennial,NA,forb,NA,NA,NA,NA
+Astragalus inflexus,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Astragalus lentiginosus,perforb,perennial,NA,forb,NA,NA,NA,NA
+Astragalus missouriensis,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Astragalus spp,perforb,perennial,NA,forb,NA,NA,NA,NA
+Atriplex confertifolia,shrub,perennial,NA,shrub,subshrub,NA,NA,NA
+Balsamorhiza sagittata,perforb,perennial,NA,forb,NA,NA,NA,NA
+Boechera retrofracta,perforb,biennial,perennial,forb,NA,NA,NA,NA
+Bouteloua curtipendula,c4grass,perennial,NA,grass,NA,c4,NA,NA
+Bouteloua dactyloides,c4grass,perennial,NA,grass,NA,c4,NA,NA
+Bouteloua gracilis,c4grass,perennial,NA,grass,NA,c4,NA,NA
+Brassica spp,annforb,annual,NA,forb,NA,NA,not sure of duration,NA
+Brodiaea douglasii,perforb,perennial,NA,forb,NA,NA,NA,NA
+Bromus arvensis,anngrass,annual,NA,grass,NA,NA,NA,NA
+Bromus japonicus,anngrass,annual,NA,grass,NA,NA,NA,NA
+Bromus tectorum,anngrass,annual,NA,grass,NA,NA,NA,NA
+Buglossoides arvensis,annforb,annual,NA,forb,NA,NA,NA,NA
+Camelina microcarpa,annforb,annual,biennial,forb,NA,NA,NA,NA
+Carex duriuscula,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Carex filifolia,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Carex spp,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Castilleja angustifolia,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Castilleja thompsonii,perforb,perennial,NA,forb,NA,NA,NA,NA
+Centaurea stoebe,annforb,biennial,perennial,forb,NA,NA,NA,NA
+Ceratocephala testiculata,annforb,annual,NA,forb,NA,NA,NA,NA
+Chrysothamnus viscidiflorus,shrub,perennial,NA,shrub,NA,NA,NA,NA
+Collinsia parviflora,annforb,annual,NA,forb,NA,NA,NA,NA
+Collomia linearis,annforb,annual,NA,forb,NA,NA,NA,NA
+Comandra umbellata,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Convolvulus arvensis,perforb,perennial,NA,forb,vine,NA,NA,NA
+Convolvulus spp,perforb,perennial,NA,forb,vine,NA,NA,NA
+Cordylanthus parviflorus,annforb,annual,NA,forb,NA,NA,NA,NA
+Cordylanthus spp,annforb,annual,NA,forb,NA,NA,NA,NA
+Crategus spp,shrub,perennial,NA,shrub,tree,NA,should doublecheck,NA
+Crepis acuminata,perforb,perennial,NA,forb,NA,NA,NA,NA
+Cymopterus spp,perforb,perennial,NA,forb,NA,NA,should doublecheck,NA
+Descurainia pinnata,annforb,annual,biennial,forb,NA,NA,NA,NA
+Descurainia sophia,annforb,annual,biennial,forb,NA,NA,NA,NA
+Draba repens,annforb,NA,NA,NA,NA,NA,not sure based on USDA database,NA
+Draba spp,annforb,NA,NA,NA,NA,NA,not sure of duration,NA
+Draba verna,annforb,annual,NA,forb,NA,NA,NA,NA
+Echinacea angustifolia,perforb,perennial,NA,forb,NA,NA,NA,NA
+Elymus elymoides,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Ephedra viridis,perforb,perennial,NA,shrub,NA,NA,NA,NA
+Epilobium spp,perforb,NA,NA,NA,NA,NA,not sure based on USDA database,NA
+Eriastrum sparsiflorum,annforb,annual,NA,forb,NA,NA,NA,NA
+Eriastrum spp,annforb,annual,NA,forb,NA,NA,NA,NA
+Ericameria nauseosa,perforb,perennial,NA,shrub,subshrub,NA,NA,NA
+Erigeron compositus,perforb,perennial,NA,forb,NA,NA,NA,NA
+Erigeron corymbosus,perforb,perennial,NA,forb,NA,NA,NA,NA
+Erigeron pumilus,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Erigeron speciosus,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Eriogonum heracleoides,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Eriogonum spp,perforb,perennial,NA,forb,subshrub,NA,possibly classify as shrub?,NA
+Eriogonum spp,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Erodium cicutarium,annforb,annual,biennial,forb,NA,NA,NA,NA
+Euphorbia esula,perforb,perennial,NA,forb,NA,NA,NA,NA
+Euphorbia spathulata,annforb,annual,perennial,forb,NA,NA,NA,NA
+Euphorbia spp,annforb,NA,NA,forb,NA,NA,not sure of duration,NA
+Exotic forb,annforb,NA,NA,forb,NA,NA,not sure of duration,NA
+Exotic grass,anngrass,NA,NA,grass,NA,NA,not sure of duration,NA
+Festuca campestris,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Festuca idahoensis,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Gaillardia aristata,perforb,perennial,NA,forb,NA,NA,NA,NA
+Gaillardia pinnatifida,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Geranium spp,perforb,perennial,NA,forb,NA,NA,NA,NA
+Gutierrezia sarothrae,perforb,perennial,NA,forb,shrub,NA,NA,NA
+Hedeoma hispida,annforb,annual,NA,forb,NA,NA,NA,NA
+Helianthus annuus,annforb,annual,NA,forb,NA,NA,NA,NA
+Hesperostipa comata,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Heterotheca villosa,perforb,perennial,NA,forb,NA,NA,NA,NA
+Holosteum umbellatum,annforb,annual,NA,forb,NA,NA,NA,NA
+Hordeum pusillum,annfons,annual,NA,grass,NA,NA,NA,NA
+Koeleria macrantha,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Lactuca serriola,annforb,annual,biennial,forb,NA,NA,NA,NA
+Lappula occidentalis,annforb,annual,biennial,forb,NA,NA,NA,NA
+Lappula redowskii,annforb,annual,biennial,forb,NA,NA,NA,NA
+Lappula spp,annforb,annual,biennial,forb,NA,NA,NA,NA
+Lepidium spp,perforb,perennial,NA,forb,NA,NA,NA,NA
+Leucocrinum montanum,perforb,perennial,NA,forb,NA,NA,NA,NA
+Lewisia rediviva,perforb,perennial,NA,forb,NA,NA,NA,NA
+Liatris punctata,perforb,perennial,NA,forb,NA,NA,NA,NA
+Lichen,crust,NA,NA,non-plant,NA,NA,NA,what to do?
+Linanthus pungens,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Linanthus septentrionalis,annforb,annual,NA,forb,NA,NA,NA,NA
+Linum lewisii,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Linum perenne,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Lithophragma parviflorum,perforb,perennial,NA,forb,NA,NA,NA,NA
+Lithospermum incisum,perforb,perennial,NA,forb,NA,NA,NA,NA
+Lithospermum ruderale,perforb,perennial,NA,forb,NA,NA,NA,NA
+Logfia arvensis,annforb,annual,NA,forb,NA,NA,NA,NA
+Lomatium foeniculaceum,perforb,perennial,NA,forb,NA,NA,NA,NA
+Lomatium triternatum,perforb,perennial,NA,forb,NA,NA,NA,NA
+Lonicera arizonica,perforb,perennial,NA,shrub,vine,NA,NA,NA
+Lupinus arboreus,perforb,perennial,NA,shrub,subshrub,NA,should doublecheck,NA
+Lupinus sericeus,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Lupinus spp,perforb,perennial,NA,NA,NA,NA,not sure of type,NA
+Medicago lupulina,perforb,annual,perennial,forb,NA,NA,NA,NA
+Medicago sativa,perforb,annual,perennial,forb,NA,NA,NA,NA
+Melilotus officinalis,perforb,annual,biennial,forb,NA,NA,NA,NA
+Microsteris gracilis,annforb,annual,NA,forb,NA,NA,NA,NA
+Mushroom,,NA,NA,non-plant,NA,NA,NA,what to do?
+Myosotis micrantha,annforb,annual,NA,forb,NA,NA,NA,NA
+Myosotis stricta,annforb,annual,NA,forb,NA,NA,NA,NA
+Nassella viridula,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Oenothera suffrutescens,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Oligoneuron rigidum,perforb,perennial,NA,forb,NA,NA,NA,NA
+Opuntia polyacantha,shrub,perennial,NA,shrub,NA,NA,NA,NA
+Orthocarpus tenuifolius,annforb,annual,NA,forb,NA,NA,NA,NA
+Pascopyrum smithii,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Phlox andicola,perforb,perennial,NA,forb,NA,NA,NA,NA
+Phlox hoodii,perforb,perennial,NA,forb,NA,NA,NA,NA
+Phlox longifolia,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Plantago patagonica,annforb,annual,NA,forb,NA,NA,NA,NA
+Pleiacanthus spinosus,perforb,perennial,NA,forb,subshrub,NA,NA,NA
+Pleuraphis jamesii,c4grass,perennial,NA,grass,NA,c4,NA,NA
+Poa bulbosa,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Poa pratensis,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Poa sandbergii,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Poa secunda,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Polygonum aviculare,annforb,annual,perennial,forb,NA,NA,NA,NA
+Polygonum douglasii,annforb,annual,NA,forb,NA,NA,NA,NA
+Pseudoroegneria spicata,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Psoralidium tenuiflorum,perforb,perennial,NA,forb,NA,NA,NA,NA
+Ratibida columnifera,perforb,perennial,NA,forb,NA,NA,NA,NA
+Rhus trilobata,shrub,perennial,NA,shrub,NA,NA,NA,NA
+Sisymbrium altissimum,annforb,annual,biennial,forb,NA,NA,NA,NA
+Solidago missouriensis,perforb,perennial,NA,forb,NA,NA,NA,NA
+Solidago rigida,perforb,perennial,NA,forb,NA,NA,NA,NA
+Sphaeralcea coccinea,perforb,biennial,perennial,forb,subshrub,NA,NA,NA
+Sphaeralcea spp,perforb,NA,NA,forb,NA,NA,not sure of duration,NA
+Sporobolus cryptandrus,c4grass,perennial,NA,grass,NA,c4,NA,NA
+Sporobolus spp,c4grass,perennial,NA,grass,NA,c4,NA,NA
+Symphyotrichum ericoides,perforb,perennial,NA,forb,NA,NA,NA,NA
+Symphyotrichum oblongifolium,perforb,perennial,NA,forb,NA,NA,NA,NA
+Taeniatherum caput-medusae,anngrass,annual,NA,grass,NA,NA,NA,NA
+Taraxacum officinale,annforb,perennial,NA,forb,NA,NA,NA,NA
+Tetradymia canescens,shrub,perennial,NA,shrub,subshrub,NA,NA,NA
+Thinopyrum intermedium,c3grass,perennial,NA,grass,NA,c3,NA,NA
+Tradescantia bracteata,perforb,perennial,NA,forb,NA,NA,NA,NA
+Tragopogon dubius,annforb,annual,biennial,forb,NA,NA,NA,NA
+Veronica peregrina,annforb,annual,NA,forb,NA,NA,NA,NA
+Veronica verna,annforb,annual,NA,forb,NA,NA,NA,NA
+Vicia villosa,annforb,annual,biennial,forb,vine,NA,NA,NA
+Viola nuttallii,perforb,perennial,NA,forb,NA,NA,NA,NA
+Vulpia octoflora,anngrass,annual,NA,grass,NA,NA,NA,NA
+Vulpia spp,anngrass,annual,NA,grass,NA,NA,NA,NA
+bare,,NA,NA,non-plant,NA,NA,NA,NA
+biocrust,,NA,NA,non-plant,NA,NA,NA,NA
+cyanobacteria,,NA,NA,non-plant,NA,NA,NA,NA
+dead,,perennial,NA,grass,NA,c3,not sure how dead plant is classified,NA
+dead,,NA,NA,dead,NA,NA,NA,NA
+litter,,NA,NA,non-plant,NA,NA,NA,NA
+moss,,NA,NA,moss,NA,NA,NA,NA
+rock,,NA,NA,non-plant,NA,NA,NA,NA
+scat,,NA,NA,non-plant,NA,NA,NA,NA
+soil,,NA,NA,non-plant,NA,NA,NA,NA
+soil,,NA,NA,NA,NA,NA,NA,NA
+unknown,,NA,NA,unknown,NA,NA,NA,what to do?
+unknown,,NA,NA,NA,NA,NA,NA,what to do?
+unknown annual forb,annforb,annual,NA,forb,NA,NA,NA,NA
+unknown forb,perforb,NA,NA,forb,NA,NA,not sure of duration,NA
+unknown grass,c3grass,NA,NA,grass,NA,NA,not sure of duration,NA
+unknown perennial forb,perforb,perennial,NA,forb,NA,NA,NA,NA
+unknown perennial grass,c3grass,perennial,NA,grass,NA,unknown,NA,NA
+unknown shrub,shrub,NA,NA,shrub,NA,NA,not sure of duration,NA
+unknown tree,shrub,perennial,NA,tree,NA,NA,NA,NA
