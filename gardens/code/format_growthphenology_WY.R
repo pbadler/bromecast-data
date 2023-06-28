@@ -103,11 +103,22 @@ for(i in 1:length(dates)){
 # Bring all data together
 rbind(marA_phen, marB_phen, aprA_phen, aprB_phen, mayA_phen, mayB_phen, juneA_phen) -> phen_WY
 
+# Switch x and y so that x = 1:10 or 1:20 and y = 1:10 or 1:5
+phen_WY %>% 
+  mutate(x_new = y,
+         y_new = x) %>% 
+  mutate(x = x_new,
+         y = y_new)-> phen_WY
+
 # Check notes
 phen_WY %>% 
   arrange(plantID, jday) %>% 
   pull(notes) %>% 
   unique()
+
+# Remove data that has the note "recording error, no data exists for this date"
+phen_WY %>% 
+  filter(notes != "recording error, no data exists for this date" | is.na(notes)) -> phen_WY
 
 # Create final columns
 phen_WY %>% 
@@ -119,12 +130,12 @@ phen_WY %>%
                                T ~ "N"),
          v = case_when(v == "IB" ~ "BS",
                        v == "?" ~ NA,
-                       T ~ v)) %>% 
-  dplyr::select(plantID, jday, live, v, length_mm, herbivory, frost_heave, tillers, harvested, notes) -> phen_WY_format
+                       T ~ v)) -> phen_WY_format
 
-
+# Create not in operator
 `%notin%` <- Negate(`%in%`)
 
+# Figure out which plants flowered over the course of phenology checks
 phen_WY_format %>% 
   filter(v %in% c("FG", "FB", "FP")) %>% 
   group_by(plantID) %>%
@@ -132,26 +143,66 @@ phen_WY_format %>%
   ungroup() %>% 
   pull(plantID) -> flowered
 
+# Figure out which plants did NOT flower over the course of phenology checks
 phen_WY_format %>% 
   filter(plantID %notin% flowered) %>% 
   group_by(plantID) %>% 
   slice(which.max(jday)) %>% 
-  filter(live == "Y")
+  filter(live == "Y") -> not_flowered
 
-phen_WY_format %>% 
-  group_by(plantID) %>% 
-  slice(which.max(jday)) %>% 
-  mutate(survived = ifelse(live == "Y", 1, 0)) -> out
-
+# Read in harvest matrix data
 harvest <- read_csv("gardens/rawdata/WY_harvest_matrix.csv")
 
-# This code figures out which plants weren't harvested by the end of the experiment because they didn't flower (I think)
+# This code figures out which plants weren't harvested by the end of the
+# experiment but they should have been. Most of these were not harvested because
+# they didn't flower (?) but about 1/4 of them had previously flowered.
 harvest %>% 
-  filter(check %notin% c("FG", "FB", "FP", 0, "H")) %>% 
+  filter(check != 0) %>% 
   gather(key = date, value = harvested, `5/9/22`:`7/27/22`) %>% 
-  group_by(block, density, albedo, X, Y, genotype) %>% 
+  group_by(block, density, albedo, X, Y, genotype, check) %>% 
   summarize(harvested_yes = length(which(complete.cases(harvested)))) %>% 
   filter(harvested_yes == 0)
+
+# Assume that if they were harvested at some point, they had flowered. If they
+# were NOT harvested, they did not flower.
+
+harvest %>% 
+  mutate(density = density_long,
+         x = X,
+         y = Y,
+         gravel = albedo,
+         genotype = parse_number(genotype)) %>% 
+  gather(key = date, value = harvested, `5/9/22`:`7/27/22`) %>% 
+  mutate(jday = yday(mdy(date))) %>% 
+  mutate(jday = ifelse(jday < 270, jday, jday-365)) %>%
+  # When a seed head or whole plant has been harvested, assume it flowered. This
+  # is a big assumption that we need to check with Seth!!!
+  mutate(v = case_when(complete.cases(harvested) ~ "FG",
+                       # Set rest to NF = not flowered. This doesn't necessarily
+                       # mean the plant has flowered already, but rather is used
+                       # to catch instances when this would be its first time
+                       # flowering.
+                       T ~ "NF")) %>% 
+  select(site, jday, block, density, gravel, x, y, genotype, v) %>% 
+  filter(complete.cases(density, gravel))-> harvest_flowering
+  
+# Merge with plantID info
+phen_WY %>% 
+  select(plantID, block, density, gravel, x, y) %>% 
+  distinct() %>% 
+  merge(harvest_flowering) -> harvest_flowering
+
+# Filter observations where plants were collected (assumed flowered). Only do
+# this for plants that hadn't yet flowered during census.
+harvest_flowering %>% 
+  filter(plantID %in% not_flowered$plantID) %>% 
+  filter(v == "FG") %>% 
+  group_by(plantID) %>% 
+  slice(which.min(jday)) %>% 
+  ungroup() %>% 
+  arrange(block, gravel, density, x, y) -> check
+
+write_csv(check,"~/Desktop/check.csv")
 
 # Write phenology data to file
 write.csv(phen_WY_format,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)
