@@ -146,7 +146,7 @@ Medicago lupulina,perforb,annual,perennial,forb,NA,NA,NA,NA
 Medicago sativa,perforb,annual,perennial,forb,NA,NA,NA,NA
 Melilotus officinalis,perforb,annual,biennial,forb,NA,NA,NA,NA
 Microsteris gracilis,annforb,annual,NA,forb,NA,NA,NA,NA
-Mushroom,,NA,NA,non-plant,NA,NA,NA,what to do?
+Mushroom,,notplant,NA,non-plant,NA,NA,NA,NA
 Myosotis micrantha,annforb,annual,NA,forb,NA,NA,NA,NA
 Myosotis stricta,annforb,annual,NA,forb,NA,NA,NA,NA
 Nassella viridula,c3grass,perennial,NA,grass,NA,c3,NA,NA
@@ -192,19 +192,19 @@ Vicia villosa,annforb,annual,biennial,forb,vine,NA,NA,NA
 Viola nuttallii,perforb,perennial,NA,forb,NA,NA,NA,NA
 Vulpia octoflora,anngrass,annual,NA,grass,NA,NA,NA,NA
 Vulpia spp,anngrass,annual,NA,grass,NA,NA,NA,NA
-bare,,NA,NA,non-plant,NA,NA,NA,NA
-biocrust,,NA,NA,non-plant,NA,NA,NA,NA
-cyanobacteria,,NA,NA,non-plant,NA,NA,NA,NA
-dead,,perennial,NA,grass,NA,c3,not sure how dead plant is classified,NA
-dead,,NA,NA,dead,NA,NA,NA,NA
-litter,,NA,NA,non-plant,NA,NA,NA,NA
-moss,,NA,NA,moss,NA,NA,NA,NA
-rock,,NA,NA,non-plant,NA,NA,NA,NA
-scat,,NA,NA,non-plant,NA,NA,NA,NA
-soil,,NA,NA,non-plant,NA,NA,NA,NA
-soil,,NA,NA,NA,NA,NA,NA,NA
-unknown,,NA,NA,unknown,NA,NA,NA,what to do?
-unknown,,NA,NA,NA,NA,NA,NA,what to do?
+bare,bare,NA,NA,non-plant,NA,NA,NA,NA
+biocrust,biocrust,NA,NA,non-plant,NA,NA,NA,NA
+cyanobacteria,biocrust,NA,NA,non-plant,NA,NA,NA,NA
+dead,litter,perennial,NA,grass,NA,c3,not sure how dead plant is classified,NA
+dead,litter,NA,NA,dead,NA,NA,NA,NA
+litter,litter,NA,NA,non-plant,NA,NA,NA,NA
+moss,biocrust,NA,NA,moss,NA,NA,NA,NA
+rock,rock,NA,NA,non-plant,NA,NA,NA,NA
+scat,litter,NA,NA,non-plant,NA,NA,NA,NA
+soil,bare,NA,NA,non-plant,NA,NA,NA,NA
+soil,bare,NA,NA,NA,NA,NA,NA,NA
+unknown,unknown,NA,NA,unknown,NA,NA,NA,NA
+unknown,unknown,NA,NA,NA,NA,NA,NA,NA
 unknown annual forb,annforb,annual,NA,forb,NA,NA,NA,NA
 unknown forb,perforb,NA,NA,forb,NA,NA,not sure of duration,NA
 unknown grass,c3grass,NA,NA,grass,NA,NA,not sure of duration,NA
