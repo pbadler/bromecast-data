@@ -1,0 +1,24 @@
+notes,action,standard_note
+herbivory,flag,herbivory
+dormant,ignore,
+regrowth,ignore,
+now absent,ignore,
+audio unclear for v-stage,ignore,
+harvested?,ignore,
+"toothpick displaced, Pi/Pu/Pi?",flag,badposition
+"toothpick displaced, Or/Or/Pi?",flag,badposition
+"toothpick crushed by pronghorn, Bl/Bl/Bl?",flag,badposition
+"toothpick crushed by pronghorn, Pu/Bl/Pi?",flag,badposition
+"toothpick displaced, Pi/Pi/Bl?",flag,badposition
+no measurement recorded Jun1,ignore,
+not measured on Jun1,ignore,
+"dormant, (17,3) - (17,5) measured twice after recording pause - using first measurements",ignore,
+"(17,3) - (17,5) measured twice after recording pause - using first measurements",ignore,
+seed head lost,ignore,
+?,ignore,
+herbivoery,flag,herbivory
+"herbivory, only seed head gone",flag,herbivory
+basal seed head,ignore,
+basal seed heads,ignore,
+post-harvest regrowth,ignore,
+"likely error if measured previously, confirmed absent",ignore,

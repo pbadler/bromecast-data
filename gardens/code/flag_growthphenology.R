@@ -42,6 +42,7 @@ phenoD$v_numeric[phenoD$v=="BS"] <- 6  # boot stage
 phenoD$v_numeric[phenoD$v=="FG"] <- 7 # flowering green
 phenoD$v_numeric[phenoD$v=="FP"] <- 8 # flowering purple
 phenoD$v_numeric[phenoD$v=="FB"] <- 9 # flowering brown
+phenoD$v_numeric[phenoD$v=="FX"] <- 10 # flowering brown
 phenoD <- phenoD[order(phenoD$v_numeric),]
 #check!
 print(phenoD)

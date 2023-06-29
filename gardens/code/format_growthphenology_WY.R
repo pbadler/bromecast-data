@@ -6,14 +6,14 @@ doyear <- 2022 # growing season to do
 dosite <- "CH" # code for focal site
 
 # Read in data
-juneB <- read_csv("gardens/rawdata/WY_census_data_June22b.csv")
-juneA <- read_csv("gardens/rawdata/WY_census_data_June22a.csv")
-mayB <- read_csv("gardens/rawdata/WY_census_data_May22b.csv")
-mayA <- read_csv("gardens/rawdata/WY_census_data_May22a.csv")
-aprB <- read_csv("gardens/rawdata/WY_census_data_April22b.csv")
-aprA <- read_csv("gardens/rawdata/WY_census_data_April22a.csv")
-marB <- read_csv("gardens/rawdata/WY_census_data_March22b.csv")
-marA <- read_csv("gardens/rawdata/WY_census_data_March22a.csv")
+juneB <- suppressMessages(read_csv("gardens/rawdata/WY_census_data_June22b.csv"))
+juneA <- suppressMessages(read_csv("gardens/rawdata/WY_census_data_June22a.csv"))
+mayB <- suppressMessages(read_csv("gardens/rawdata/WY_census_data_May22b.csv"))
+mayA <- suppressMessages(read_csv("gardens/rawdata/WY_census_data_May22a.csv"))
+aprB <- suppressMessages(read_csv("gardens/rawdata/WY_census_data_April22b.csv"))
+aprA <- suppressMessages(read_csv("gardens/rawdata/WY_census_data_April22a.csv"))
+marB <- suppressMessages(read_csv("gardens/rawdata/WY_census_data_March22b.csv"))
+marA <- suppressMessages(read_csv("gardens/rawdata/WY_census_data_March22a.csv"))
 
 # Create a list of data
 all_phen <- list(juneB, juneA, mayB, mayA, aprB, aprA, marB, marA)
@@ -151,7 +151,7 @@ phen_WY_format %>%
   filter(live == "Y") -> not_flowered
 
 # Read in harvest matrix data
-harvest <- read_csv("gardens/rawdata/WY_harvest_matrix.csv")
+harvest <- suppressMessages(read_csv("gardens/rawdata/WY_harvest_matrix.csv"))
 
 # This code figures out which plants weren't harvested by the end of the
 # experiment but they should have been. Most of these were not harvested because
@@ -202,17 +202,82 @@ harvest_flowering %>%
   ungroup() %>% 
   arrange(block, gravel, density, x, y) -> check
 
-write_csv(check,"~/Desktop/check.csv")
+# write_csv(check,"~/Desktop/check.csv")
 
-# Write phenology data to file
-write.csv(phen_WY_format,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)
+# The envelopes for these plant IDs were checked manually to see if there was
+# evidence of flowering by the time of harvest
+
+# Read this data frame in
+ids_checked <- suppressMessages(read_csv("gardens/deriveddata/WY_harvest_flower_check.csv"))
+
+# Filter out plants that flowered
+ids_checked %>% 
+  filter(`flowered?` == "y") %>% 
+  # Set all to be FX. I didn't check the phenology carefully, jut figured out if
+  # it had flowered or not so it could be FG, FP, or FB. Can fill this in later
+  # when the seeds get processed.
+  mutate(v = "FX",
+         live = "Y",
+         # Set these as NA now
+         length_mm = NA,
+         herbivory = NA,
+         frost_heave = NA,
+         notes = NA,
+         # At least partial harvest here
+         harvested = "Y") %>% 
+  select(plantID, jday, live, v, length_mm, herbivory, frost_heave, harvested, notes) -> ids_checked_format
+
+# Combine harvest flowering data with rest of phenology data
+phen_WY_format %>% 
+  select(names(ids_checked_format)) %>% 
+  rbind(ids_checked_format) %>% 
+  arrange(plantID, jday) -> phen_WY_format
+
+# Set data frame to be same name format as Boise and SS
+pgD <- phen_WY_format
+
+# pull out and format phenology and growth data and notes for each plant
+pgD <- pgD[order(pgD$plantID,pgD$jday),] # sort by plantID then Julian day
+
+# check for bad "live" values
+table(pgD$live) # N Y
+#change live column to factor
+pgD$live<-as.factor(pgD$live)
+
+# check for bad "v" values
+table(pgD$v)  # BS   FB   FG   FP   FX    H   V0   V1   V2   V3  V3+ 
+# FX deals with the plants that flowered at some point during harvest but I
+# didn't check the stage carefully.
+
+# H means that the plant was already harvested, so I think we can change these
+# to NA
+pgD %>% 
+  mutate(v = ifelse(v == "H", NA, v)) -> pgD
+
+# check for bad length values
+# first turn missing values into NAs then make length numeric
+pgD$length_mm <- as.numeric(pgD$length_mm)
+hist(pgD$length_mm) # a few very high values
+# looks good
+
+# compile notes
+tmp <- pgD$notes
+tmp[tmp==""] <- NA
+tmp <- tmp[!is.na(tmp)]
+tmp <- unique(tmp,MARGIN=2)
+tmp <- data.frame(notes=tmp,action=NA)
+# write.csv(tmp,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_notes_actions.csv"),row.names=F)
+# MLV updated on 29 June 2023
+
+# write pgD to file
+write.csv(pgD,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)
 
 # Write plantID key data to file
-genotype_info <- read_csv("gardens/rawdata/WY_genotypes.csv")
+genotype_info <- suppressMessages(read_csv("gardens/rawdata/WY_genotypes.csv"))
 
 genotype_info %>% 
   dplyr::select(block, density = density_long, gravel = albedo, source, growout = growout_yr,
-         x = Y, y = X, genotype) -> genotype_info
+         x = X, y = Y, genotype) -> genotype_info
 
 merge(genotype_info, phen_WY) %>% 
   mutate(site = dosite,
@@ -223,5 +288,5 @@ merge(genotype_info, phen_WY) %>%
 
 write.csv(plant_key,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_plantID.csv"),row.names=F)
 
-
-  
+# Remove all objects but pgD
+rm(list=setdiff(ls(), "pgD"))
