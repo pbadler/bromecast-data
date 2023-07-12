@@ -20,7 +20,7 @@ siteD <- rbind(siteD,tmp)
 
 # remove duplicates
 siteD <- unique(siteD, MARGIN=2)
-siteD <- siteD[-28,] # remove SymstadS1 w/ bad coords
+siteD <- siteD[-41,] # remove SymstadS1 w/ bad coords
 
 # drop Lehnoff sites (no data)
 tmp <- grep("LEHN", siteD$SiteCode)
