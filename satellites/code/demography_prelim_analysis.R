@@ -210,6 +210,9 @@ mean_fecundity <- fecD %>% group_by(SiteCode,Year,Treatment) %>%
             q95=quantile(log(Fecundity),0.95) )  %>% 
   pivot_wider(names_from=Treatment, names_prefix="logF_",values_from=c(mean, q05, q95))
 
+mean_fecundity$fec_logratio <- mean_fecundity$mean_logF_control - mean_fecundity$mean_logF_removal
+
+
 # join site means
 site_means <- merge(prob_reprod,mean_fecundity,all.x=T)
 
@@ -275,7 +278,7 @@ site_means <- merge(siteD,site_means)
 ### Figures
 ###
 
-par(tcl=0.2,mgp=c(2,0.5,0))
+par(tcl=-0.2,mgp=c(2,0.5,0))
 
 # treatment effects on prob of reproduction
 par(mar=c(3,5,3,1))
@@ -285,12 +288,14 @@ plot(site_means$pR_removal,site_means$pR_control,
 abline(0,1,lty="dashed")
 
 # map mean prob of reproduction
+par(mar=c(4,4,4,4))
 map("state",xlim=c(-128,-95),ylim=c(30,52))
 #title("Fitness")
 points(x=site_means$Lon,y=site_means$Lat,pch=".",col="black")
 symbols(x=site_means$Lon,y=site_means$Lat,circles=site_means$pR_overall,inches=0.4,add=T)
 
 # mean prob of reproduction and climate
+par(mar=c(3,5,3,1))
 mycol <- ifelse(site_means$Lon < -109, "blue","red")
 plot(site_means$prcp,site_means$pR_overall,pch=16, col=mycol,
      xlab="Precipitation (mm)",ylab="Prob. seed production")
@@ -302,30 +307,58 @@ legend("topleft",c("west","east"),pch=16,col=c("blue","red"))
 # summary(lm(x~1))
 
 
+# fecundity figures
+threshold <- 0.1
+tmp <- which(site_means$pR_control >= threshold & site_means$pR_removal >= threshold)
 
-
-
-
-
-
-
-
-plot(mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
-     mean_fecundity$mean[mean_fecundity$Treatment=="control"],
+# treatment 1:1
+par(mar=c(3,5,3,1))
+#mycol <- ifelse(site_means$Lon < -109, "blue","red")
+plot(site_means$mean_logF_removal[tmp],site_means$mean_logF_control[tmp], col="black",
      xlab="Removal",ylab="Control", xlim=c(0,7), ylim=c(0,7),pch=16,main="log Fecundity")
+abline(0,1,lty="dashed")
 # removals confidence intervals
-arrows(x0=mean_fecundity$q05[mean_fecundity$Treatment=="removal"],
-       y0=mean_fecundity$mean[mean_fecundity$Treatment=="control"],
-       x1=mean_fecundity$q95[mean_fecundity$Treatment=="removal"],
-       y1=mean_fecundity$mean[mean_fecundity$Treatment=="control"],angle=90,length=0,code=3)
+arrows(x0=site_means$q05_logF_removal[tmp],
+       y0=site_means$mean_logF_control[tmp],
+       x1=site_means$q95_logF_removal[tmp],
+       y1=site_means$mean_logF_control[tmp],angle=90,length=0,code=3)
 # controls confidence intervals
-arrows(x0=mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
-       y0=mean_fecundity$q05[mean_fecundity$Treatment=="control"],
-       x1=mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
-       y1=mean_fecundity$q95[mean_fecundity$Treatment=="control"],angle=90,length=0,code=3)
+arrows(x0=site_means$mean_logF_removal[tmp],
+       y0=site_means$q05_logF_control[tmp],
+       x1=site_means$mean_logF_removal[tmp],
+       y1=site_means$q95_logF_control[tmp],angle=90,length=0,code=3)
+
+# map fecundity in removals
+par(mar=c(4,4,4,4))
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+#title("Fitness")
+points(x=site_means$Lon,y=site_means$Lat,pch=".",col="black")
+symbols(x=site_means$Lon,y=site_means$Lat,circles=site_means$mean_logF_removal,inches=0.4,add=T)
+
+# mean removal fecundity and climate
+par(mar=c(3,5,3,1))
+mycol <- ifelse(site_means$Lon < -109, "blue","red")
+plot(site_means$prcp,site_means$mean_logF_removal,pch=16, col=mycol,
+     xlab="Precipitation (mm)",ylab="log Fecundity")
+legend("topright",c("west","east"),pch=16,col=c("blue","red"))
+
+# removal fecundity vs effect of competition
+mycol <- ifelse(site_means$Lon < -109, "blue","red")
+plot(site_means$mean_logF_removal,site_means$fec_logratio, 
+     xlab="log Fecundity in Removals",ylab="log(Control/Removal)",pch=16,col=mycol)
+abline(h=0,lty="dashed")
+legend("topright",c("west","east"),pch=16,col=c("blue","red"))
 
 
-abline(0,1,lty="dotted")
+
+
+
+
+
+
+
+
+
 
 # fixed effects approach
 m2 <- glm(Fecundity ~ Treatment, family="poisson",data = fecD)
@@ -336,9 +369,7 @@ summary(m2)
 
 mean_fecundity$logratio <- mean_fecundity$mean_control - mean_fecundity$mean_removal
 
-plot(mean_fecundity$mean_removal,mean_fecundity$logratio, 
-     xlab="log Fecundity in Removals",ylab="log(Control/Removal)",pch=16)
-abline(h=0,lty="dashed")
+
 
 # # link site means to aridity data
 # mean_fecundity <- merge(mean_fecundity, aridD, all.x=T)
