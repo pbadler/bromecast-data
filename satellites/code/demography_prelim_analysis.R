@@ -29,7 +29,9 @@ abline(0,1,lty="dashed")
 plot(log(removal),log(control),type="l",col="red")
 abline(0,1)
 
-# effect of removal increases with removal
+plot(log(removal),log(control/removal))
+
+# effect of competition increases with fitness
 control <- removal^(0.5)
 
 plot(removal,control,type="l",col="black")
@@ -38,7 +40,9 @@ abline(0,1,lty="dashed")
 plot(log(removal),log(control),type="l",col="black")
 abline(0,1)
 
-# effect of removal decreases with removal
+plot(log(removal),log(control/removal))
+
+# effect of competition decreases with fitness
 control <- removal*c(0.1,0.2,0.3,0.4,0.5,0.6)
 
 plot(removal,control,type="l",col="black")
@@ -46,6 +50,9 @@ abline(0,1,lty="dashed")
 
 plot(log(removal),log(control),type="l",col="black")
 abline(0,1,lty="dashed")
+
+plot(log(removal),log(control/removal))
+
 
 rm(removal,control)
 
@@ -216,6 +223,10 @@ mean_fecundity$fec_logratio <- mean_fecundity$mean_logF_control - mean_fecundity
 # join site means
 site_means <- merge(prob_reprod,mean_fecundity,all.x=T)
 
+# calculate fitness on log scales
+site_means$fit_control <- log(site_means$pR_control) + site_means$mean_logF_control
+site_means$fit_removal <- log(site_means$pR_removal) + site_means$mean_logF_removal
+site_means$fit_logratio <- site_means$fit_control - site_means$fit_removal
 
 ###
 ### import site info -------------------------------------------------------------------
@@ -332,151 +343,117 @@ arrows(x0=site_means$mean_logF_removal[tmp],
 par(mar=c(4,4,4,4))
 map("state",xlim=c(-128,-95),ylim=c(30,52))
 #title("Fitness")
-points(x=site_means$Lon,y=site_means$Lat,pch=".",col="black")
-symbols(x=site_means$Lon,y=site_means$Lat,circles=site_means$mean_logF_removal,inches=0.4,add=T)
+points(x=site_means$Lon[tmp],y=site_means$Lat[tmp],pch=".",col="black")
+symbols(x=site_means$Lon[tmp],y=site_means$Lat[tmp],circles=site_means$mean_logF_removal[tmp],inches=0.4,add=T)
 
 # mean removal fecundity and climate
 par(mar=c(3,5,3,1))
-mycol <- ifelse(site_means$Lon < -109, "blue","red")
-plot(site_means$prcp,site_means$mean_logF_removal,pch=16, col=mycol,
+mycol <- ifelse(site_means$Lon[tmp] < -109, "blue","red")
+plot(site_means$prcp[tmp],site_means$mean_logF_removal[tmp],pch=16, col=mycol,
      xlab="Precipitation (mm)",ylab="log Fecundity")
 legend("topright",c("west","east"),pch=16,col=c("blue","red"))
 
 # removal fecundity vs effect of competition
-mycol <- ifelse(site_means$Lon < -109, "blue","red")
-plot(site_means$mean_logF_removal,site_means$fec_logratio, 
+mycol <- ifelse(site_means$Lon[tmp] < -109, "blue","red")
+plot(site_means$mean_logF_removal[tmp],site_means$fec_logratio[tmp], 
      xlab="log Fecundity in Removals",ylab="log(Control/Removal)",pch=16,col=mycol)
 abline(h=0,lty="dashed")
-legend("topright",c("west","east"),pch=16,col=c("blue","red"))
+legend("bottomleft",c("west","east"),pch=16,col=c("blue","red"))
 
 
-
-
-
-
-
-
-
-
-
-
-# fixed effects approach
-m2 <- glm(Fecundity ~ Treatment, family="poisson",data = fecD)
-summary(m2)
-
-# play with site means
-# go from long to wide
-
-mean_fecundity$logratio <- mean_fecundity$mean_control - mean_fecundity$mean_removal
-
-
-
-# # link site means to aridity data
-# mean_fecundity <- merge(mean_fecundity, aridD, all.x=T)
-# 
-# # try a few plots
-# plot(mean_fecundity$gs.AI, mean_fecundity$mean_removal, pch=16, col="blue")
-# points(mean_fecundity$gs.AI, mean_fecundity$mean_control, pch=16, col="red")
-# 
-# plot(mean_fecundity$gs.AI, mean_fecundity$logratio)
-# 
-# ## look at R & R classes
-# mean_fecundity <- merge(mean_fecundity,rrD,all.x=T)
-# plot(as.numeric(as.factor(mean_fecundity$RR_Class)),mean_fecundity$logratio)
-
-###
-### combine models
-###
-
-names(prob_reprod)[3:4] <- paste0("pr_",names(prob_reprod)[3:4])
-fitD <- merge(prob_reprod, mean_fecundity)
-
-# combine on log scale
-fitD$fit_control <- log(fitD$pr_mean_control) + fitD$mean_control
-fitD$fit_removal <- log(fitD$pr_mean_removal) + fitD$mean_removal
-
-plot(fitD$fit_removal,fitD$fit_control,xlab="Removals",ylab="Controls",main="Fitness")
-abline(0,1,lty="dashed")
-
-fitD$fit_ratio <- fitD$fit_control - fitD$fit_removal
-plot(fitD$fit_removal,fitD$fit_ratio,xlab="log Fitness in Removals",
-     pch=16, ylab="Effect of competition")
-abline(h=0,lty="dashed")
-
-
-
-
-
-
-
-
-###
-### plot on map
-###
-
-# merge Lat lons
-fitD <- merge(fitD,siteD,all.x=T)
-
-par(mfrow=c(1,2))
-
-# removal fecundity
-map("state",xlim=c(-128,-95),ylim=c(30,52))
-#title("Fitness")
-points(x=fitD$Lon,y=fitD$Lat,col="red")
-#symbols(x=fitD$Lon,y=fitD$Lat,circles=fitD$mean_removal,inches=0.4,add=T)
-symbols(x=fitD$Lon,y=fitD$Lat,circles=sqrt(exp(fitD$fit_removal)),inches=0.4,add=T)
-
-# log ratio control/removal
-map("state",xlim=c(-128,-95),ylim=c(30,52))
-title("log(Control/Removal)")
-tmp <- which(fitD$logratio<0)
-symbols(x=fitD$Lon[tmp],y=fitD$Lat[tmp],circles=abs(fitD$logratio[tmp]),inches=0.4,add=T,fg="red")
-tmp <- which(fitD$logratio>0)
-symbols(x=fitD$Lon[tmp],y=fitD$Lat[tmp],circles=fitD$logratio[tmp],inches=0.4,add=T,fg="blue")
-
-
-
-
-png("abiotic_drivers.png",height=3,width=8,res=400,units="in")
-par(mfrow=c(1,3),mar=c(5,2,1,1),oma=c(4,2,0,0),
-    cex.lab=1.2)
-plot(fitD$prcp,fitD$fit_removal,pch=16,
-     xlab="Precipitation",ylab="")
-plot(fitD$tmean,fitD$fit_removal,pch=16,
-     xlab="Mean temperature",ylab="")
-plot(fitD$swe_mean,fitD$fit_removal,pch=16,
-     xlab="Mean snow water equivalent",ylab="")
-mtext("log Fitness in removals",2,outer=T,line=0.5,cex=0.8)
-dev.off()
-
-
-par(mfrow=c(1,1))
-plot(fitD$prcp/fitD$tmean,fitD$fit_removal)
-
-plot(fitD$swe_mean,fitD$fit_removal)
-symbols(x=fitD$swe_mean,y=fitD$prcp,circles=fitD$fit_removal+1,inches=0.4,add=T,fg="blue")
-
-## this one is promising
+# not much here
 pdf("SWExLongitude.pdf",height=3, width=8.5)
 
 par(mfrow=c(1,3),mar=c(3,5,1,1),mgp=c(2,0.5,0))
 
-plot(fitD$Lon,fitD$swe_mean,xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
-     main="Fitness in removals")
-symbols(x=fitD$Lon,y=fitD$swe_mean,circles=sqrt(exp(fitD$fit_removal)),inches=0.4,add=T,fg="blue")
+plot(site_means$Lon[tmp],site_means$swe_mean[tmp],xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Fecundty in removals")
+symbols(x=site_means$Lon[tmp],y=site_means$swe_mean[tmp],circles=sqrt(exp(site_means$mean_logF_removal[tmp])),inches=0.4,add=T,fg="blue")
 
-plot(fitD$Lon,fitD$swe_mean,xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
-     main="Fitness in controls")
-symbols(x=fitD$Lon,y=fitD$swe_mean,circles=sqrt(exp(fitD$fit_control)),inches=0.4,add=T,fg="blue")
+plot(site_means$Lon[tmp],site_means$swe_mean[tmp],xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Fecundity in controls")
+symbols(x=site_means$Lon[tmp],y=site_means$swe_mean[tmp],circles=sqrt(exp(site_means$mean_logF_control[tmp])),inches=0.4,add=T,fg="blue")
 
-plot(fitD$Lon,fitD$swe_mean,xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+plot(site_means$Lon[tmp],site_means$swe_mean[tmp],xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
      main="Effect of competition")
-tmp <- which(fitD$fit_ratio<0)
-symbols(x=fitD$Lon[tmp],y=fitD$swe_mean[tmp],circles=abs(fitD$fit_ratio[tmp]),inches=0.4,add=T,fg="red")
-tmp <- which(fitD$fit_ratio>0)
-symbols(x=fitD$Lon[tmp],y=fitD$swe_mean[tmp],circles=fitD$fit_ratio[tmp],inches=0.4,add=T,fg="blue")
+tmp2 <- which(site_means$fec_logratio[tmp]<0)
+symbols(x=site_means$Lon[tmp[tmp2]],y=site_means$swe_mean[tmp[tmp2]],
+        circles=abs(site_means$fec_logratio[tmp[tmp2]]),inches=0.4,add=T,fg="red")
+tmp2 <- which(site_means$fec_logratio>0)
+symbols(x=site_means$Lon[tmp[tmp2]],y=site_means$swe_mean[tmp[tmp2]],
+        circles=abs(site_means$fec_logratio[tmp[tmp2]]),inches=0.4,add=T,fg="blue")
 
 dev.off()
+
+
+# fitness figures
+
+# assign color categories based on fitness outcomes
+tmp <- which(site_means$fit_control<0 & site_means$fit_removal<0)
+mycol[tmp] <- "black"
+tmp <- which(site_means$fit_control>0 & site_means$fit_removal<0)
+mycol[tmp] <- "green"
+tmp <- which(site_means$fit_control<0 & site_means$fit_removal>0)
+mycol[tmp] <- "red"
+tmp <- which(site_means$fit_control>0 & site_means$fit_removal>0)
+mycol[tmp] <- "blue"
+# ???tmp[ <- which(is.na(tmp))]
+
+# set threshold for prob of reproduction
+threshold <- 0.05
+tmp <- which(site_means$pR_control >= threshold & site_means$pR_removal >= threshold)
+
+# treatment 1:1
+par(mar=c(3,5,3,1))
+plot(site_means$fit_removal[tmp],site_means$fit_control[tmp], col=mycol[tmp],
+     xlab="Removal",ylab="Control", xlim=c(-2,7), ylim=c(-2,7),pch=16,main="log Fitness")
+abline(h=0)
+abline(v=0)
+
+# map outcome category
+par(mar=c(4,4,4,4))
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+points(x=site_means$Lon[tmp],y=site_means$Lat[tmp],pch=16,col=mycol[tmp])
+
+# mean removal fitness and climate
+par(mar=c(3,5,3,1))
+mycol <- ifelse(site_means$Lon[tmp] < -109, "blue","red")
+plot(site_means$prcp[tmp],site_means$mean_logF_removal[tmp],pch=16, col=mycol[tmp],
+     xlab="Precipitation (mm)",ylab="log Fitness")
+legend("topright",c("west","east"),pch=16,col=c("blue","red"))
+
+# removal fitness vs effect of competition
+mycol <- ifelse(site_means$Lon[tmp] < -109, "blue","red")
+plot(site_means$fit_removal[tmp],site_means$fit_logratio[tmp], 
+     xlab="log Fitness in Removals",ylab="log(Control/Removal)",pch=16,col=mycol)
+abline(h=0,lty="dashed")
+legend("bottomleft",c("west","east"),pch=16,col=c("blue","red"))
+
+
+# not much here
+pdf("SWExLongitude_fitness.pdf",height=3, width=8.5)
+
+par(mfrow=c(1,3),mar=c(3,5,1,1),mgp=c(2,0.5,0))
+
+plot(site_means$Lon[tmp],site_means$swe_mean[tmp],xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Fitness in removals")
+symbols(x=site_means$Lon[tmp],y=site_means$swe_mean[tmp],circles=sqrt(exp(site_means$fit_removal[tmp])),inches=0.4,add=T,fg="blue")
+
+plot(site_means$Lon[tmp],site_means$swe_mean[tmp],xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Fitness in controls")
+symbols(x=site_means$Lon[tmp],y=site_means$swe_mean[tmp],circles=sqrt(exp(site_means$fit_control[tmp])),inches=0.4,add=T,fg="blue")
+
+plot(site_means$Lon[tmp],site_means$swe_mean[tmp],xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
+     main="Effect of competition")
+tmp2 <- which(site_means$fit_logratio[tmp]<0)
+symbols(x=site_means$Lon[tmp[tmp2]],y=site_means$swe_mean[tmp[tmp2]],
+        circles=abs(site_means$fit_logratio[tmp[tmp2]]),inches=0.4,add=T,fg="red")
+tmp2 <- which(site_means$fit_logratio>0)
+symbols(x=site_means$Lon[tmp[tmp2]],y=site_means$swe_mean[tmp[tmp2]],
+        circles=abs(site_means$fit_logratio[tmp[tmp2]]),inches=0.4,add=T,fg="blue")
+
+dev.off()
+
 
 
 
