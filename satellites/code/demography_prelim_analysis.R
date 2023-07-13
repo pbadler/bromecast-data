@@ -182,6 +182,38 @@ D <- rbind(D2021,D2022)
 
 rm(D2021,D2022)
 
+
+###
+### probability of producing seeds -- get site means
+###
+
+# Get rid of missing records
+D <- subset(D,Reproduced!="missing")
+
+# convert N/Y to 0/1
+D$Reproduced <- as.numeric(as.factor(D$Reproduced))-1
+
+prob_reprod <- D %>% group_by(SiteCode,Year,Treatment) %>%
+                summarize(mean=mean(Reproduced)) %>% 
+                pivot_wider(names_from=Treatment, names_prefix="pR_",values_from=c(mean))
+prob_reprod$pR_overall <- (prob_reprod$pR_control + prob_reprod$pR_removal)/2
+                               
+###
+###  calculate site means for fecundity
+###
+
+fecD <- subset(D,D$Fecundity>0 & D$fecundityflag==0)
+
+mean_fecundity <- fecD %>% group_by(SiteCode,Year,Treatment) %>%
+  summarize(mean=mean(log(Fecundity)),
+            q05=quantile(log(Fecundity),0.05),
+            q95=quantile(log(Fecundity),0.95) )  %>% 
+  pivot_wider(names_from=Treatment, names_prefix="logF_",values_from=c(mean, q05, q95))
+
+# join site means
+site_means <- merge(prob_reprod,mean_fecundity,all.x=T)
+
+
 ###
 ### import site info -------------------------------------------------------------------
 ###
@@ -210,58 +242,73 @@ siteD$SiteCode[siteD$SiteCode=="SymstadS2"] <- "Symstad2"
 # combine years into one data frame
 siteD <- rbind(siteD1[,c("SiteCode","Lat","Lon","Year")],siteD[,c("SiteCode","Lat","Lon","Year")])
 
-rm(siteD1)
+#remove Lehnoff sites
+tmp <- grep("LEHN",siteD$SiteCode)
+siteD <- siteD[-tmp,]
+
+rm(siteD1,tmp)
 
 
 ###
-### analyze probability of producing seeds
+### pull climate data for each site
 ###
 
-# Get rid of missing records
-D <- subset(D,Reproduced!="missing")
+# Daymet means for fall through spring
+climD <- read.csv("../deriveddata/Satellites_daymet_Fall2Spr_means.csv",header=T)
 
-# convert N/Y to 0/1
-D$Reproduced <- as.numeric(as.factor(D$Reproduced))-1
+# make site SiteCodes match those in the demography file
+climD$SiteCode[climD$SiteCode=="EnsingS1_SuRDC"] <- "EnsingS1 SuRDC"
+climD$SiteCode[climD$SiteCode=="EnsingS2_SumPrinceRd"] <- "EnsingS2 Summerland-Princeton"
+climD$SiteCode[climD$SiteCode=="EnsingS3_BearCreek"] <- "EnsingS3 Bear Creek"
+climD$SiteCode[climD$SiteCode=="EnsingS4_LDBM"] <- "EnsingS4 Lundbom"
+climD$SiteCode[climD$SiteCode=="SymstadS1"] <- "Symstad1"
+climD$SiteCode[climD$SiteCode=="SymstadS2"] <- "Symstad2"
 
-prob_reprod <- D %>% group_by(SiteCode,Year,Treatment) %>%
-                summarize(mean=mean(Reproduced),sd=sd(Reproduced) )
+# merge to site info
+names(climD)[which(names(climD)=="climYr")] <- "Year"
+siteD <- merge(siteD,climD,all.x=T)
 
-plot(prob_reprod$mean[prob_reprod$Treatment=="removal"],
-     prob_reprod$mean[prob_reprod$Treatment=="control"],
-     xlab="Removal",ylab="Control", xlim=c(0,1), ylim=c(0,1),main="Probability of reproduction")
-abline(0,1,lty="dotted")
-
-prob_reprod <- prob_reprod %>% pivot_wider(names_from=Treatment, values_from=c(mean, sd))
-
-# paired t-test
-x <- prob_reprod$mean_control-prob_reprod$mean_removal
-summary(lm(x~1))
-
-# # site level analysis (better to do GLM on individual data)
-# # is slope different from 1?
-# m1 <- lm(prob_reprod$mean[prob_reprod$Treatment=="control"] ~ prob_reprod$mean[prob_reprod$Treatment=="removal"])
-# abline(m1,col="red")
-# summary(m1)
+# merge to site means
+site_means <- merge(siteD,site_means)
 
 ###
-### model fecundity, conditional on seed production
+### Figures
 ###
 
+par(tcl=0.2,mgp=c(2,0.5,0))
 
-fecD <- subset(D,D$Fecundity>0 & D$fecundityflag==0)
+# treatment effects on prob of reproduction
+par(mar=c(3,5,3,1))
+plot(site_means$pR_removal,site_means$pR_control,
+     xlab="Removal",ylab="Control", xlim=c(0,1), ylim=c(0,1),
+     main="Probability of reproduction")
+abline(0,1,lty="dashed")
 
-# # get counts by site year treatment
-# tmp <- fecD %>% group_by(SiteCode,Year,Treatment) %>%mutate(count=1) %>% 
-#   summarize(sum(count))
-# OttS1 has no observations for removals, just 3 for controls, cut that site for now
-fecD <- subset(fecD, fecD$SiteCode!="OttS1")
-# FtK Lone Pine has no obs for removals, 1 for controls, cut for now
-fecD <- subset(fecD, fecD$SiteCode!="FtK_Lone_Pine")
-# FtK Cottonwood has no obs for removals, 23 for controls, cut for now (but ouch)
-fecD <- subset(fecD, fecD$SiteCode!="FtK_Cottonwood_Coulee")
+# map mean prob of reproduction
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+#title("Fitness")
+points(x=site_means$Lon,y=site_means$Lat,pch=".",col="black")
+symbols(x=site_means$Lon,y=site_means$Lat,circles=site_means$pR_overall,inches=0.4,add=T)
 
-mean_fecundity <- fecD %>% group_by(SiteCode,Year,Treatment) %>%
-  summarize(mean=mean(log(Fecundity)),q05=quantile(log(Fecundity),0.05),q95=quantile(log(Fecundity),0.95) )
+# mean prob of reproduction and climate
+mycol <- ifelse(site_means$Lon < -109, "blue","red")
+plot(site_means$prcp,site_means$pR_overall,pch=16, col=mycol,
+     xlab="Precipitation (mm)",ylab="Prob. seed production")
+legend("topleft",c("west","east"),pch=16,col=c("blue","red"))
+
+
+# # paired t-test
+# x <- prob_reprod$mean_control-prob_reprod$mean_removal
+# summary(lm(x~1))
+
+
+
+
+
+
+
+
+
 
 plot(mean_fecundity$mean[mean_fecundity$Treatment=="removal"],
      mean_fecundity$mean[mean_fecundity$Treatment=="control"],
@@ -286,7 +333,6 @@ summary(m2)
 
 # play with site means
 # go from long to wide
-mean_fecundity <- mean_fecundity %>% pivot_wider(names_from=Treatment, values_from=c(mean, q05, q95))
 
 mean_fecundity$logratio <- mean_fecundity$mean_control - mean_fecundity$mean_removal
 
@@ -326,6 +372,13 @@ plot(fitD$fit_removal,fitD$fit_ratio,xlab="log Fitness in Removals",
      pch=16, ylab="Effect of competition")
 abline(h=0,lty="dashed")
 
+
+
+
+
+
+
+
 ###
 ### plot on map
 ###
@@ -352,24 +405,6 @@ symbols(x=fitD$Lon[tmp],y=fitD$Lat[tmp],circles=fitD$logratio[tmp],inches=0.4,ad
 
 
 
-###
-### pull climate data for each site
-###
- 
-# Daymet means for fall through spring
-climD <- read.csv("../deriveddata/Satellites_daymet_Fall2Spr_means.csv",header=T)
-
-# make site SiteCodes match those in the demography file
-climD$SiteCode[climD$SiteCode=="EnsingS1_SuRDC"] <- "EnsingS1 SuRDC"
-climD$SiteCode[climD$SiteCode=="EnsingS2_SumPrinceRd"] <- "EnsingS2 Summerland-Princeton"
-climD$SiteCode[climD$SiteCode=="EnsingS3_BearCreek"] <- "EnsingS3 Bear Creek"
-climD$SiteCode[climD$SiteCode=="EnsingS4_LDBM"] <- "EnsingS4 Lundbom"
-climD$SiteCode[climD$SiteCode=="SymstadS1"] <- "Symstad1"
-climD$SiteCode[climD$SiteCode=="SymstadS2"] <- "Symstad2"
-
-# merge to demography site means
-names(climD)[which(names(climD)=="climYr")] <- "Year"
-fitD <- merge(fitD,climD,all.x=T)
 
 png("abiotic_drivers.png",height=3,width=8,res=400,units="in")
 par(mfrow=c(1,3),mar=c(5,2,1,1),oma=c(4,2,0,0),
