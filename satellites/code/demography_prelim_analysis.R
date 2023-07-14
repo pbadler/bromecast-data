@@ -170,6 +170,9 @@ D$Fecundity[is.na(D$Fecundity) & D$Reproduced=="N"] <- 0
 
 # flag records where Reproduced = Y and Fecundity is NA
 D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
+# flag two records where Emerged and Reproduced = N and Fecundity is > 0
+tmp <- which(D$Emerged=="N" & D$Reproduced=="N" & D$Fecundity > 0)
+D$fecundityflag[tmp] <- 1
 
 # remove and reorder columns
 D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag")]
@@ -227,6 +230,10 @@ site_means <- merge(prob_reprod,mean_fecundity,all.x=T)
 site_means$fit_control <- log(site_means$pR_control) + site_means$mean_logF_control
 site_means$fit_removal <- log(site_means$pR_removal) + site_means$mean_logF_removal
 site_means$fit_logratio <- site_means$fit_control - site_means$fit_removal
+
+# set fitness NAs (caused by zero prob. reproduction) to -5 (lower than lowest log fitness)
+site_means$fit_control[is.na(site_means$fit_control)] <- -5
+site_means$fit_removal[is.na(site_means$fit_removal)] <- -5
 
 ###
 ### import site info -------------------------------------------------------------------
@@ -388,72 +395,61 @@ dev.off()
 
 # fitness figures
 
+
 # assign color categories based on fitness outcomes
-tmp <- which(site_means$fit_control<0 & site_means$fit_removal<0)
-mycol[tmp] <- "black"
+colvals <- col2rgb("blue")
+tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+mycol <-  rep(tmpcol,nrow(site_means))  # if fitness control and removal > 0
+tmp <- which(site_means$fit_control<0 & site_means$fit_removal<0) 
+colvals <- col2rgb("black")
+tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+mycol[tmp] <- tmpcol
 tmp <- which(site_means$fit_control>0 & site_means$fit_removal<0)
-mycol[tmp] <- "green"
+colvals <- col2rgb("green4")
+tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+mycol[tmp] <- tmpcol
 tmp <- which(site_means$fit_control<0 & site_means$fit_removal>0)
-mycol[tmp] <- "red"
-tmp <- which(site_means$fit_control>0 & site_means$fit_removal>0)
-mycol[tmp] <- "blue"
-# ???tmp[ <- which(is.na(tmp))]
+colvals <- col2rgb("red")
+tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+mycol[tmp] <- tmpcol
 
 # set threshold for prob of reproduction
 threshold <- 0.05
-tmp <- which(site_means$pR_control >= threshold & site_means$pR_removal >= threshold)
+mypch <- ifelse(site_means$pR_control >= threshold & site_means$pR_removal >= threshold,16,1)
 
 # treatment 1:1
+pdf("test.pdf",height=3,width=5)
 par(mar=c(3,5,3,1))
-plot(site_means$fit_removal[tmp],site_means$fit_control[tmp], col=mycol[tmp],
-     xlab="Removal",ylab="Control", xlim=c(-2,7), ylim=c(-2,7),pch=16,main="log Fitness")
+plot(site_means$fit_removal,site_means$fit_control, col=mycol,
+     xlab="Removal",ylab="Control", xlim=c(-5.1,7), ylim=c(-5.1,7),pch=mypch,main="log Fitness")
 abline(h=0)
 abline(v=0)
+abline(0,1,lty="dashed")
+dev.off()
 
 # map outcome category
 par(mar=c(4,4,4,4))
 map("state",xlim=c(-128,-95),ylim=c(30,52))
-points(x=site_means$Lon[tmp],y=site_means$Lat[tmp],pch=16,col=mycol[tmp])
+points(x=site_means$Lon,y=site_means$Lat,col=mycol,pch=mypch,cex=2)
 
 # mean removal fitness and climate
 par(mar=c(3,5,3,1))
-mycol <- ifelse(site_means$Lon[tmp] < -109, "blue","red")
-plot(site_means$prcp[tmp],site_means$mean_logF_removal[tmp],pch=16, col=mycol[tmp],
+plot(site_means$prcp,site_means$fit_removal,pch=mypch, col=mycol,lwd=2,
      xlab="Precipitation (mm)",ylab="log Fitness")
-legend("topright",c("west","east"),pch=16,col=c("blue","red"))
+abline(h=0,lty="dashed")
 
 # removal fitness vs effect of competition
-mycol <- ifelse(site_means$Lon[tmp] < -109, "blue","red")
-plot(site_means$fit_removal[tmp],site_means$fit_logratio[tmp], 
-     xlab="log Fitness in Removals",ylab="log(Control/Removal)",pch=16,col=mycol)
+plot(site_means$fit_removal,site_means$fit_logratio, 
+     xlab="log Fitness in Removals",ylab="log(Control/Removal)",pch=mypch,col=mycol,lwd=2)
 abline(h=0,lty="dashed")
-legend("bottomleft",c("west","east"),pch=16,col=c("blue","red"))
 
 
-# not much here
-pdf("SWExLongitude_fitness.pdf",height=3, width=8.5)
-
-par(mfrow=c(1,3),mar=c(3,5,1,1),mgp=c(2,0.5,0))
-
-plot(site_means$Lon[tmp],site_means$swe_mean[tmp],xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
-     main="Fitness in removals")
-symbols(x=site_means$Lon[tmp],y=site_means$swe_mean[tmp],circles=sqrt(exp(site_means$fit_removal[tmp])),inches=0.4,add=T,fg="blue")
-
-plot(site_means$Lon[tmp],site_means$swe_mean[tmp],xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
-     main="Fitness in controls")
-symbols(x=site_means$Lon[tmp],y=site_means$swe_mean[tmp],circles=sqrt(exp(site_means$fit_control[tmp])),inches=0.4,add=T,fg="blue")
-
-plot(site_means$Lon[tmp],site_means$swe_mean[tmp],xlab="Longitude",ylab="Mean daily SWE",pch=16,cex=0.5,
-     main="Effect of competition")
-tmp2 <- which(site_means$fit_logratio[tmp]<0)
-symbols(x=site_means$Lon[tmp[tmp2]],y=site_means$swe_mean[tmp[tmp2]],
-        circles=abs(site_means$fit_logratio[tmp[tmp2]]),inches=0.4,add=T,fg="red")
-tmp2 <- which(site_means$fit_logratio>0)
-symbols(x=site_means$Lon[tmp[tmp2]],y=site_means$swe_mean[tmp[tmp2]],
-        circles=abs(site_means$fit_logratio[tmp[tmp2]]),inches=0.4,add=T,fg="blue")
-
-dev.off()
+# longitude, prcp, and fitness outcome
+plot(site_means$Lon,site_means$prcp,pch=mypch,col=mycol,lwd=2,
+     xlab="Longitude",ylab="Precipitation (mm)")
 
 
-
+# longitude, swe, and fitness outcome
+plot(site_means$Lon,site_means$swe_mean,pch=mypch,col=mycol,lwd=2,
+     xlab="Longitude",ylab="Snow water equivalent (cm)")
 
