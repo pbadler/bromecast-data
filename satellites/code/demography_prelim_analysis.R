@@ -299,8 +299,10 @@ site_means <- merge(siteD,site_means)
 par(tcl=-0.2,mgp=c(2,0.5,0))
 
 # treatment effects on prob of reproduction
+colvals <- col2rgb("black")
+tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
 par(mar=c(3,5,3,1))
-plot(site_means$pR_removal,site_means$pR_control,
+plot(site_means$pR_removal,site_means$pR_control,col=tmpcol,pch=16,
      xlab="Removal",ylab="Control", xlim=c(0,1), ylim=c(0,1),
      main="Probability of reproduction")
 abline(0,1,lty="dashed")
@@ -324,9 +326,11 @@ legend("topleft",c("west","east"),pch=16,col=c("blue","red"))
 # x <- prob_reprod$mean_control-prob_reprod$mean_removal
 # summary(lm(x~1))
 
+###
+### fecundity figures
+###
 
-# fecundity figures
-threshold <- 0.1
+threshold <- 0.05
 tmp <- which(site_means$pR_control >= threshold & site_means$pR_removal >= threshold)
 
 # treatment 1:1
