@@ -30,7 +30,7 @@ source("load_site_climate_data.R")
 source("site_means_analysis&figures.R")
 
 # TO DO: format composition data
-# assign functional groups
+# assign functional groups (we now have more 2021-2022 data)
 # load composition data
   # join to functional groups
   # aggregate functional groups to individual plant level
