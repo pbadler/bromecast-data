@@ -25,9 +25,18 @@ source("load_and_clean_demography_data.R")
 # load site info and site climate data
 source("load_site_climate_data.R")
 
-# analyze site means for prob. reproduction, fecunditym fitness
+# analyze site means for prob. reproduction, fecundity, fitness
 # and make figures
 source("site_means_analysis&figures.R")
 
+# TO DO: format composition data
+# assign functional groups
+# load composition data
+  # join to functional groups
+  # aggregate functional groups to individual plant level
+  # write to file
 
+# analyze individual plant data
+  # join demography data, site info/climate data, and functional group neighborhood data
+  # do stats
 
