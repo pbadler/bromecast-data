@@ -231,9 +231,9 @@ site_means$fit_control <- log(site_means$pR_control) + site_means$mean_logF_cont
 site_means$fit_removal <- log(site_means$pR_removal) + site_means$mean_logF_removal
 site_means$fit_logratio <- site_means$fit_control - site_means$fit_removal
 
-# set fitness NAs (caused by zero prob. reproduction) to -5 (lower than lowest log fitness)
-site_means$fit_control[is.na(site_means$fit_control)] <- -5
-site_means$fit_removal[is.na(site_means$fit_removal)] <- -5
+# set fitness NAs (caused by zero prob. reproduction) to -6 (lower than lowest log fitness)
+site_means$fit_control[is.na(site_means$fit_control)] <- -6
+site_means$fit_removal[is.na(site_means$fit_removal)] <- -6
 
 ###
 ### import site info -------------------------------------------------------------------
@@ -296,16 +296,41 @@ site_means <- merge(siteD,site_means)
 ### Figures
 ###
 
-par(tcl=-0.2,mgp=c(2,0.5,0))
+
+
+
+# make transparent colors
+colvals <- col2rgb("black")
+myblack <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+colvals <- col2rgb("blue3")
+myblue <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+colvals <- col2rgb("red3")
+myred <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+colvals <- col2rgb("green4")
+mygreen <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+colvals <- col2rgb("purple4")
+mypurple <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+colvals <- col2rgb("orange3")
+myorange <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
+
+# map of locations
+png("../figures/site_map.png",height=4,width=6,units="in",res=600)
+par(mar=c(2,2,2,2))
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+points(x=site_means$Lon[site_means$Year==2021],y=site_means$Lat[site_means$Year==2021],
+       pch=0, cex=1.5,col=mypurple)
+points(x=site_means$Lon[site_means$Year==2022],y=site_means$Lat[site_means$Year==2022],
+       pch=1, cex=1.5,col=myorange)
+legend("bottomright",c("2021","2022"),pch=c(0,1),col=c(mypurple,myorange))
+dev.off()
 
 # treatment effects on prob of reproduction
-colvals <- col2rgb("black")
-tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
-par(mar=c(3,5,3,1))
-plot(site_means$pR_removal,site_means$pR_control,col=tmpcol,pch=16,
-     xlab="Removal",ylab="Control", xlim=c(0,1), ylim=c(0,1),
-     main="Probability of reproduction")
+png("../figures/pR_treatments.png",height=3.5,width=5,units="in",res=600)
+par(tcl=-0.2,mgp=c(2,0.5,0),mar=c(3,5,1,1))
+plot(site_means$pR_removal,site_means$pR_control,col=myblack,pch=16,
+     xlab="Removal",ylab="Control", xlim=c(0,1), ylim=c(0,1))
 abline(0,1,lty="dashed")
+dev.off()
 
 # map mean prob of reproduction
 par(mar=c(4,4,4,4))
@@ -315,12 +340,13 @@ points(x=site_means$Lon,y=site_means$Lat,pch=".",col="black")
 symbols(x=site_means$Lon,y=site_means$Lat,circles=site_means$pR_overall,inches=0.4,add=T)
 
 # mean prob of reproduction and climate
-par(mar=c(3,5,3,1))
-mycol <- ifelse(site_means$Lon < -109, "blue","red")
+png("../figures/pR_prcp.png",height=3.5,width=5,units="in",res=600)
+par(tcl=-0.2,mgp=c(2,0.5,0),mar=c(3,5,1,1))
+mycol <- ifelse(site_means$Lon < -109, mypurple,myorange)
 plot(site_means$prcp,site_means$pR_overall,pch=16, col=mycol,
-     xlab="Precipitation (mm)",ylab="Prob. seed production")
-legend("topleft",c("west","east"),pch=16,col=c("blue","red"))
-
+     xlab="Precipitation (mm)",ylab="Mean prob. seed production")
+legend("topleft",c("Western","Eastern"),pch=16,col=c(mypurple,myorange),bty="n")
+dev.off()
 
 # # paired t-test
 # x <- prob_reprod$mean_control-prob_reprod$mean_removal
@@ -334,8 +360,8 @@ threshold <- 0.05
 tmp <- which(site_means$pR_control >= threshold & site_means$pR_removal >= threshold)
 
 # treatment 1:1
-par(mar=c(3,5,3,1))
-#mycol <- ifelse(site_means$Lon < -109, "blue","red")
+png("../figures/fecundity_treatments.png",height=3.5,width=5,units="in",res=600)
+par(tcl=-0.2,mgp=c(2,0.5,0),mar=c(3,5,1,1))
 plot(site_means$mean_logF_removal[tmp],site_means$mean_logF_control[tmp], col="black",
      xlab="Removal",ylab="Control", xlim=c(0,7), ylim=c(0,7),pch=16,main="log Fecundity")
 abline(0,1,lty="dashed")
@@ -349,6 +375,7 @@ arrows(x0=site_means$mean_logF_removal[tmp],
        y0=site_means$q05_logF_control[tmp],
        x1=site_means$mean_logF_removal[tmp],
        y1=site_means$q95_logF_control[tmp],angle=90,length=0,code=3)
+dev.off()
 
 # map fecundity in removals
 par(mar=c(4,4,4,4))
@@ -358,11 +385,13 @@ points(x=site_means$Lon[tmp],y=site_means$Lat[tmp],pch=".",col="black")
 symbols(x=site_means$Lon[tmp],y=site_means$Lat[tmp],circles=site_means$mean_logF_removal[tmp],inches=0.4,add=T)
 
 # mean removal fecundity and climate
-par(mar=c(3,5,3,1))
-mycol <- ifelse(site_means$Lon[tmp] < -109, "blue","red")
+png("../figures/fecundity_prcp.png",height=3.5,width=5,units="in",res=600)
+par(tcl=-0.2,mgp=c(2,0.5,0),mar=c(3,5,1,1))
+mycol <- ifelse(site_means$Lon[tmp] < -109, mypurple,myorange)
 plot(site_means$prcp[tmp],site_means$mean_logF_removal[tmp],pch=16, col=mycol,
      xlab="Precipitation (mm)",ylab="log Fecundity")
-legend("topright",c("west","east"),pch=16,col=c("blue","red"))
+legend("topright",c("Western","Eastern"),pch=16,col=c(mypurple,myorange))
+dev.off()
 
 # removal fecundity vs effect of competition
 mycol <- ifelse(site_means$Lon[tmp] < -109, "blue","red")
@@ -401,46 +430,42 @@ dev.off()
 
 
 # assign color categories based on fitness outcomes
-colvals <- col2rgb("blue")
-tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
-mycol <-  rep(tmpcol,nrow(site_means))  # if fitness control and removal > 0
+mycol <- rep(myblack,nrow(site_means))
 tmp <- which(site_means$fit_control<0 & site_means$fit_removal<0) 
-colvals <- col2rgb("black")
-tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
-mycol[tmp] <- tmpcol
+mycol[tmp] <- myred
 tmp <- which(site_means$fit_control>0 & site_means$fit_removal<0)
-colvals <- col2rgb("green4")
-tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
-mycol[tmp] <- tmpcol
+mycol[tmp] <- mygreen
 tmp <- which(site_means$fit_control<0 & site_means$fit_removal>0)
-colvals <- col2rgb("red")
-tmpcol <- rgb(colvals[1],colvals[2],colvals[3],alpha=120,maxColorValue = 255)
-mycol[tmp] <- tmpcol
+mycol[tmp] <- myblue
 
 # set threshold for prob of reproduction
 threshold <- 0.05
 mypch <- ifelse(site_means$pR_control >= threshold & site_means$pR_removal >= threshold,16,1)
 
 # treatment 1:1
-pdf("test.pdf",height=3,width=5)
-par(mar=c(3,5,3,1))
+png("../figures/fitness_treatments.png",height=3.5,width=5,units="in",res=600)
+par(tcl=-0.2,mgp=c(2,0.5,0),mar=c(3,5,1,1))
 plot(site_means$fit_removal,site_means$fit_control, col=mycol,
-     xlab="Removal",ylab="Control", xlim=c(-5.1,7), ylim=c(-5.1,7),pch=mypch,main="log Fitness")
+     xlab="Removal",ylab="Control", xlim=c(-6.1,7), ylim=c(-6.1,7),pch=mypch,cex=1.5,main="log Fitness")
 abline(h=0)
 abline(v=0)
 abline(0,1,lty="dashed")
 dev.off()
 
 # map outcome category
-par(mar=c(4,4,4,4))
+png("../figures/fitness_map.png",height=4,width=6,units="in",res=600)
+par(mar=c(2,2,2,2))
 map("state",xlim=c(-128,-95),ylim=c(30,52))
 points(x=site_means$Lon,y=site_means$Lat,col=mycol,pch=mypch,cex=2)
+dev.off()
 
 # mean removal fitness and climate
-par(mar=c(3,5,3,1))
+#png("../figures/fitness_prcp.png",height=3.5,width=5,units="in",res=600)
+#par(tcl=-0.2,mgp=c(2,0.5,0),mar=c(3,5,1,1))
 plot(site_means$prcp,site_means$fit_removal,pch=mypch, col=mycol,lwd=2,
      xlab="Precipitation (mm)",ylab="log Fitness")
 abline(h=0,lty="dashed")
+#dev.off()
 
 # removal fitness vs effect of competition
 plot(site_means$fit_removal,site_means$fit_logratio, 
@@ -449,9 +474,12 @@ abline(h=0,lty="dashed")
 
 
 # longitude, prcp, and fitness outcome
-plot(site_means$Lon,site_means$prcp,pch=mypch,col=mycol,lwd=2,
+png("../figures/fitness_lon_prcp.png",height=3.5,width=5,units="in",res=600)
+par(tcl=-0.2,mgp=c(2,0.5,0),mar=c(3,5,1,1))
+plot(site_means$Lon,site_means$prcp,pch=mypch,col=mycol,lwd=2,cex=1.5,
      xlab="Longitude",ylab="Precipitation (mm)")
-
+legend("bottomleft",c("Climate limits","Competition limits"),pch=16,col=c(myred,myblue))
+dev.off()
 
 # longitude, swe, and fitness outcome
 plot(site_means$Lon,site_means$swe_mean,pch=mypch,col=mycol,lwd=2,
