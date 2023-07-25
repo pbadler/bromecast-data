@@ -99,9 +99,11 @@ model{
 ", fill = TRUE)
 sink()
 
+# Create vector of survival / mortality
 w <- data_jags$w
 w[data_jags$w > 0] <- 1
 
+# Set initial values for draws
 inits = list(
   list(beta = runif(3, -2, 2), gamma = runif(3, -2, 2),
        mu.alpha = 1, sigma.alpha = 1,
@@ -113,6 +115,7 @@ inits = list(
        mu.alpha = 3, sigma.alpha = 3,
        mu.psi = 3, sigma.psi = 3))
 
+# Create data object for JAGS
 data <- list(d = data_jags$d,
              x1 = as.numeric(as.factor(data_jags$x1))-1, 
              x2 = as.numeric(as.factor(data_jags$x2))-1,
@@ -121,13 +124,19 @@ data <- list(d = data_jags$d,
              genotype = as.numeric(droplevels(as.factor(data_all$genotype))),
              nalpha = length(unique(data_all$genotype)))
 
-
+# Set parameters for MCMC
 n.adapt = 5000
 n.update = 10000
-n.iter = 10000
+n.iter = 20000
 
+# Fit model in JAGS
 jm = jags.model("modeling/demo_model.R", data = data, inits = inits, n.chains = length(inits), n.adapt = n.adapt)
 update(jm, n.iter = n.update)
 zm = coda.samples(jm, variable.names = c("gamma", "beta", "mu.alpha", "sigma.alpha", "mu.psi", "sigma.psi"), n.iter = n.iter, n.thin = 1)
+
+# Plot trace and density plots
 plot(zm)
-densplot(zm)
+
+# Calculate median and 95% quantiles for parameters
+samples <- as.data.frame(zm[[1]])
+apply(samples, 2, quantile, probs = c(0.025, 0.5, 0.975))
