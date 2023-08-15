@@ -1,0 +1,46 @@
+Site code,Latitude (decimal degrees),Longitude (decimal degrees),Aspect (degrees),Slope (degrees),Grazing comments,Notes
+Blumenthal01,41.177913,-104.899046,,Flat,,"Cheyenne, WY, native mixed grass"
+Boise_High,43.20847803,-116.9951781,NA,NA,"Antelope grazing, light; early spring to mid summer cattle grazing, light",
+Boise_Low,43.333643,-116.708793,56,2,"Deer grazing, light",
+CaseAoyamaS1,43.47110267,-119.6833963,7,14°,Ungrazed,
+CastValley,38.677,-109.417,NA,NA,,
+CG PASTURE,41.21283,-104.852501,135,Slope,"Cattle grazing, season long, light stocking","Cheyenne, WY, crested wheatgrass"
+CG_BoiseHigh,43.208482,-116.995198,,,,
+CG_BoiseLow,43.47437,-116.90177,,,,
+CG_Cheyenne,41.212078,-104.852543,,,,
+CG_SheepStation,44.24559,-112.214337,,,,
+CPER- Far north,40.856915,-104.713075,,Flat,,"Nunn, CO, CPER, pasture 6W"
+CPER- Near NutNet,40.839464,-104.717125,,Flat,,"Nunn, CO, CPER, pasture 13NE"
+CPER-4-Way ,40.812673,-104.714491,,Flat,,"Nunn, CO, CPER, pasture 19S"
+CPER-NEAR HQ ,40.835791,-104.763785,,Flat,,"Nunn, CO, CPER, pasture 15NWS"
+EnsingS1_SuRDC,49.561619,-119.652027,NA,NA,ungrazed,
+EnsingS2_SumPrinceRd,49.616744,-119.797613,NA,NA,"ungrazed, roadside",
+EnsingS3_BearCreek,49.939567,-119.505992,180,not measured,"Ungrazed, Bighorn Sheep, Whitetail and Mule deer in area",
+EnsingS4_LDBM,50.097899,-120.60262,145,not measured,"Grazed by cattle recently, an active, tenured rangeland",
+EOARC,43.467044,-119.700795,flat,0,"Infrequently grazed, has been at least 3 years since the last grazing in this pasture",
+FtK_Cottonwood_Coulee,46.3863,-105.9526,NA,NA,ungrazed,
+FtK_Lone_Pine,46.347,-105.8464,180,NA,grazed,
+GreenCanyon,41.766018,-111.789327,flat,0,Ungrazed,
+HardwareRanch,41.613286,-111.567217,NA,NA,"Likely sheep and deer grazing, moderate",Need to get slope and aspect data
+K1_vanDiepen,41.221569,-106.136433,,1,"summer cattle grazing, moderate",long time between 2nd and final census date
+L1_vanDiepen,41.217483,-105.925447,,0,Ungrazed,long time between 2nd and final census date
+LEHN1,36.770889,-105.750886,49,17.5,Heavy elk / some cow,
+LEHN2,36.770281,105.752939,356,0.02,Heavy cow / some elk,
+MPG_IR,46.691,-114.022,350,15.11,Wildlife and feral horses,
+MPG_SR,46.664,-114.001,274,9.09,Wildlife and feral horses,
+MPG_TH,46.673,-114.006,203,7.97,Wildlife and feral horses,
+OttS1,43.777398,-102.607243,gentle slope,5,lightly grazed by beef cattle,11/2/21 evidence of cows visiting plot
+Peavine,39.591003,-119.878406,160,8,Currently ungrazed,
+Plymouth,39.072101,-119.783711,NA,NA,Currently ungrazed; flat,
+PMR- Brome,41.21283,-104.852501,,,Ungrazed,
+PMR- Pine,40.63,-105.27,350,Slope,Ungrazed,
+Porensky17,43.338797,-105.133254,,Flat,Ungrazed,"Thunder Basin, Wyoming, Lake Creek - Prairie Dog"
+Porensky18,43.327853,-105.112892,,Flat,Grazed,"Site names: Thunder Basin, Wyoming, Lake Creek - Control"
+Porensky19,43.31193,-105.125329,,Flat,Grazed,"Thunder Basin, Wyoming, Lake Creek - Fire"
+Rush_Valley,40.0906,-112.305,NA,0,Ungrazed,
+SouthEden,41.926717,-111.275659,NA,NA,"Deer grazing, moderate",Need to get slope and aspect data
+SSHigh,44.295988,-112.096947,flat,0,"Cattle grazing, moderate",
+SSHQ,44.246799,-112.213263,flat,0,Ungrazed,
+SymstadS1,43.35653,-103.54075,122,5.7,Ungrazed,
+SymstadS2,43.3562,-103.54046,81,6.8,Summer horse grazing previous year after long rest. During experiment a heifer crossed a fence and preferencially ate some of the growing cheatgrass affecting the seed count. Notes taken for each sample on how many culms were eaten.,
+Woodruff,41.56042,-111.172565,flat,0,"Deer grazing, light",

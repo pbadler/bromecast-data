@@ -1,6 +1,6 @@
 # Formatting Cheyenne phenology to be in same structure as Sheep Station
 
-library(lubridate); library(tidyverse)
+library(lubridate); library(tidyverse); library(here)
 
 doyear <- 2022 # growing season to do
 dosite <- "CH" # code for focal site
@@ -123,6 +123,8 @@ phen_WY %>%
 # Create final columns
 phen_WY %>% 
   mutate(herbivory = case_when(grepl("herbivory", notes) ~ "Y",
+                               grepl("herbivory, only seed head gone", notes) ~ "Y",
+                               grepl("herbivoery", notes) ~ "Y",
                                T ~ NA),
          frost_heave = NA,
          tillers = NA,

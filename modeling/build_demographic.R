@@ -126,8 +126,8 @@ data <- list(d = data_jags$d,
 
 # Set parameters for MCMC
 n.adapt = 5000
-n.update = 10000
-n.iter = 20000
+n.update = 5000
+n.iter = 5000
 
 # Fit model in JAGS
 jm = jags.model("modeling/demo_model.R", data = data, inits = inits, n.chains = length(inits), n.adapt = n.adapt)
@@ -140,3 +140,37 @@ plot(zm)
 # Calculate median and 95% quantiles for parameters
 samples <- as.data.frame(zm[[1]])
 apply(samples, 2, quantile, probs = c(0.025, 0.5, 0.975))
+
+# Create predicted mean fecundity for treatment groups
+high_black <- (samples$mu.alpha)
+high_white <- (samples$mu.alpha + samples$`beta[2]`)
+low_black <- (samples$mu.alpha + samples$`beta[1]`)
+low_white <- (samples$mu.alpha + samples$`beta[1]` + samples$`beta[2]` + samples$`beta[3]`)
+
+quantile(low_black-low_white, c(0.025, 0.975))
+quantile(high_black-high_white, c(0.025, 0.975))
+
+
+tibble(high_black = high_black,
+       high_white = high_white,
+       low_black = low_black,
+       low_white = low_white) %>% 
+  gather(key = treatment, value = seeds, high_black:low_white) %>% 
+  mutate(density = case_when(grepl("high", treatment) ~ "high",
+                             T ~ "low"),
+         gravel = case_when(grepl("black", treatment) ~ "black",
+                            T ~ "white")) -> pred_means
+
+pred_means %>% 
+  ggplot(aes(x = density, y = seeds, color = gravel, group = gravel)) +
+  stat_summary(fun = mean,
+               geom = "point") +
+  stat_summary(fun = mean,
+               geom = "line") +
+  stat_summary(geom = "errorbar",
+               fun.max = function(x) quantile(x, 0.025),
+               fun.min = function(x) quantile(x, 0.975),
+               width = 0.1) 
+pred_means %>% 
+  group_by(density, gravel) %>% 
+  summarize(mean = mean(seeds))
