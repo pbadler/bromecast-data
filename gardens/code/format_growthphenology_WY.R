@@ -101,7 +101,7 @@ for(i in 1:length(dates)){
 }
 
 # Bring all data together
-rbind(marA_phen, marB_phen, aprA_phen, aprB_phen, mayA_phen, mayB_phen, juneA_phen) -> phen_WY
+rbind(marA_phen, marB_phen, aprA_phen, aprB_phen, mayA_phen, mayB_phen, juneA_phen, juneB_phen) -> phen_WY
 
 # Switch x and y so that x = 1:10 or 1:20 and y = 1:10 or 1:5
 phen_WY %>% 
@@ -125,6 +125,8 @@ phen_WY %>%
   mutate(herbivory = case_when(grepl("herbivory", notes) ~ "Y",
                                grepl("herbivory, only seed head gone", notes) ~ "Y",
                                grepl("herbivoery", notes) ~ "Y",
+                               grepl("H herbivory", notes) ~ "Y",
+                               grepl("h herbivory", notes) ~ "Y",
                                T ~ NA),
          frost_heave = NA,
          tillers = NA,
