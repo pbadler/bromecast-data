@@ -7,7 +7,7 @@ library(tidyverse); library(rjags)
 `%notin%` <- Negate(`%in%`)
 
 # Read in harvest data 
-harvest <- read_csv("gardens/rawdata/CG_harvest2022_4May23.csv")
+harvest <- read_csv("gardens/rawdata/CG_harvest2022 - 10-2-2023")
 
 # Make column names all lower case
 names(harvest) <- tolower(names(harvest))
