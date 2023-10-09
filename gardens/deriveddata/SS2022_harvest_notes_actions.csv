@@ -1,0 +1,254 @@
+notes,action,standard_note
+all seeds dropped,action,allseeddrop
+dropped all seeds,action,allseeddrop
+DROPPED ALL SEEDS,action,allseeddrop
+ALL SEEDS DROPPED,action,allseeddrop
+HUGE HOLE WHERE TOOTHPICK WAS. HERBIVORE LIKELY DUG UNDERNEATH,action,herbivory
+DEAD,action,mortality
+SOME FLOWERS DIED,action,mortality
+ALLFLOWERS DIED,action,mortality
+STEMBROKEALL FLOWERSDIED,action,mortality
+ALL FLOWERS DIED,action,mortality
+HALF FLOWERS ARE DEAD,action,mortality
+SOME FLOWERS ARE DEAD,action,mortality
+ALL FLOWERS ARE DEAD,action,mortality
+HALF OF FLOWERS ARE DEAD,action,mortality
+SOME FLOWERSAREDEAD,action,mortality
+"SOME FLOWERS ARE DEAD, 4/50 unripe",action,mortality
+SOMEFLOWERS ARE DEAD,action,mortality
+Dead,action,mortality
+"ALL FLOWERS DIED, NO FILLED SEEDS",action,mortality
+ALMOST ALL FLOWERS ARE DEAD,action,mortality
+HALF FLOWERS DEAD,action,mortality
+WIND BLEW IT AWAY,action,mortality
+"0/50 unripe seeds, SOME FLOWERS ARE DEAD",action,mortality
+"0/50 unripe, MANY FLOWERS ARE DEAD",action,mortality
+"0/12 unripe, HALF FLOWERS DEAD",action,mortality
+23/50 dead,action,mortality
+"2/50 unripe, ABOUT HALF OF FLOWERS ARE DEAD",action,mortality
+"0/50 unripe, SOME FLOWERS ARE DEAD",action,mortality
+broken tiller,action,physicaldamage
+TILLER BROKE,action,physicaldamage
+BROKEN TILLER,action,physicaldamage
+FLOWERS FELL OFF,action,physicaldamage
+Tiller broke,action,physicaldamage
+one tiller broken,action,physicaldamage
+LOST 1 TILLER BEFORE HARVEST,action,physicaldamage
+FLOWERS BROKE OFF,action,physicaldamage
+SOME FLOWERS BROKE OFF,action,physicaldamage
+Blew away,action,physicaldamage
+tiller broken,action,physicaldamage
+tiller broke,action,physicaldamage
+flowers died; seed head fell off,action,physicaldamage
+Broken Tiller,action,physicaldamage
+"broken tiller, boot",action,physicaldamage
+Broken tiller,action,physicaldamage
+0/50 unripe. 2 broken tillers,action,physicaldamage
+6/50 UNRIPE BROKEN TILLER,action,physicaldamage
+STEM WITH FLOWERS BROKE OFF; broken tiller,action,physicaldamage
+TOP BROKE OFF,action,physicaldamage
+lost inflor.,action,physicaldamage
+"2 tillers broken, only leaves left",action,physicaldamage
+1 broken tiller,action,physicaldamage
+ONE BLADE OF FLOERS FELL OFF,action,physicaldamage
+"BLADE FELL OFF, tiller broken",action,physicaldamage
+"SOME FLOWERS ARE DEAD, broken tiller",action,physicaldamage
+"broken tiller, no seeds",action,physicaldamage
+1 tiller broken,action,physicaldamage
+broken tillers,action,physicaldamage
+2 broken tillers,action,physicaldamage
+"broken tiller, 0/50 unripe",action,physicaldamage
+"broken tiller, SOME FLOWERS ARE DEAD",action,physicaldamage
+"broken tiller, 2/50 unripe",action,physicaldamage
+"broken tillers, 0/50 unripe",action,physicaldamage
+"ALL FLOWERS ARE DEAD, BROKEN TILLER",action,physicaldamage
+1 BROKEN TILLER,action,physicaldamage
+"9/50 unripe, broken tiller",action,physicaldamage
+"17/50 unripe, broken tiller",action,physicaldamage
+"2/50 unripe, broken tiller",action,physicaldamage
+"2/50 unripe seeds, broken tiller",action,physicaldamage
+"7/50 unripe, BROKEN TILLER",action,physicaldamage
+6/50 unripe seeds. broken tiller,action,physicaldamage
+0/50 UNRIPE BROKEN TILLER,action,physicaldamage
+"5/50 unripe, DEAD, BROKEN TILLER",action,physicaldamage
+"DEAD, BROKEN TILLER",action,physicaldamage
+"broken tiller, lost a chunk too",action,physicaldamage
+"5/28 UNRIPE, BROKEN TILLER",action,physicaldamage
+SEED DROP,action,seeddrop
+DEAD/ SEED DROP,action,seeddrop
+DROPPED MOST SEEDS,action,seeddrop
+DROPPED ALL EXCEPT 1 SEED,action,seeddrop
+DROPPED HALF SEEDS,action,seeddrop
+MOST SEEDS DROPPED,action,seeddrop
+DROPPED MOST SEED,action,seeddrop
+2/2 with seed drop,action,seeddrop
+DROPPED SOME SEEDS BEFORE HARVEST,action,seeddrop
+DROP SOME SEEDS,action,seeddrop
+smut,action,smut
+appears to have had mold,action,smut
+SMUT,action,smut
+SOME FLOWERS HAVE SMUT,action,smut
+"1/50 unripe, smut - 1 tiller",action,smut
+smut?,action,smut
+"0/50 UNRIPE, SMUT SOME FLORETS",action,smut
+"smut, 4/50 unripe",action,smut
+Bromus japonicus,action,wrongspp
+NA,ignore,
+SECONDARY FLORETS,ignore,
+COMBINE 2 ENVELOPES,ignore,
+TOOTHPICK BROKEN,ignore,
+FROST HEAVE AROUND TOOTHPICK,ignore,
+AREA AROUND TOOTHPICK FROST HEAVE,ignore,
+1/2 seeds,ignore,
+2 ENVELOPES,ignore,
+MAY BE PART OF EXISTING HARVEST OR NO FLOWERS,ignore,
+3 seeds unfilled,ignore,
+only loose seeds left,ignore,
+didnt produce seeds yet,ignore,
+5/50 unripe seeds,ignore,
+TOP TOOTHPICK BROKE OFF,ignore,
+MAY BE PART OF ANOTHER HARVESTED PLANT,ignore,
+IN TWO ENVELOPES,ignore,
+3/50 unripe seeds,ignore,
+1/50 unripe seeds,ignore,
+AROUND TOOTHPICK FROST HEAVE,ignore,
+2/50 unripe seeds,ignore,
+2/50 unripe,ignore,
+1/50 unripe,ignore,
+BS,ignore,
+TOP TOOTHPICK FELL OFF; 1/50 unripe,ignore,
+TOOTHPICK MISSING,ignore,
+0/50 unripe,ignore,
+"2/50 UNRIPE, DEAD",ignore,
+4/50 unripe,ignore,
+Boot,ignore,
+4/50 unripe seeds,ignore,
+0/50 UNRIPE,ignore,
+1/50 UNRIPE,ignore,
+TOP TOOTHPICK BROKE,ignore,
+FROST HEAVE AROUND,ignore,
+BROKE OFF TOP TOOTHPICK,ignore,
+8/50 UNRIPE,ignore,
+11/50 unripe,ignore,
+3/50 UNRIPE,ignore,
+21/50 unripe,ignore,
+29/50 unripe,ignore,
+"TOP BROKE OFF TOOTHPICK, 21/50 unripe",ignore,
+24/50 unripe,ignore,
+20/50 unripe,ignore,
+length missing,ignore,
+25/50 unripe,ignore,
+13/50 unripe,ignore,
+6/50 unripe,ignore,
+no filled seeds,ignore,
+"ORIGINAL ENVELOPE POSITION (6,8), DOUBLE CHECK",ignore,
+TOP TOOTHPICK BROKEN OFF,ignore,
+3/50 unripe,ignore,
+6/50 UNRIPE,ignore,
+only loose seeds,ignore,
+sample was in 2 bags,ignore,
+sample was in 2 envelopes,ignore,
+12/50 unripe,ignore,
+5/50 unripe,ignore,
+21/5o unripe,ignore,
+16/50 unripe,ignore,
+9/50 unripe,ignore,
+"LOST A FEW LEAVES, FLOWERS COMPLETE",ignore,
+FLOWERS CLOSE TO THE GROUND - SECONDARY?,ignore,
+HEIGHT & V WERE BLANK ON ENVELOPE,ignore,
+18/50 unripe,ignore,
+10/50 UNRIPE,ignore,
+8/50 unripe,ignore,
+sample was in two envelopes,ignore,
+SOME OF FLOWERS ARE DEAD,ignore,
+5/50 UNRIPE SEEDS,ignore,
+8/50 unripe seeds,ignore,
+11/50 UNRIPE SEEDS,ignore,
+3/50 UNRIPE SEEDS,ignore,
+1/50 UNRIPE SEEDS,ignore,
+2/20 UNRIPE SEEDS,ignore,
+4/50 UNRIPE SEEDS,ignore,
+8/50 UNRIPE SEEDS,ignore,
+9/50 UNRIPE SEEDS,ignore,
+1/11 UNRIPE SEEDS,ignore,
+0/50 unripe seeds,ignore,
+9/50 unripe seeds,ignore,
+10/50 unripe,ignore,
+25/50 UNRIPE,ignore,
+20/50 UNRIPE,ignore,
+4/50 UNRIPE,ignore,
+14/50 unripe seeds,ignore,
+0/11 unripe seeds,ignore,
+21/50 unripe seeds,ignore,
+10/50 UNRIPE SEEDS,ignore,
+2/50 UNRIPE,ignore,
+7/50 UNRIPE,ignore,
+7/50 unripe,ignore,
+40/50 unripe,ignore,
+24/50 unripe seeds,ignore,
+14/50 unripe,ignore,
+17/50 unripe,ignore,
+0/50 unriipe,ignore,
+dead,ignore,
+8/42 UNRIPE,ignore,
+14/50 UNRIPE,ignore,
+0/36 UNRIPE SECONDARY FLORETS,ignore,
+0/13 UNRIPE,ignore,
+O/14 UNRIPE,ignore,
+0/35 UNRIPE,ignore,
+"3/34 unripe, 2 samples combined",ignore,
+0/21 unripe,ignore,
+0/1 unripe,ignore,
+0/6 unripe,ignore,
+0/25 unripe,ignore,
+0/26 unripe,ignore,
+0/41 unripe,ignore,
+0/2 unripe,ignore,
+0/24 unripe,ignore,
+0/17 unripe,ignore,
+0/16 unripe,ignore,
+0/40 unripe,ignore,
+0/32 unripe,ignore,
+0/12 unripe,ignore,
+0/5 unripe,ignore,
+0/49 unripe,ignore,
+SAMPLE IN 2 BAGS,ignore,
+5/50 UNRIPE,ignore,
+12/50 UNRIPE,ignore,
+"0/50 unripe, TOP OF TOOTHPICK BROKE OFF",ignore,
+22/50 unripe,ignore,
+"FROST HEAVE AROUND TOOTHPICK, 29/50 unripe",ignore,
+15/50 UNRIPE,ignore,
+28/50 UNRIPE,ignore,
+0/27  unripe,ignore,
+23/50 unripe,ignore,
+50/50 unripe,ignore,
+32/50 unripe,ignore,
+8/30 UNRIPE,ignore,
+0/52 UNRIPE,ignore,
+11/50 UNRIPE,ignore,
+14/50 unripre,ignore,
+"2/50 unripe, 2 samples combined",ignore,
+0/11 unripe,ignore,
+"0/50 unripe, 2 samples combined",ignore,
+0/10 unripe,ignore,
+0/4 unripe,ignore,
+0/7 UNRIPE,ignore,
+0/3 unripe,ignore,
+3/11 unripe,ignore,
+0/9 unripe,ignore,
+0/25 UNRIPE,ignore,
+"0/14 UNRIPE, SAMPLE IN TWO ENVELOPES",ignore,
+0/10 UNRIPE,ignore,
+0/6 UNRIPE,ignore,
+0/15 UNRIPE,ignore,
+0/8 unripe,ignore,
+2/6 unripe,ignore,
+0/7 unripe,ignore,
+1/1 unripe,ignore,
+0/15 unripe,ignore,
+0/31 unripe,ignore,
+4/19 UNRIPE,ignore,
+0/44 UNRIPE,ignore,
+2/17 unripe,ignore,
+0/20 unripe,ignore,
