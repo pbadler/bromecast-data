@@ -1,0 +1,391 @@
+notes,action,standard_note
+"4/8 UNRIPE, MISSED STEM?",flag,physicaldamage
+ALL SEEDS HAVE SMUT,flag,smut
+"0/0 unripe, missing inflorescence",flag,physicaldamage
+"9/50 UNRIPE, HERB..",flag,herbivory
+"4/8 UNRIPE, MISSED STEMS?",flag,physicaldamage
+"heavily herbivorized, no viable seeds",flag,herbivory
+NO SEEDS,flag,seeddrop
+MISSING FLOWER,flag,physicaldamage
+"3/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"3/50 UNRIPE, 6/50 HERBIVORIZED",flag,herbivory
+"0/50 UNRIPE, ALL SMUT",flag,smut
+"5/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+7/50 UNRIPE; 1/50 HERBIVORIZED,flag,herbivory
+12/50 UNRIPE; 2/50 HERBIVORIZED,flag,herbivory
+3/48 UNRIPE; 7/48 HERBIVORIZED,flag,herbivory
+10/50 UNRIPE; 2/50 HERBIVORIZED,flag,herbivory
+14 UNRIPE 2 HERBIVORIZED,flag,herbivory
+4/50 UNRIPE; 1/50 HERBIVORIZED,flag,herbivory
+10/50 UNRIPE; 1/50 HERBIVORIZED,flag,herbivory
+2/19 UNRIPE 2/19 HERBIVORIZED,flag,herbivory
+1/50 UNRIPE;2/50 HERBIVORIZED,flag,herbivory
+1/50 HERBIVORIZED,flag,herbivory
+missing inflorescence,flag,physicaldamage
+2/50 UNRIPE 1/50 HERBIVORISE,flag,herbivory
+MISSING INFLORESENCE,flag,physicaldamage
+0/35 UNRIPE 1/35 HERBIVORIZED,flag,herbivory
+"1/2 UNRIPE, 1/2 HERBIVORIZED",flag,herbivory
+"0/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"0/14 unripe, 2/14 herbivorized",flag,herbivory
+1/26 UNRIPE 1/26 HERBIVORIZED,flag,herbivory
+1/50 UNRIPE 1/50 HERBIVORIZED,flag,herbivory
+"0/33 unripe, 10/33 herbivorized",flag,herbivory
+"0/15 unripe, 2/15 herbivorized",flag,herbivory
+"1/43 unripe, 2/43 herbivorized",flag,herbivory
+"0/50 unripe, 3/50 herbivorized",flag,herbivory
+"smut, 0/50 unripe",flag,smut
+"0/18 unripe,  7/18 herbivorized",flag,herbivory
+"0/34 unripe, 1/34 herbivorized",flag,herbivory
+"0/35 UNRIPE, 4/35 HERBIVORIZED",flag,herbivory
+"2/4 UNRIPE, 1/4 HERBIVORIZED",flag,herbivory
+"1/39 UNRIPE, 7/39 HERBIVORIZED",flag,herbivory
+"4/12 UNRIPE, 3/12 HERBIVORIZED",flag,herbivory
+1/50 UNRIPE; 1/50 HERBIVORIZED,flag,herbivory
+5/50 UNRIPE; 2/50 HERBIVORIZED,flag,herbivory
+seems to be a broken tiller; 7/50 UNRIPE; 1/50 HERBIVORIZED,flag,physicaldamage
+"3/50 UNRIPE,2/50 HERBIVORIZED",flag,herbivory
+"2/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"0/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+3/11  UNRIPE 6/11 HERBIVORIZED,flag,herbivory
+3/50 UNRIPE 5/50 HERBIVORIZED,flag,herbivory
+"0/22 unripe, 12/22 herbivorized",flag,herbivory
+1/14 UNRIPE 2/14HERBIVORIZED,flag,herbivory
+16/44 UNRIPE 16/44 HERBIVORIZED,flag,herbivory
+"6/41 UNRIPE, 3/41 HERBIVORY",flag,herbivory
+"6/50 UNRIPE, BROKEN TILLER",flag,physicaldamage
+"6/50 UNRIPE, 1/50 HERBIVORY, BROKEN TILLER",flag,physicaldamage
+"12/50 UNRIPE, BROKEN TILLER",flag,physicaldamage
+"3/50 UNRIPE, 2/50 HERBIVORY",flag,herbivory
+"2/34 UNRIPE, 1/34 HERBIVORY",flag,herbivory
+"1/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"1/29 UNRIPE, 7/29 HERBIVORIZED",flag,herbivory
+"1/50 UNRIPE, 4/50 HERBIVORIZED",flag,herbivory
+"0/16 UNRIPE, 4/16 HERBIVORIZED",flag,herbivory
+0/5 UNRIPE 1/5 HERBIVORIZED,flag,herbivory
+1/36 HERBIVORY,flag,herbivory
+NO DEVELOPED SEEDS,flag,allunripe
+"1/33 UNRIPE, 1/33 HERBIVORY",flag,herbivory
+"0/22 unripe, 1/22 herbivorized",flag,herbivory
+"0/25 unripe, 1/25 herbivorized",flag,herbivory
+"1/4 unripe, 3/4 herbivorized",flag,herbivory
+no inflorescence,flag,physicaldamage
+"0/39 unripe, 1/39 herbivorized",flag,herbivory
+"0/31 unripe, 1/31 herbivorized",flag,herbivory
+"0/50 unripe, 1/50 herbivorized",flag,herbivory
+"0/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"1/3 UNRIPE, 1/3 HERBIVORIZED",flag,herbivory
+2/50 UNRIPE 2/50 HERBIVORIZED,flag,herbivory
+0/50 UNRIPE 1/50 HERBIVORIZED,flag,herbivory
+1 HERBIVORIZED 1UNRIPE,flag,herbivory
+"1/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+9/50 UNRIPE 3/50 HERBIVORIZE,flag,herbivory
+0/37 UNRIPE 1/37 HERBIVORIZED,flag,herbivory
+4/41 UNRIPE 3/41 HERBIVORIZED,flag,herbivory
+11/39 UNRIPE 9/39 HERBIVORIZED,flag,herbivory
+0/50 UNRIPE 1/50 HERBIVORZED,flag,herbivory
+5/50 UNRIPE 1/50 HERBIVORIZED,flag,herbivory
+0/28 UNRIPE 4/28 HERBIVORIZED,flag,herbivory
+"0/2 unripe, missing inflorescence",flag,physicaldamage
+"5/28 unripe, 11/28 herbivorized",flag,herbivory
+"3/50 unripe, 1/50 herbivorized",flag,herbivory
+0/39 UNRIPE 1/39 HERBIVORIZED,flag,herbivory
+0/29 UNRIPE 2/29 HERBIVORIZED,flag,herbivory
+"4/40 UNRIPE, 4/50 HERBIVORIZED",flag,herbivory
+"2/26 UNRIPE, 1/26 HERBIVORIZED",flag,herbivory
+"0/28 UNRIPE, 5/28 HERBIVORIZED",flag,herbivory
+"0/14 UNRIPE, 3/14 HERBIVORIZED",flag,herbivory
+"0/25 UNRIPE, 7/25 HERBIVORIZED",flag,herbivory
+"1/17 UNRIPE, 3/17 HERBIVORIZED, VERY DRY",flag,herbivory
+"0/25 UNRIPE, 2/25 HERBIVORIZED",flag,herbivory
+"6/14 UNRIPE, 2/14 HERBIVORIZED",flag,herbivory
+"0/23 UNRIPE, 2/23 HERBIVORIZED",flag,herbivory
+"1/8 unripe, 1/8 herbivorized",flag,herbivory
+"1/50 unripe, 2/50 herbivorized",flag,herbivory
+"2/50 unripe, 5/50 herbivorized",flag,herbivory
+"5/19 unripe, 11/19 herbivorized",flag,herbivory
+0/7 UNRIPE 6/7 HERBIVORIZE,flag,herbivory
+0/46 UNRIPE 6/46 HERBIVORIZED,flag,herbivory
+1/22 UNRIPE 5/22 HERBIVORIZED,flag,herbivory
+7/45 UNRIPE 2/45 HERBIVORIZED,flag,herbivory
+1/33 UNRIPE 2/33 HERBIVORISED,flag,herbivory
+2/50 UNRIPE 1/50 HERBIVORIZED,flag,herbivory
+11/43 UNRIPE 4/43 HERBIVORIZED,flag,herbivory
+2/49 HERBIVORIZED,flag,herbivory
+1/17 UNRIPE 1/17 HERBIVORIZED,flag,herbivory
+2/12 UNRIPE 3/12 HERBIVORIZED,flag,herbivory
+0/48 UNRIPE 1/48 HERBIVORIZED,flag,herbivory
+4/50 UNRIPE 1/50 HERBIVORIZED,flag,herbivory
+"11/50 unripe, 2/50 herbivorized",flag,herbivory
+"smut, difficult to distinguish seeds",flag,smut
+"0/25 unripe, 2/25 herbivorized",flag,herbivory
+8/13 UNRIPE 1/13 HERBIVORIZED,flag,herbivory
+6/8 UNRIPE 2/8 HERBIVORIZED,flag,herbivory
+"0/26 UNRIPE, 2/26 HERBIVORIZED",flag,herbivory
+"0/35 UNRIPE, 1/35 HERBIVORIZED",flag,herbivory
+"7/16 UNRIPE, 1/16 HERBIVORIZED",flag,herbivory
+"1/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"4/50 UNRIPE, 5/50 HERBIVORIZED",flag,herbivory
+"0/50 UNRIPE, 1/50 HERBIVOIZED",flag,herbivory
+"3/31 UNRIPE, 1/31 HERBIVORIZED",flag,herbivory
+6/50 UNRIPE 1/50 HERBIVORIZED,flag,herbivory
+1/50 UNRIPE SAME SEED HERBIVORIZED,flag,herbivory
+1/24 UNRIPE 2/24 HERBIVORIZED,flag,herbivory
+14/32 UNRIPE 1/32 HERBIVORIZE,flag,herbivory
+"8/36 unripe, 5/36 herbivorized",flag,herbivory
+9/13 UNRIPE 1/13 HERBIVORIZED,flag,herbivory
+0/50 UNRIPE. 1/50 HERBIVORIZED,flag,herbivory
+"3/14 UNRIPE, 1/14 HERBIVORIZED",flag,herbivory
+"2/19 UNRIPE, 1/19 HERBIVORIZED",flag,herbivory
+"0/31 UNRIPE, MALFORMED SEEDS",flag,smut
+"0/10 UNRIPE, ALL SMUT",flag,smut
+"0/4 UNRIPE, 1/4 HERBIVORIZED",flag,herbivory
+"NO INFLORESENCE, HERBIVORY",flag,physicaldamage
+"0/24 UNRIPE, 2/24 HERBIVORIZED",flag,herbivory
+"2/38 UNRIPE, 3/38 HERBIVORIZED",flag,herbivory
+"5/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"11/50 unripe, 1/50 herbivorized",flag,herbivory
+"4/50 unripe, 1/50 herbivorized",flag,herbivory
+"0/34 UNRIPE, 6/34 HERBIVORIZED",flag,herbivory
+"7/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"8/50 unripe, 1/50 herbivorized",flag,herbivory
+"heavily grazed, missing inflorescence",flag,physicaldamage
+"16/50 unripe, 1/50 herbivorized",flag,herbivory
+7/50 UNRIPE 1/50 HERBIVORIZED ONE TILLERS SEEDS WERE ALL ASHY,flag,smut
+4/50 UNRIPE 1/HERBIVERIZED,flag,herbivory
+"4/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"0/1 UNRIPE, INFLORESENSE ALL HERBIVORIZED",flag,herbivory
+"0/50 unripe, 5/50 herbivorized",flag,herbivory
+"0/16 UNRIPE, 1/16 HERBIVORIZED",flag,herbivory
+"0/46 unripe, 1/46 herbivorized",flag,herbivory
+"0/27 UNRIPE, 2/27 HERBIVORIZED",flag,herbivory
+"0/50 UNRPIE, 1/50 HERBIVORIZED",flag,herbivory
+NO INFLORESENCE,flag,physicaldamage
+"25/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"7/36 unripe, 1/36 herbivorized",flag,herbivory
+"6/50 unripe, 1/50 herbivorized, need to check length",flag,herbivory
+0/4 UNRIPE 4/4 HERBIVORIZED,flag,herbivory
+"2/45 unripe, 8/45 herbivorized",flag,herbivory
+"0/5 unripe, 1/5 herbivorized",flag,herbivory
+"1/50 unripe, 3/50 herbivorized",flag,herbivory
+"0/1 unripe, infloresence herbivorized",flag,herbivory
+"11/50 unripe, 9/50 herbivorized",flag,herbivory
+"0/1 unripe, 1/1 herbivorized, infloresence herbivorized",flag,herbivory
+"4/50 unripe, 2/50 herbivorized",flag,herbivory
+"3/14 unripe, 1/14 herbivorized",flag,herbivory
+"0/41 UNRIPE, 2/41 HERBIVORIZED",flag,herbivory
+"9/17 unripe, 1/17 herbivorized, infloresence herbivorized",flag,herbivory
+6/36 UNRIPE 2/36 HERBIVORISED,flag,herbivory
+"8/50 unripe, 3/50 herbivorized",flag,herbivory
+"5/17 unripe, 3/17 herbivorized",flag,herbivory
+"6/14 unripe, 4/14 herbivorized",flag,herbivory
+"0/2 unripe, infloresence herbivorized",flag,herbivory
+"5/50 unripe, 2/50 herbivorized",flag,herbivory
+"28/50 UNRIPE, DOUBLE CHECK PREVIOUS DATA FOR PLANT MATCH, NOT POSITIVE RIGHT PLANT, SEEMED UNATTACHED TO GROUND",flag,location_issue
+"10/50 UNRIPE, 4/50 HERBIVORIZED",flag,herbivory
+"4/50 UNRIPE, 7/50 HERBIVORIZED",flag,herbivory
+THERE WAS NO SAMPLE IN THE ENVELOPE,flag,location_issue
+"18/50 unripe, 1/50 herbivorized",flag,herbivory
+"10/33 unripe, 6/33 herbivorized",flag,herbivory
+"11/50 unripe, 6/50 herbivorized",flag,herbivory
+"11/24 unripe, 6/24 herbivorized",flag,herbivory
+"13/50 unripe, 4/50 herbivorized",flag,herbivory
+"0/7 unripe, 7/7 herbivorized",flag,herbivory
+"9/37 unripe, 3/37 herbivorized",flag,herbivory
+"14/50 unripe, 2/50 herbivorized",flag,herbivory
+"0/9 UNRIPE, 2/9 HERBIVORIZED",flag,herbivory
+"0/48 unripe, 10/48 herbivorized, infloresence herbivorized on 2 tillers",flag,herbivory
+"0/31 UNRIPE, 1/31 HERBIVORIZED",flag,herbivory
+"0/38 UNRIPE, 1/38 HERBIVORIZED",flag,herbivory
+"0/49 UNRIPE, 3/49 HERBIVORIZED",flag,herbivory
+"0/31 UNRIPE, 4/31 HERBIVORIZED",flag,herbivory
+"0/14 UNRIPE, 1/14 HERBIVORIZED",flag,herbivory
+"3/44 UNRIPE, 4/44 HERBIVORIZED",flag,herbivory
+"1/34 UNRIPE, 7/34 HERBIVORIZED",flag,herbivory
+"0/34 UNRIPE, 2/34 HERBIVORIZED",flag,herbivory
+"0/23 unripe, 6/23 herbivorized",flag,herbivory
+"0/30 unripe, 1/30 herbivorized",flag,herbivory
+"0/3 unripe, 1/3 herbivorized",flag,herbivory
+"0/2 UNRIPE, 1/2 HERBIVORIZED",flag,herbivory
+INFLORESENSE HERBIVORIZED,flag,herbivory
+"0/50 unripe, smut",flag,smut
+"0/21 unripe, 2/21 herbivorized",flag,herbivory
+"0/33 UNRIPE, 4/33 HERBIVORIZED",flag,herbivory
+"0/11 UNRIPE, 1/11 HERBIVORIZED",flag,herbivory
+"2/9 UNRIPE, 7/9 HERBIVORIZED",flag,herbivory
+"6/43 UNRIPE, BROKEN TILLER",flag,herbivory
+"1/12 UNRIPE, 2/12 HERBIVORIZED",flag,herbivory
+"13/50 unripe, 19/50 herbivorized",flag,herbivory
+"8/9 UNRIPE, 5/9 HERBIVORIZED, 1 TILLERS INFLORESENCE GONE FROM HERBIVORY",flag,herbivory
+"2/26 unripe, 1/26 herbivorized",flag,herbivory
+"0/20 unripe, 2/20 herbivorized",flag,herbivory
+"0/22 unripe, 3/22 herbivorized",flag,herbivory
+"2/11 unripe, 4/11 herbivorized",flag,herbivory
+"8/39 unripe, 4/39 herbivorized",flag,herbivory
+"2/14 UNRIPE, 1/14 HERBIVORIZED",flag,herbivory
+"15/24 UNRIPE, 5/24 HERBIVORIZED",flag,herbivory
+"2/23 UNRIPE, 3/23 HERBIVORIZED",flag,herbivory
+"5/14 UNRIPE, 4/14 HERBIVORIZED",flag,herbivory
+"25/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"29/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"3/28 UNRIPE, 4/28 HERBIVORIZED",flag,herbivory
+"15/50 unripe, 1/50 herbivorized",flag,herbivory
+"3/50 unripe, 3/50 herbivorized",flag,herbivory
+"0/50 UNRIPE, 4/50 HERBIVORIZED",flag,herbivory
+"9/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"0/7 unripe, 2/7 herbivorized",flag,herbivory
+"14/50 unripe, 11/50 herbivorized",flag,herbivory
+"0/6 unripe, 2/6 herbivorized",flag,herbivory
+"6/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"5/50 unripe, 1/50 herbivorized",flag,herbivory
+"1/15 unripe, 14/15 herbivorized",flag,herbivory
+"3/50 unripe, 2/50 herbivorized",flag,herbivory
+"3/22 unripe, 3/22 herbivorized",flag,herbivory
+"0/50 unripe, 2/50 herbivorized",flag,herbivory
+"2/26 unripe, 13/26 herbivorized",flag,herbivory
+"4/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"0/11 unripe, 5/11 herbivorized",flag,herbivory
+"6/50 unripe, 8/50 herbivorized",flag,herbivory
+"0/20 UNRIPE, 4/20 HERBIVORIZED",flag,herbivory
+"0/7 UNRIPE, ALL SMUT",flag,smut
+"19/30 UNRIPE, 7/30 HERBIVORIZED",flag,herbivory
+"0/35 UNRIPE, 2/35 HERBIVORIZED",flag,herbivory
+"6/31 UNRIPE, 6/31 HERBIVORIZED",flag,herbivory
+SMUT,flag,smut
+"2/39 UNRIPE, 11/39 HERBIVORIZED",flag,herbivory
+"0/50 UNRIPE, 3 TILLERS SMUT",flag,herbivory
+"1/19 UNRIPE, 3/19 HERBIVORIZED",flag,herbivory
+"2/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"2/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"17/28 UNRIPE, 14/28 HERBIVORIZED",flag,herbivory
+"1/50 UNRIPE, 7/50 HERBIVORIZED",flag,herbivory
+"2/50 UNRIPE, 4/50 HERBIVORIZED",flag,herbivory
+"4/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"5/50 unripe, 20/50 herbivorized",flag,herbivory
+"17/50 unripe, 1/50 herbivorized",flag,herbivory
+"0/8 unripe, 3/8 herbivorized",flag,herbivory
+missing tiller/infloresence,flag,physicaldamage
+"7/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"13/43 unripe, 16/43 herbivorized",flag,herbivory
+"8/13 UNRIPE, 7/13 HERBIVORIZED, 2 TILLERS COMPLETELY HERBIVORIZED",flag,herbivory
+"3/50 UNRIPE, 7/50 HERBIVORIZED",flag,herbivory
+"22/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"2/39 UNRIPE, 2/39 HERBIVORIZED",flag,herbivory
+"1/40 UNRIPE, 1/40 HERBIVORIZED",flag,herbivory
+"11/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"18/38 UNRIPE, 1/38 HERBIVORIZED",flag,herbivory
+"15/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"19/32 UNRIPE, 6/32 HERBIVORIZED",flag,herbivory
+"0/28 unripe, 1/28 herbivorized",flag,herbivory
+"0/2 unripe, 2/2 herbivorized",flag,herbivory
+"23/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"0/43 unripe, 10/43 herbivorized",flag,herbivory
+"22/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"2/50 unripe, 3/50 herbivorized",flag,herbivory
+"0/3 unripe, 3/3 herbivorized, infloresence herbivorized",flag,herbivory
+"26/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"3/50 unripe, 4/50 herbivorized",flag,herbivory
+"13/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"19/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"14/29 UNRIPE, 5/29 HERBIVORIZED, BROKEN TILLER",flag,physicaldamage
+"26/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"2/50 unripe, 2/50 herbivorized, need to check sample height/length",flag,herbivory
+"4/33 unripe, 4/33 herbivorized",flag,herbivory
+"1/25 unripe, 2/25 herbivorized",flag,herbivory
+"5/16 UNRIPE, 2/16 HERBIVORIZED",flag,herbivory
+ALL SEEDS DROPPED,flag,allseeddrop
+"1/42 unripe, 1/42 herbivorized",flag,herbivory
+"0/39 UNRIPE, 1/39 HERBIVORIZED",flag,herbivory
+"0/13 UNRIPE, 1/13 HERBIVORIZED",flag,herbivory
+"0/18 UNRIPE, 1/18 HERBIVORIZED",flag,herbivory
+"0/21 UNRIPE, 1/21 HERBIVORIZED",flag,herbivory
+"1/19 UNRIPE, 1/19 HERBIVORIZED",flag,herbivory
+"0/9 UNRIPE, 3/9 HERBIVORIZED",flag,herbivory
+"2/37 UNRIPE, 3/37 HERBIVORIZED",flag,herbivory
+"2/27 UNRIPE, 4/27 HERBIVORIZED",flag,herbivory
+"0/20 UNRIPE, 2/20 HERBIVORIZED",flag,herbivory
+"1/13 UNRIPE, 2/13 HERBIVORIZED",flag,herbivory
+"0/42 UNRIPE, 2/42 HERBIVORIZED",flag,herbivory
+"0/31 UNRIPE, 3/31 HERBIVORIZED",flag,herbivory
+"19/50 unripe, 13/50 herbivorized",flag,herbivory
+"6/14 unripe, 6/14 herbivorized, infloresence herbivorized",flag,herbivory
+"1/34 unripe, 10/34 herbivorized",flag,herbivory
+"6/50 unripe, 13/50 herbivorized",flag,herbivory
+"5/50 unripe, 8/50 herbivorized",flag,herbivory
+"10/50 unripe, 4/50 herbivorized",flag,herbivory
+"9/50 unripe, 4/50 herbivorized",flag,herbivory
+"2/50 unripe, 10/50 herbivorized",flag,herbivory
+"4/50 unripe, 10/50 herbivorized",flag,herbivory
+"4/50 unripe, 4/50 herbivorized",flag,herbivory
+"7/50 unripe, 14/50 herbivorized",flag,herbivory
+Missing infloresence (herbivorized),flag,herbivory
+missing infloresence (herbivorized),flag,herbivory
+"7/50 unripe, 3/50 herbivorized",flag,herbivory
+"5/50 unripe, 1/50 herbivorized, very dry",flag,herbivory
+"7/29 unripe, 9/29 herbivorized",flag,herbivory
+"3/50 UNRIPE, 4/50 HERBIVORIZED",flag,herbivory
+INFLORESENCE HERBIVORIZED,flag,herbivory
+"16/50 UNRIPE, 2/50 HERBIVORIZED",flag,herbivory
+"22/50 UNRIPE, 1/50 HERBIVORIZED, VERY DRY",flag,herbivory
+"10/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"1/10 UNRIPE, 9/10 HERBIVORIZED, VERY DRY",flag,herbivory
+"8/50 unripe, 2/50 herbivorized",flag,herbivory
+"8/50 unripe, 2/50 herbviorized",flag,herbivory
+"0/35 unripe, 6/35 herbivorized",flag,herbivory
+"15/50 UNRIPE, 2/50 HERBIVORIZED, DRY",flag,herbivory
+"14/50 UNRIPE, 5/50 HERBIVORIZED",flag,herbivory
+"2/50 UNRIPE, 5/50 HERBIVORIZED",flag,herbivory
+"34/50 UNRIPE, 5/50 HERBIVORIZED",flag,herbivory
+"14/50 unripe, 4/50 herbivorized",flag,herbivory
+"3/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"13/50 unripe, 5/50 herbivorized",flag,herbivory
+2/50 herbivorized,flag,herbivory
+6/50 herbivorized 6/60 unripe,flag,herbivory
+"1/50 UNRIPE, 8/50 HERBIVORIZED, 1 TILLER INFLORESENCE COMPLETELY HERBIVORIZED",flag,herbivory
+"1/50 unripe, 1/50 herbivorized",flag,herbivory
+"7/50 unripe, 2/50 herbivorized",flag,herbivory
+"9/19 UNRIPE, 7/19 HERBIVORIZED",flag,herbivory
+"0/46 unripe, 2/46 herbivorized",flag,herbivory
+"6/7 UNRIPE, 4/7 HERBIVORIZED",flag,herbivory
+"notes: extra tiller, 0/50 unripe",flag,location_issue
+"notes: missing inflorescence on three tillers 1/50 unripe, 2/50 herbivorized",flag,physicaldamage
+"5/10 herbivorized, 2/50 unripe",flag,herbivory
+"5/9 unripe, 1/9 herbivorized",flag,herbivory
+"2/50 unripe, 1/50 herbivorized",flag,herbivory
+"3/50 unripe, 5/50 herbivorized",flag,herbivory
+"8/50 unripe, 7/50 herbivorized",flag,herbivory
+"2/50 unripe, 4/50 herbivorized",flag,herbivory
+"1/49 unripe, 8/49 herbivorized",flag,herbivory
+"0/48 UNRIPE, 1/48 HERBIVORIZED",flag,herbivory
+"0/5 UNRIPE, 1/5 HERBIVORIZED",flag,herbivory
+"0/21 UNRIPE, 2/21 HERBIVORIZED",flag,herbivory
+"2/35 unripe, 1/35 herbivorized",flag,herbivory
+"11/31 unripe, 2/31 herbivorized",flag,herbivory
+"9/13 unripe, 2/13 herbivorized",flag,herbivory
+"11/38 unripe, 7/38 herbivorized",flag,herbivory
+"7/19 UNRIPE, 2/19 HERBIVORIZED",flag,herbivory
+"0/14 UNRIPE, 4/14 HERBIVORIZED",flag,herbivory
+"0/24 UNRIPE, 1/24 HERBIVORIZED",flag,herbivory
+Sample had no seeds,flag,allseeddrop
+"0/22 UNRIPE, 12/22 HERBIVORIZED",flag,herbivory
+"0/12 unripe, 2/12 herbivorized",flag,herbivory
+"Missing inflorensence, no seeds",flag,herbivory
+"2/16 herbivorized, 4/16 unripe",flag,herbivory
+"8/42 unripe, 2/42 herbivorized",flag,herbivory
+"2/7 unripe, 2/7 herbivorized",flag,herbivory
+"0/20 unripe, 1/20 herbivorized",flag,herbivory
+"1/27 unripe, 1/27 herbivorized",flag,herbivory
+"0/26 unripe, 1/26 herbivorized",flag,herbivory
+"1/5 unripe, 1/5 herbivorized",flag,herbivory
+"1/50 unripe, 2/ 50 herbivoirzed",flag,herbivory
+"6/44 unripe, 3/44 herbivorized",flag,herbivory
+"3/24 unripe, 1 herbivorized",flag,herbivory
+"0/18 unripe, 1/18 herbivorized",flag,herbivory
+"2/49 unripe, 3/49 herbivorized",flag,herbivory
+"0/19 unripe, 3/19 herbivorized",flag,herbivory
+"0/36 unripe, 4/36 herbivorized",flag,herbivory
+"0/8 unripe, 2/8 herbivorized",flag,herbivory
+"0/9 unripe, 5/9 herbivorized",flag,herbivory
+"1/22 unripe, 1/22 herbivorized",flag,herbivory
+"5/50 unripe, 16/50 herbivorized",flag,herbivory
+"0/5 unripe, half of plant blew away",flag,physicaldamage

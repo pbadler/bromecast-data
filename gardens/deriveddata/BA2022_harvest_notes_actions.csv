@@ -1,0 +1,420 @@
+notes,action,standard_note
+NO SEEDS,flag,allseeddrop
+NO FILLED SEEDS,flag,allunripe
+"19/50 unripe, 1/50 herbivorized",flag,herbivory
+"4/4 UNRIPE, 10/12 TILLERS HERBIVORIZED",flag,herbivory
+"19/50 UNRIPE, 4/11  TILLERS HERBIVORIZED",flag,herbivory
+"0/48 unripe, 2/48 herbivorized",flag,herbivory
+"7/50 unripe, 3/50 herbivorized",flag,herbivory
+"0/2 unripe, 2/2 herbivorized",flag,herbivory
+"6/16 unripe, 1/16 herbivorized",flag,herbivory
+"9/46 unripe, 2/46 herbivorized",flag,herbivory
+"1/2 unripe, 1/2 herbivorized",flag,herbivory
+"5/34 unripe, 2/34 herbivorized",flag,herbivory
+"18/20 unripe, 2/20 herbivorized",flag,herbivory
+"9/9 unripe, 2/9 herbivorized",flag,herbivory
+"6/25 UNRIPE, 3/25 HERBIVORIZED",flag,herbivory
+"6/21 UNRIPE, 1/21 HERBIVORIZED",flag,herbivory
+"5/38 UNRIPE, 2/38 HERBIVORIZED",flag,herbivory
+3/42 HEBIVORIZED,flag,herbivory
+"3/50 unripe, 2/50 herbivorized",flag,herbivory
+"0/50 unripe, 13/14 tillers no infloresence/herbivorized",flag,herbivory
+"0/50 UNRIPE, 1/50 HERBIVORIZED",flag,herbivory
+"0/2 UNRIPE, 2/2 HERBIVORIZED",flag,herbivory
+"7/32 UNRIPE, 1/32 HERBIVORIZED",flag,herbivory
+"0/50 unripe, 2/50 herbivorized, herbivory",flag,herbivory
+"15/22 unripe, 4/22 herbivorized, herbivory",flag,herbivory
+"9/11 unripe, 1/11 herbivorized",flag,herbivory
+"2/12 unripe, 3/12 herbivorized",flag,herbivory
+"18/50 unripe, 3/50 herbivorized",flag,herbivory
+"0/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"23/50 unripe, 3/50 herbivorized",flag,herbivory
+"34/34 unripe, 1 tiller with infloresence, 8 entirely herbivorized",flag,herbivory
+"4/50 unripe, 3/50 herbivorized",flag,herbivory
+"2/50 unripe, 2/50 herbivorized",flag,herbivory
+2/2 HERBIVORIZED,flag,herbivory
+1/37 HERBIVORIZED,flag,herbivory
+"34/46 unripe, 10/36 herbivorized",flag,herbivory
+"4/50 unripe, 7/50 herbivorized",flag,herbivory
+"3/50 unripe, 2/20 herbivorized",flag,herbivory
+"12/50 unripe, 4/50 herbivorized",flag,herbivory
+"11/30 unripe, multiple tillers completely herbivorized",flag,herbivory
+"10/50 UNRIPE, multiple tillers herbivorized",flag,herbivory
+"11/50 unripe, 3/50 herbivorized, 5 tillers with no infloresence/herbivorized",flag,herbivory
+"36/50 UNRIPE, 4 tillers with no infloresence/herbivorized",flag,herbivory
+"6/50 unripe, 4 tillers herbivorized",flag,herbivory
+"0/13 UNRIPE, 1/13 HERBIVORIZED",flag,herbivory
+"0/4 UNRIPE, 1/4 HERBIVORIZED",flag,herbivory
+"0/21 unripe, 2/21 herbivorized",flag,herbivory
+"0/24 UNRIPE, 2/24 HERBIVORIZED",flag,herbivory
+"1 TILLER W/O INFLUORESCENCE, 0/18 UNRIPE, 1/18 HERBIVORIZED",flag,herbivory
+"0/24 unripe, 1/24 herbivorized",flag,herbivory
+"0/50 unripe, 4/50 herbivorized",flag,herbivory
+"0/21 unripe, 3/21 herbivorized",flag,herbivory
+0/27 UNRIPE 1/27 HERBIVORIZED,flag,herbivory
+"4/50 unripe, 1/50 herbivorized",flag,herbivory
+"3/50 UNRIPE, 3/50 HERBIVORIZED",flag,herbivory
+"5/50 unripe, 2/50 herbivorized",flag,herbivory
+"3/50 unripe, 1/50 herbivorized",flag,herbivory
+"2/30 unripe, 5/30 herbivorized",flag,herbivory
+2/8 herviorized,flag,herbivory
+"1/18 unripe, 1/18 herbivorized",flag,herbivory
+"0/23 unripe, 1/23 herbivorized",flag,herbivory
+"15/29 unripe, 8/29 herbivorized",flag,herbivory
+2/2 herbivorized,flag,herbivory
+"3/16 unripe, 4/16 herbivorized",flag,herbivory
+0/8 UNRIPE 1/8 HERBIVORIZED,flag,herbivory
+0/13 UNRIPE 1/13 HERBIVORIZED,flag,herbivory
+"4/6 UNRIPE, 1/6 HERBIVORIZED",flag,herbivory
+"0/14 UNRIPE, 1/14 HERBIVORIZED",flag,herbivory
+"4/18 unripe, 1/18 herbivorized",flag,herbivory
+"11/40 unripe, 2/40 herbivorized",flag,herbivory
+No tillers or seeds in sample bag,flag,location_issue
+"2 samples marked ""(8,10)?""",flag,location_issue
+"2 SAMPLES MARKED (1,1)?",flag,location_issue
+EMPTY BAG/NO SAMPLE,flag,location_issue
+BROKEN TILLER,flag,physicaldamage
+"0/9 UNRIPE, BROKEN TILLER",flag,physicaldamage
+"1/1 HERBIVORIZED, BROKEN TILLER",flag,physicaldamage
+"0/3 UNRIPE, BROKEN TILLER",flag,physicaldamage
+"7/17 UNRIPE, BROKEN TILLER",flag,physicaldamage
+"0/1 UNRIPE, BROKEN TILLER",flag,physicaldamage
+BROKEN TILLERS,flag,physicaldamage
+"36/50 UNRIPE, 2 broken tillers",flag,physicaldamage
+"11/50 UNRIPE, 1 TILLER INFLORESENCE GONE",flag,physicaldamage
+"1/50 UNRIPE, 1 broken tiller",flag,physicaldamage
+"0/50 UNRIPE, 2 BROKEN TILLERS",flag,physicaldamage
+"0/26 UNRIPE, 2 BROKEN TILLERS",flag,physicaldamage
+"0/50 UNRIPE, 1 BROKEN TILLER",flag,physicaldamage
+2 BROKEN TILLERS,flag,physicaldamage
+"NO SEEDS, 4 BROKEN TILLERS",flag,physicaldamage
+BROKEN TILLER/NO INFLORESCENCE,flag,physicaldamage
+BROKEN TILLERS/NO INFLORESCENCE,flag,physicaldamage
+missing inflorescence,flag,physicaldamage
+"4/4 unripe, missing inflorescence on 1 tiller",flag,physicaldamage
+"6/25 unripe, Missing inforensence on one tiller",flag,physicaldamage
+Missing Infloresence,flag,physicaldamage
+Missing Inforesence,flag,physicaldamage
+"2/6 unripe, Missing Infloresence",flag,physicaldamage
+"42/50 unripe, 2 seed heads that were ripe-rest of plant behind",flag,physicaldamage
+"4 BROKEN TILLERS, 28/50 UNRIPE",flag,physicaldamage
+44/50 UNRIPE 9/12 TILLERS NO INFLORESCENCE,flag,physicaldamage
+"25/50 UNRIPE, 1 BROKEN TILLER, 1 TILLER WITH NO INFLUORESCENCE",flag,physicaldamage
+"20/50 UNRIPE, 1/50 HERBIVORIZED, 1 BROKEN TILLER",flag,physicaldamage
+"11/50 UNRIPE, 2 BROKEN TILLERS",flag,physicaldamage
+"34/50 UNRIPE, 5 BROKEN TILLERS",flag,physicaldamage
+"12/50 UNRIPE, 3 BROKEN TILLERS",flag,physicaldamage
+"24/50 UNRIPE, 15 BROKEN TILLERS",flag,physicaldamage
+"1/50 UNRIPE, 2 BROKEN TILLER",flag,physicaldamage
+"26/50 UNRIPE, 4 BROKEN TILLERS",flag,physicaldamage
+"9/50 UNRIPE, 1 tiller with no seeds",flag,physicaldamage
+"BROKEN TILLER, NO INFLORESENCE",flag,physicaldamage
+"0/2 UNRIPE, BROKEN TILLER",flag,physicaldamage
+"0/8 UNRIPE, BROKEN TILLER",flag,physicaldamage
+"18/50 UNRIPE, BROKEN TILLER",flag,physicaldamage
+"2 BROKEN TILLERS, 1/1 UNRIPE",flag,physicaldamage
+"1 TILLER WITH NO INFLUORESCENCE, 14/14 UNRIPE",flag,physicaldamage
+0/5 UNRIPE,flag,physicaldamage
+0/21 UNRIPE. BROKEN TILLER,flag,physicaldamage
+"2/2 UNRIPE, BROKEN TILLER",flag,physicaldamage
+"0/6 unripe, 1 tiller missing inflorescence",flag,physicaldamage
+MISSING INFLORESCENCE,flag,physicaldamage
+No Inflorescence,flag,physicaldamage
+NO INFLORESCENCE,flag,physicaldamage
+"4/4 UNRIPE, 1 tiller with no inflorescence",flag,physicaldamage
+All tillers had no inflorescences,flag,physicaldamage
+"43/50 UNRIPE, 4 tillers with no inflorescence",flag,physicaldamage
+"5/18 unripe, 1 tiller with missing inflorescence",flag,physicaldamage
+"1/29 UNRIPE, 1/29 HERBIVORIZED, MISSING INFLORESCENCE",flag,physicaldamage
+"0/2 UNRIPE, MISSING INFLORESCENCE",flag,physicaldamage
+"9/50 UNRIPE, 5 BROKEN TILLERS",flag,physicaldamage
+"8 BROKEN TILLERS, 19/50 UNRIPE",flag,physicaldamage
+"3/50 unripe, only 2 tillers with inflorescence",flag,physicaldamage
+"0/50 UNRIPE, 6 TILLERS W/O INFLORESENCE",flag,physicaldamage
+"0/50 unripe, 11 tillers w/o inflorescence",flag,physicaldamage
+"2/50 unripe, 8 tillers w/o inflorescence",flag,physicaldamage
+"2/50 UNRIPE, MISSING INFLORESCENCE",flag,physicaldamage
+"0/50 UNRIPE, MISSING INFLORESCENCE",flag,physicaldamage
+"0/50 unripe, only 6 tillers with inflorescence",flag,physicaldamage
+"6 BROKEN TILLERS, 3 TILLERS W/O INFLUORESCENCE,",flag,physicaldamage
+"0/50 UNRIPE, ONLY 1 TILLER WITH INFLORESENCE",flag,physicaldamage
+"5 BROKEN TILLERS, 3/50 UNRIPE",flag,physicaldamage
+"0/1 UNRIPE, 1 TILLER W/O INFLOURESCENCE",flag,physicaldamage
+NO INFLORESENCE,flag,physicaldamage
+"0/4 UNRIPE, 1 TILLER W/O INFLORESCENCE",flag,physicaldamage
+no inflorescence,flag,physicaldamage
+No Infloresence,flag,physicaldamage
+no inforrescence,flag,physicaldamage
+No inforesence,flag,physicaldamage
+"2/28 unripe, 1 tiller missing infloresence",flag,physicaldamage
+1 tiller w/o inflorescence,flag,physicaldamage
+"1/14 urnipe, 2 tillers missing Infloresence",flag,physicaldamage
+"1/22 unripe, 2 tillers missing infloresence",flag,physicaldamage
+No infloresence,flag,physicaldamage
+No inflorensence,flag,physicaldamage
+"0/3 UNRIPE, MISSING INFLORESCENCE",flag,physicaldamage
+"0/6 UNRIPE, MISSING INFLORESCENCE",flag,physicaldamage
+"0/33 UNRIPE, MISSING INFLORESCENCE",flag,physicaldamage
+No inflorescense on tiller,flag,physicaldamage
+"0;50 unripe, 2 tillers w/o inflorescence",flag,physicaldamage
+"0/26 unripe, 1 tiller w/o inflorescence",flag,physicaldamage
+"8/8 unripe, Missing Infloresence",flag,physicaldamage
+"35/40 unripe, 11 tillers w/o inflorescence",flag,physicaldamage
+"7/9 unripe, 2/9 herbivoirzed, Missing Infloresence",flag,physicaldamage
+"37/50 unripe, 3 tillers w/o inflorescence",flag,physicaldamage
+"21/50 unripe, missing infloresence",flag,physicaldamage
+"3/50 unripe, 7 tillers w/o inflorescence",flag,physicaldamage
+"BROKEN TILLER, NO INFORESENCE",flag,physicaldamage
+NO SEEDS OR INFLORESCENCE,flag,physicaldamage
+"0/2 unripe, 1 tiller seed drop",flag,seeddrop
+3/50 unripe,ignore,
+16/50 unripe,ignore,
+"50/50 UNRIPE, ""2 DRIED STEM ON OTHERWISE GREEN + HEALTHY PLANT HARVESTED FOR SEED COUNT""",ignore,
+48/50 unripe,ignore,
+7/50 unripe,ignore,
+0/50 unripe,ignore,
+22/22 UNRIPE,ignore,
+0/1 unripe,ignore,
+0/12 unripe,ignore,
+0/7 unripe,ignore,
+0/8 unripe,ignore,
+0/35 unripe,ignore,
+0/19 unripe,ignore,
+11/40 UNRIPE,ignore,
+0/13 UNRIPE,ignore,
+0/16 UNRIPE,ignore,
+0/22 unripe,ignore,
+2/50 unripe,ignore,
+1/16 unripe,ignore,
+0/17 unripe,ignore,
+0/34 unripe,ignore,
+8/36 unripe,ignore,
+0/20 unripe,ignore,
+0/5 unripe,ignore,
+0/2 unripe,ignore,
+0/16 unripe,ignore,
+0/24 unripe,ignore,
+14/23 unripe,ignore,
+6/41 unripe,ignore,
+8/24 unripe,ignore,
+0/36 unripe,ignore,
+0/14 unripe,ignore,
+0/18 unripe,ignore,
+7/18 unripe,ignore,
+4/25 unripe,ignore,
+0/0 unripe,ignore,
+0/6 unripe,ignore,
+0/4 unripe,ignore,
+0/26 unripe,ignore,
+3/26 unripe,ignore,
+0/28 UNRIPE,ignore,
+7/33 UNRIPE,ignore,
+0/23 unripe,ignore,
+7/7 unripe,ignore,
+2/8 unripe,ignore,
+0/10 unripe,ignore,
+2/26 unripe,ignore,
+0/33 unripe,ignore,
+1/6 unripe,ignore,
+4/8 UNRIPE,ignore,
+2/20 UNRIPE,ignore,
+6/38 UNRIPE,ignore,
+2/12 UNRIPE,ignore,
+"6/6 UNRIPE, no recorded height measurement on sample bag",ignore,
+3/23 UNRIPE,ignore,
+0/7 UNRIPE,ignore,
+11/39 UNRIPE,ignore,
+0/38 unripe,ignore,
+2/31 unripe,ignore,
+8/19 unripe,ignore,
+4/50 unripe,ignore,
+0/15 unripe,ignore,
+2/45 unripe,ignore,
+0/11 unripe,ignore,
+0/21 unripe,ignore,
+2/21 unripe,ignore,
+1/13 unripe,ignore,
+2/16 unripe,ignore,
+5/5 unripe,ignore,
+2/2 unripe,ignore,
+10/10 unripe,ignore,
+6/6 unripe,ignore,
+0/6 UNRIPE,ignore,
+1/1 HERBIVORIZED,ignore,
+0/4 UNRIPE,ignore,
+0/3 UNRIPE,ignore,
+6/6 UNRIPE,ignore,
+0/11 UNRIPE,ignore,
+2/2 UNRIPE,ignore,
+1/12 UNRIPE,ignore,
+0/15 UNRIPE,ignore,
+7/7 UNRIPE,ignore,
+22/50 UNRIPE,ignore,
+8/50 UNRIPE,ignore,
+19/50 UNRIPE,ignore,
+No seed heads,ignore,
+0/3 unripe,ignore,
+0/44 UNRIPE,ignore,
+0/32 UNRIPE,ignore,
+0/1 UNRIPE,ignore,
+4/50 UNRIPE,ignore,
+0/50 UNRIPE,ignore,
+"0/50 unripe, one dry brown broken infloresence collected",ignore,
+"1/1 UNRIPE, could not get weight due to small size",ignore,
+28/50 UNRIPE,ignore,
+17/50 UNRIPE,ignore,
+"0/50 unripe, 1 tiller with no seeds",ignore,
+11/50 UNRIPE,ignore,
+No tillers or seeds in sample,ignore,
+30/50 UNRIPE,ignore,
+9/50 UNRIPE,ignore,
+"1/50 UNRIPE, 2 intact tillers, there could have been more but they were not in the sample",ignore,
+31/50 UNRIPE,ignore,
+4 tillers with no seeds,ignore,
+2/50 UNRIPE,ignore,
+0/36 UNRIPE,ignore,
+0/21 UNRIPE,ignore,
+1/50 UNRIPE,ignore,
+1/5 UNRIPE,ignore,
+0/19 UNRIPE,ignore,
+1/26 UNRIPE,ignore,
+0/14 UNRIPE,ignore,
+0/18 UNRIPE,ignore,
+0/40 UNRIPE,ignore,
+0/25 UNRIPE,ignore,
+15/50 unripe,ignore,
+1/50 unripe,ignore,
+7/50 UNRIPE,ignore,
+2/17 UNRIPE,ignore,
+13/50 UNRIPE,ignore,
+0/31 UNRIPE,ignore,
+9/35 UNRIPE,ignore,
+No tillers or seeds,ignore,
+0/20 UNRIPE,ignore,
+0/12 UNRIPE,ignore,
+0/9 UNRIPE,ignore,
+3/9 UNRIPE,ignore,
+9/17 UNRIPE,ignore,
+0/10 UNRIPE,ignore,
+"1/3 UNRIPE, 1 broken tiller",ignore,
+1/21 UNRIPE,ignore,
+0/2 UNRIPE,ignore,
+11/12 UNRIPE,ignore,
+0/33 UNRIPE,ignore,
+0/24 UNRIPE,ignore,
+7/27 UNRIPE,ignore,
+0/46 UNRIPE,ignore,
+0/30 unripe,ignore,
+2/19 unripe,ignore,
+0/9 unripe,ignore,
+18/19 unripe,ignore,
+4/33 unripe,ignore,
+No seeds,ignore,
+15/46 unripe,ignore,
+11/50 unripe,ignore,
+0/30 UNRIPE,ignore,
+0/26 UNRIPE,ignore,
+8/28 UNRIPE,ignore,
+4/38 UNRIPE,ignore,
+5/20 UNRIPE,ignore,
+0/22 UNRIPE,ignore,
+0/35 UNRIPE,ignore,
+24/50 UNRIPE,ignore,
+6/50 UNRIPE,ignore,
+0/23 UNRIPE,ignore,
+3/3 UNRIPE,ignore,
+0/17 UNRIPE,ignore,
+0/8 UNRIPE,ignore,
+2/28 UNRIPE,ignore,
+0/45 UNRIPE,ignore,
+0/48 UNRIPE,ignore,
+0/28 unripe,ignore,
+5/50 unripe,ignore,
+1/23 UNRIPE,ignore,
+8/14 UNRIPE,ignore,
+0/29 unripe,ignore,
+3/19 UNRIPE,ignore,
+2/46 unripe,ignore,
+2/7 UNRIPE,ignore,
+0/37 unripe,ignore,
+26/26 UNRIPE,ignore,
+"0/4 unripe, 1 tiller with no seeds",ignore,
+"0/3 UNRIPE, 1 tiller with no seeds",ignore,
+38/50 UNRIPE,ignore,
+48/50 UNRIPE,ignore,
+23/50 UNRIPE,ignore,
+26/50 UNRIPE,ignore,
+no seed heads,ignore,
+32/50 unripe,ignore,
+33/50 UNRIPE,ignore,
+7/39 UNRIPE,ignore,
+1/27 unripe,ignore,
+0/48 unripe,ignore,
+0/45 unripe,ignore,
+6/30 UNRIPE,ignore,
+10/45 UNRIPE,ignore,
+0/47 UNRIPE,ignore,
+5/48 UNRIPE,ignore,
+0/37 UNRIPE,ignore,
+6/24 UNRIPE,ignore,
+16/50 UNRIPE,ignore,
+6/12 UNRIPE,ignore,
+4/9 UNRIPE,ignore,
+0/42 UNRIPE,ignore,
+1/35 UNRIPE,ignore,
+15/50 UNRIPE,ignore,
+0/34 UNRIPE,ignore,
+0/42 unripe,ignore,
+0/39 UNRIPE,ignore,
+4/28 UNRIPE,ignore,
+5/33 UNRIPE,ignore,
+13/15 UNRIPE,ignore,
+0/27 UNRIPE,ignore,
+1/1 UNRIPE,ignore,
+9/25 UNRIPE,ignore,
+27/27 UNRIPE,ignore,
+6/50 unripe,ignore,
+14/50 unripe,ignore,
+14/50 UNRIPE,ignore,
+50/50 UNRIPE,ignore,
+8/50 unripe,ignore,
+3/50 UNRIPE,ignore,
+1/15 UNRIPE,ignore,
+16/16 unripe,ignore,
+1/9 unripe,ignore,
+18/50 unripe,ignore,
+2/30 unripe,ignore,
+5/50 UNRIPE,ignore,
+10/50 UNRIPE,ignore,
+5/6 UNRIPE,ignore,
+6/8 UNRIPE,ignore,
+18/50 UNRIPE,ignore,
+25/50 UNRIPE,ignore,
+0/39 unripe,ignore,
+0/43 unripe,ignore,
+3/11 unripe,ignore,
+6/43 UNRIPE,ignore,
+2/22 UNRIPE,ignore,
+45/45 UNRIPE,ignore,
+10/10 UNRIPE,ignore,
+11/11 UNRIPE,ignore,
+0/31 unripe,ignore,
+11/11 unripe,ignore,
+16/45 UNRIPE,ignore,
+1/14 unripe,ignore,
+6/31 unripe,ignore,
+1/4 UNRIPE,ignore,
+1/11 UNRIPE,ignore,
+3/13 UNRIPE,ignore,
+1/14 UNRIPE,ignore,
+8/9 unripe,ignore,
+3/17 unripe,ignore,
+0/13 unripe,ignore,
+1/15 unripe,ignore,
+1/21 unripe,ignore,
+3/3 unripe,ignore,
+"11/14 UNRIPE, 3/14 HERBIVORIZED",ignore,
+11/33 UNRIPE,ignore,
+4/6 UNRIPE,ignore,
+1/31 UNRIPE,ignore,
+4/4 UNRIPE,ignore,

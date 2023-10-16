@@ -115,10 +115,6 @@ merge(data_most, notes_actions_keep, all.x = T) %>%
          smut = ifelse(notes == "smut", 1, 0),
          wrong_spp = ifelse(notes == "wrongspp", 1, 0)) -> data_most
 
-
-
-
-
 ## Boise Low (WI) ####
 # Filter to be just sheep station and make unique ID
 harvest %>% 
@@ -140,6 +136,12 @@ harvestWI %>%
   mutate(seed_count_total = 0)-> calib_data_noseeds_WI
 
 # Create data subset 3: harvested seeds that were subsetted
+
+# Fix inflor_mass for one observation
+harvestWI[which(harvestWI$plot == 5.2 &
+                  harvestWI$x == 16 &
+                  harvestWI$y == 5),"inflor_mass"] <- 0.9
+
 harvestWI %>% 
   filter(complete.cases(inflor_mass) & complete.cases(biomass_sub) & complete.cases(seed_mass_sub)) %>% 
   mutate(inflor_mass_sub = biomass_sub + seed_mass_sub,
@@ -175,6 +177,22 @@ harvestWI %>%
   filter(id %notin% data_most_WI$id) %>% 
   select(id, biomass_whole, inflor_mass, seed_count_sub, seed_mass_sub, biomass_sub) %>% 
   print(n = Inf) 
+
+# Read in notes information
+notes_actions_WI <- read_csv("gardens/deriveddata/WI2022_harvest_notes_actions.csv")
+notes_actions_WI %>% 
+  filter(action == "action") %>% 
+  select(notes, standard_note) -> notes_actions_keep_WI
+
+# Merge together with the rest of the data
+merge(data_most_WI, notes_actions_keep_WI, all.x = T) %>% 
+  mutate(all_seed_drop = ifelse(notes == "allseeddrop", 1, 0),
+         all_unripe = ifelse(notes == "allunripe", 1, 0),
+         herbivory = ifelse(notes == "herbivory", 1, 0),
+         physical_damage = ifelse(notes == "physicaldamage", 1, 0),
+         seed_drop = ifelse(notes == "seeddrop", 1, 0),
+         smut = ifelse(notes == "smut", 1, 0),
+         location_issue = ifelse(notes == "location_issue", 1, 0)) -> data_most_WI
 
 ## Boise High (BA) ####
 # Filter to be just sheep station and make unique ID
@@ -229,3 +247,27 @@ harvestBA %>%
   select(id, biomass_whole, inflor_mass, seed_count_sub, seed_mass_sub, biomass_sub) %>% 
   print(n = Inf)
 
+# Read in notes information
+notes_actions_BA <- read_csv("gardens/deriveddata/BA2022_harvest_notes_actions.csv")
+notes_actions_BA %>% 
+  filter(action == "flag") %>% 
+  select(notes, standard_note) -> notes_actions_keep_BA
+
+# Merge together with the rest of the data
+merge(data_most_BA, notes_actions_keep_BA, all.x = T) %>% 
+  mutate(all_seed_drop = ifelse(notes == "allseeddrop", 1, 0),
+         all_unripe = ifelse(notes == "allunripe", 1, 0),
+         herbivory = ifelse(notes == "herbivory", 1, 0),
+         physical_damage = ifelse(notes == "physicaldamage", 1, 0),
+         seed_drop = ifelse(notes == "seeddrop", 1, 0),
+         smut = ifelse(notes == "smut", 1, 0),
+         location_issue = ifelse(notes == "location_issue", 1, 0)) -> data_most_BA
+
+library(lme4)
+
+mod <- lmer(log(seed_count_total) ~ density * albedo + (1|genotype), data = data_most %>% 
+              filter(seed_count_total > 0))
+plot(mod)
+car::Anova(mod)
+sjPlot::plot_model(mod, type = "emm", terms = c("density", "albedo"))
+pairs(emmeans::emmeans(mod, ~albedo|density))
