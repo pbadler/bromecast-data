@@ -107,13 +107,15 @@ notes_actions %>%
 
 # Merge together with the rest of the data
 merge(data_most, notes_actions_keep, all.x = T) %>% 
-  mutate(all_seed_drop = ifelse(notes == "allseeddrop", 1, 0),
-         herbivory = ifelse(notes == "herbivory", 1, 0),
-         mortality = ifelse(notes == "mortality", 1, 0),
-         physical_damage = ifelse(notes == "physicaldamage", 1, 0),
-         seed_drop = ifelse(notes == "seeddrop", 1, 0),
-         smut = ifelse(notes == "smut", 1, 0),
-         wrong_spp = ifelse(notes == "wrongspp", 1, 0)) -> data_most
+  mutate(all_seed_drop = ifelse(standard_note == "allseeddrop", 1, 0),
+         herbivory = ifelse(standard_note == "herbivory", 1, 0),
+         mortality = ifelse(standard_note == "mortality", 1, 0),
+         physical_damage = ifelse(standard_note == "physicaldamage", 1, 0),
+         seed_drop = case_when(standard_note == "seeddrop" ~ 1,
+                               drop_seed == "Y" ~ 1,
+                               T ~ 0),
+         smut = ifelse(standard_note == "smut", 1, 0),
+         wrong_spp = ifelse(standard_note == "wrongspp", 1, 0)) -> data_most
 
 ## Boise Low (WI) ####
 # Filter to be just sheep station and make unique ID
@@ -186,13 +188,15 @@ notes_actions_WI %>%
 
 # Merge together with the rest of the data
 merge(data_most_WI, notes_actions_keep_WI, all.x = T) %>% 
-  mutate(all_seed_drop = ifelse(notes == "allseeddrop", 1, 0),
-         all_unripe = ifelse(notes == "allunripe", 1, 0),
-         herbivory = ifelse(notes == "herbivory", 1, 0),
-         physical_damage = ifelse(notes == "physicaldamage", 1, 0),
-         seed_drop = ifelse(notes == "seeddrop", 1, 0),
-         smut = ifelse(notes == "smut", 1, 0),
-         location_issue = ifelse(notes == "location_issue", 1, 0)) -> data_most_WI
+  mutate(all_seed_drop = ifelse(standard_note == "allseeddrop", 1, 0),
+         all_unripe = ifelse(standard_note == "allunripe", 1, 0),
+         herbivory = ifelse(standard_note == "herbivory", 1, 0),
+         physical_damage = ifelse(standard_note == "physicaldamage", 1, 0),
+         seed_drop = case_when(standard_note == "seeddrop" ~ 1,
+                               drop_seed == "Y" ~ 1,
+                               T ~ 0),
+         smut = ifelse(standard_note == "smut", 1, 0),
+         location_issue = ifelse(standard_note == "location_issue", 1, 0)) -> data_most_WI
 
 ## Boise High (BA) ####
 # Filter to be just sheep station and make unique ID
@@ -255,19 +259,113 @@ notes_actions_BA %>%
 
 # Merge together with the rest of the data
 merge(data_most_BA, notes_actions_keep_BA, all.x = T) %>% 
-  mutate(all_seed_drop = ifelse(notes == "allseeddrop", 1, 0),
-         all_unripe = ifelse(notes == "allunripe", 1, 0),
-         herbivory = ifelse(notes == "herbivory", 1, 0),
-         physical_damage = ifelse(notes == "physicaldamage", 1, 0),
-         seed_drop = ifelse(notes == "seeddrop", 1, 0),
-         smut = ifelse(notes == "smut", 1, 0),
-         location_issue = ifelse(notes == "location_issue", 1, 0)) -> data_most_BA
+  mutate(all_seed_drop = ifelse(standard_note == "allseeddrop", 1, 0),
+         all_unripe = ifelse(standard_note == "allunripe", 1, 0),
+         herbivory = ifelse(standard_note == "herbivory", 1, 0),
+         physical_damage = ifelse(standard_note == "physicaldamage", 1, 0),
+         seed_drop = case_when(standard_note == "seeddrop" ~ 1,
+                               drop_seed == "Y" ~ 1,
+                               T ~ 0),
+         smut = ifelse(standard_note == "smut", 1, 0),
+         location_issue = ifelse(standard_note == "location_issue", 1, 0)) -> data_most_BA
+
+## Bring data sets together ####
+data_most %>% select(site, date, block, plot, density, albedo, x, y, genotype,
+                     source, live, v, biomass_whole, seed_count_total,
+                     inflor_mass, standard_note, all_seed_drop, herbivory,
+                     physical_damage, seed_drop, smut) -> data_most
+
+data_most_BA %>% select(site, date, block, plot, density, albedo, x, y, genotype,
+                        source, live, v, biomass_whole, seed_count_total,
+                        inflor_mass, standard_note, all_seed_drop, herbivory,
+                        physical_damage, seed_drop, smut) -> data_most_BA
+
+data_most_WI %>% select(site, date, block, plot, density, albedo, x, y, genotype,
+                        source, live, v, biomass_whole, seed_count_total,
+                        inflor_mass, standard_note, all_seed_drop, herbivory,
+                        physical_damage, seed_drop, smut) -> data_most_WI
+
+data_all <- rbind(data_most, data_most_BA, data_most_WI)
+
+# Subset out seed_drop, physical damage, and herbivory
+data_all %>% 
+  mutate(all_seed_drop = ifelse(is.na(all_seed_drop), 0, all_seed_drop),
+         physical_damage = ifelse(is.na(physical_damage), 0, physical_damage),
+         smut = ifelse(is.na(smut), 0, smut),
+         herbivory = ifelse(is.na(herbivory), 0, herbivory)) -> data_all
+
+data_all %>% 
+  filter(seed_drop == 0 & all_seed_drop == 0 & herbivory == 0 & physical_damage == 0 & smut == 0) -> data_all_sub
+
+data_all_sub %>% 
+  ggplot(aes(x = seed_count_total, y = inflor_mass)) +
+  geom_point()
+
+data_all_sub %>% 
+  filter(seed_count_total == 0 & inflor_mass > 0)
+
+data_all_sub %>% 
+  filter(seed_count_total > 0) -> data_all_sub_seeds
 
 library(lme4)
 
-mod <- lmer(log(seed_count_total) ~ density * albedo + (1|genotype), data = data_most %>% 
-              filter(seed_count_total > 0))
-plot(mod)
-car::Anova(mod)
-sjPlot::plot_model(mod, type = "emm", terms = c("density", "albedo"))
-pairs(emmeans::emmeans(mod, ~albedo|density))
+data_all_sub_seeds %>% 
+  mutate(site_plot = as.factor(paste(site, plot, sep = "_")),
+         genotype = as.factor(genotype)) -> data_all_sub_seeds
+
+data_all_sub %>% 
+  mutate(site_plot = as.factor(paste(site, plot, sep = "_"))) -> data_all_sub
+
+data_all_sub_model <- data_all_sub %>% filter(seed_count_total > 0 & inflor_mass > 0)
+data_all_sub_model <- data_all_sub_model %>% mutate(genotype = as.factor(genotype))
+
+# Get summary stats
+nrow(data_all_sub_model) 
+# 4949
+nrow(data_all %>% filter(seed_count_total > 0 & inflor_mass > 0))
+# 5760
+nrow(data_all)
+# 11856
+
+# Get counts by site × density treatment
+data_all_sub_model %>% 
+  group_by(site, density) %>% 
+  summarize(n = n())
+
+# Fit model to seed count data
+seed_mod <- lmer(log(seed_count_total) ~ density*albedo*site +
+                   (1 + albedo*density + site | genotype) +
+                   (1|site_plot), data = data_all_sub_model)
+
+# Fit model to inflorescence mass data
+inflor_mass_mod <- lmer(log(inflor_mass) ~ density*albedo*site +
+                          (1 + albedo*density + site | genotype) +
+                          (1|site_plot), data = data_all_sub_model)
+
+# Compare the relative weight of random effects
+seed_re <- as.data.frame(VarCorr(seed_mod))$sdcor[c(1:7,23)]
+inflor_re <- as.data.frame(VarCorr(inflor_mass_mod))$sdcor[c(1:7,23)]
+
+# These seem pretty similar
+cbind(seed_re/sum(seed_re), inflor_re/sum(inflor_re))
+
+# Get predicted means by treatment for each model
+seed_plot <- sjPlot::plot_model(seed_mod, type = "emm", terms = c("density", "albedo", "site")) + theme_bw()
+inflor_plot <- sjPlot::plot_model(inflor_mass_mod, type = "emm", terms = c("density", "albedo", "site")) + theme_bw()
+
+seed_plot/inflor_plot
+
+# Get predicted GxE interactions
+seed_plot_RE <- sjPlot::plot_model(seed_mod, type = "pred", pred.type = "re", terms = c("site", "genotype")) +
+  theme_bw() + theme(legend.position = "none") + scale_color_manual(values = rep("black", 95)) + geom_line()
+
+inflor_plot_RE <- sjPlot::plot_model(inflor_mass_mod, type = "pred", pred.type = "re", terms = c("site", "genotype")) +
+  theme_bw() + theme(legend.position = "none") + scale_color_manual(values = rep("black", 95)) + geom_line()
+
+seed_plot_RE / inflor_plot_RE
+
+# Plot predicted means
+plot(predict(seed_mod), predict(inflor_mass_mod), xlab = "seed model predictions", ylab = "inflor. mass model predictions")
+# Plot raw data
+plot(log(data_all_sub_model$seed_count_total), log(data_all_sub_model$inflor_mass),
+     xlab = "log(seed count)", ylab = "log(inflor. mass)")
