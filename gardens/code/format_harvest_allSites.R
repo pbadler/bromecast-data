@@ -319,6 +319,8 @@ data_all_sub %>%
 data_all_sub_model <- data_all_sub %>% filter(seed_count_total > 0 & inflor_mass > 0)
 data_all_sub_model <- data_all_sub_model %>% mutate(genotype = as.factor(genotype))
 
+## Comparison of analyses: seed count, inflor mass, total plant biomass
+
 # Get summary stats
 nrow(data_all_sub_model) 
 # 4949
@@ -342,18 +344,28 @@ inflor_mass_mod <- lmer(log(inflor_mass) ~ density*albedo*site +
                           (1 + albedo*density + site | genotype) +
                           (1|site_plot), data = data_all_sub_model)
 
+# Fit model to total plant biomass data
+data_all_sub_model %>% 
+  mutate(whole_biomass = inflor_mass + biomass_whole) -> data_all_sub_model
+
+whole_mass_mod <- lmer(log(whole_biomass) ~ density*albedo*site +
+                          (1 + albedo*density + site | genotype) +
+                          (1|site_plot), data = data_all_sub_model)
+
 # Compare the relative weight of random effects
 seed_re <- as.data.frame(VarCorr(seed_mod))$sdcor[c(1:7,23)]
 inflor_re <- as.data.frame(VarCorr(inflor_mass_mod))$sdcor[c(1:7,23)]
+whole_re <- as.data.frame(VarCorr(whole_mass_mod))$sdcor[c(1:7,23)]
 
 # These seem pretty similar
-cbind(seed_re/sum(seed_re), inflor_re/sum(inflor_re))
+cbind(seed_re/sum(seed_re), inflor_re/sum(inflor_re), whole_re/sum(whole_re))
 
 # Get predicted means by treatment for each model
 seed_plot <- sjPlot::plot_model(seed_mod, type = "emm", terms = c("density", "albedo", "site")) + theme_bw()
 inflor_plot <- sjPlot::plot_model(inflor_mass_mod, type = "emm", terms = c("density", "albedo", "site")) + theme_bw()
+whole_plot <- sjPlot::plot_model(whole_mass_mod, type = "emm", terms = c("density", "albedo", "site")) + theme_bw()
 
-seed_plot/inflor_plot
+seed_plot/inflor_plot/whole_plot
 
 # Get predicted GxE interactions
 seed_plot_RE <- sjPlot::plot_model(seed_mod, type = "pred", pred.type = "re", terms = c("site", "genotype")) +
@@ -362,10 +374,19 @@ seed_plot_RE <- sjPlot::plot_model(seed_mod, type = "pred", pred.type = "re", te
 inflor_plot_RE <- sjPlot::plot_model(inflor_mass_mod, type = "pred", pred.type = "re", terms = c("site", "genotype")) +
   theme_bw() + theme(legend.position = "none") + scale_color_manual(values = rep("black", 95)) + geom_line()
 
-seed_plot_RE / inflor_plot_RE
+whole_plot_RE <- sjPlot::plot_model(whole_mass_mod, type = "pred", pred.type = "re", terms = c("site", "genotype")) +
+  theme_bw() + theme(legend.position = "none") + scale_color_manual(values = rep("black", 95)) + geom_line()
+
+seed_plot_RE + inflor_plot_RE + whole_plot_RE
 
 # Plot predicted means
 plot(predict(seed_mod), predict(inflor_mass_mod), xlab = "seed model predictions", ylab = "inflor. mass model predictions")
+summary(lm(predict(seed_mod) ~ predict(inflor_mass_mod)))
+plot(predict(seed_mod), predict(whole_mass_mod), xlab = "seed model predictions", ylab = "inflor. mass model predictions")
+summary(lm(predict(seed_mod) ~ predict(whole_mass_mod)))
+
 # Plot raw data
 plot(log(data_all_sub_model$seed_count_total), log(data_all_sub_model$inflor_mass),
      xlab = "log(seed count)", ylab = "log(inflor. mass)")
+plot(log(data_all_sub_model$seed_count_total), log(data_all_sub_model$whole_biomass),
+     xlab = "log(seed count)", ylab = "log(total mass)")
