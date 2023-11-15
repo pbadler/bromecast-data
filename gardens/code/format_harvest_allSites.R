@@ -5,7 +5,7 @@ library(tidyverse)
 `%notin%` <- Negate(`%in%`)
 
 # Read in harvest data (last updated 10/2/2023)
-harvest <- read_csv("gardens/rawdata/CG_harvest2022 - 10-13-2023.csv")
+harvest <- read_csv("gardens/rawdata/CG_harvest2022 - 11-13-2023.csv")
 
 # Make column names all lower case
 names(harvest) <- tolower(names(harvest))
@@ -269,6 +269,78 @@ merge(data_most_BA, notes_actions_keep_BA, all.x = T) %>%
          smut = ifelse(standard_note == "smut", 1, 0),
          location_issue = ifelse(standard_note == "location_issue", 1, 0)) -> data_most_BA
 
+
+## Cheyenne (CH) ####
+harvest %>% 
+  # Right now we have complete data up to block 8
+  filter(site == "Cheyenne" & block < 9) %>% 
+  mutate(id = paste(block, density, albedo, x, y, sep = "_")) -> harvestCH
+
+# Create data subset 1: plants that did not survive to harvest
+harvestCH %>% 
+  filter(is.na(live) & is.na(seed_count_sub) & is.na(biomass_whole)) %>% 
+  mutate(seed_count_total = NA) -> calib_data_nosurviveCH
+
+# Create data subset 2: plants that survived but didn't make seeds
+harvestCH %>% 
+  filter(live == "Y" & (biomass_whole)>0 & inflor_mass == 0 & seed_count_sub == 0) %>% 
+  mutate(seed_count_total = 0)-> calib_data_noseedsCH
+
+# Create data subset 3: harvested seeds that were subsetted
+harvestCH %>% 
+  filter(inflor_mass > 0 & biomass_sub > 0 & seed_mass_sub > 0) %>% 
+  mutate(inflor_mass_sub = biomass_sub + seed_mass_sub,
+         ratio = inflor_mass / inflor_mass_sub) %>% 
+  # Some plants have more inflor_mass_sub than inflor_mass which doesn't make
+  # sense
+  mutate(positive = ifelse(ratio >= 1, 1, 0)) %>% 
+  filter(positive == 1 & seed_count_sub >= 50) %>% 
+  mutate(seed_count_total = round(seed_count_sub * ratio)) %>%
+  # There are 3 reps that have 0 seeds with 0 weight
+  mutate(seed_count_total = ifelse(seed_count_total == "NaN", 0, seed_count_total)) %>% 
+  select(-positive, -inflor_mass_sub, -ratio) -> calib_data_subsettedCH
+
+# Create data subset 4: all seeds were counted (<50)
+harvestCH %>% 
+  filter(inflor_mass > 0 & seed_mass_sub > 0) %>% 
+  filter(seed_count_sub < 50 & inflor_mass > 0) %>% 
+  mutate(seed_count_total = seed_count_sub) -> calib_data_notsubsetCH
+
+# Create data subset 5: No seeds but positive inflorescence mass
+harvestCH %>% 
+  filter(seed_count_sub == 0 & seed_mass_sub == 0 & inflor_mass > 0) %>% 
+  mutate(seed_count_total = 0)-> calib_data_inflornoseedsCH
+
+# Bind data subsets 1-5 back together
+rbind(calib_data_subsettedCH, calib_data_noseedsCH, calib_data_nosurviveCH,
+      calib_data_notsubsetCH, calib_data_inflornoseedsCH) %>% 
+  arrange(id) -> data_mostCH
+
+data_mostCH %>% 
+  distinct() -> data_mostCH
+
+harvestCH %>% 
+  filter(id %notin% data_mostCH$id) %>% 
+  filter(seed_count_sub == 0 | seed_count_sub == 3 | is.na(seed_count_sub) | seed_count_sub == 24) %>% 
+  mutate(seed_count_total = case_when(seed_count_sub == 0 ~ 0,
+                   seed_count_sub == 3 ~ 0,
+                   seed_count_sub == 24 ~ 24,
+                   is.na(seed_count_sub) ~ 0)) -> add_extra_cases
+
+harvestCH %>% 
+  filter(id %notin% data_mostCH$id) %>% 
+  filter(seed_count_sub == 50) %>% 
+  mutate(inflor_mass_sub = biomass_sub + seed_mass_sub,
+         ratio = inflor_mass / inflor_mass_sub) %>% 
+  # Some plants have more inflor_mass_sub than inflor_mass which doesn't make
+  # sense
+  mutate(positive = ifelse(ratio >= 1, 1, 0)) %>% 
+  filter(positive == 0 & ratio > 0.95) %>% 
+  mutate(seed_count_total = seed_count_sub) %>% 
+  select(-positive, -inflor_mass_sub, -ratio) -> add_extra_cases2
+  
+rbind(data_mostCH, add_extra_cases, add_extra_cases2) -> data_mostCH
+
 ## Bring data sets together ####
 data_most %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                      source, live, v, biomass_whole, seed_count_total,
@@ -284,6 +356,8 @@ data_most_WI %>% select(site, date, block, plot, density, albedo, x, y, genotype
                         source, live, v, biomass_whole, seed_count_total,
                         inflor_mass, standard_note, all_seed_drop, herbivory,
                         physical_damage, seed_drop, smut) -> data_most_WI
+
+data_mostCH %>% 
 
 data_all <- rbind(data_most, data_most_BA, data_most_WI)
 
