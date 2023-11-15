@@ -115,16 +115,10 @@ harvestWI %>%
 
 # Create data subset 2: plants that survived but didn't make seeds
 harvestWI %>% 
-  filter(live == "Y" & (biomass_whole)>0 & inflor_mass ==0) %>% 
+  filter(live == "Y" & (biomass_whole)>0 & seed_count_sub ==0) %>% 
   mutate(seed_count_total = 0)-> calib_data_noseeds_WI
 
 # Create data subset 3: harvested seeds that were subsetted
-
-# Fix inflor_mass for one observation
-harvestWI[which(harvestWI$plot == 5.2 &
-                  harvestWI$x == 16 &
-                  harvestWI$y == 5),"inflor_mass"] <- 0.9
-
 harvestWI %>% 
   filter(complete.cases(inflor_mass) & complete.cases(biomass_sub) & complete.cases(seed_mass_sub)) %>% 
   mutate(inflor_mass_sub = biomass_sub + seed_mass_sub,
@@ -132,10 +126,8 @@ harvestWI %>%
   # Some plants have more inflor_mass_sub than inflor_mass which doesn't make
   # sense
   mutate(positive = ifelse(ratio >= 1, 1, 0)) %>% 
-  filter(positive == 1) %>% 
+  filter(positive == 1 & seed_count_sub >=50) %>% 
   mutate(seed_count_total = round(seed_count_sub * ratio)) %>%
-  # There are 3 reps that have 1 seed with 0 weight
-  mutate(seed_count_total = ifelse(seed_count_total == Inf, 1, seed_count_total)) %>% 
   select(-positive, -inflor_mass_sub, -ratio) -> calib_data_subsetted_WI
 
 # Create data subset 4
@@ -144,22 +136,33 @@ harvestWI %>%
   mutate(inflor_mass_sub = biomass_sub + seed_mass_sub,
          ratio = inflor_mass / inflor_mass_sub) %>% 
   mutate(positive = ifelse(ratio >= 1, 1, 0)) %>% 
-  filter(positive == 0) %>% 
+  filter(positive == 0 & seed_count_sub >=50) %>% 
   mutate(diff = inflor_mass_sub - inflor_mass) %>% 
   # Most of these are just rounding errors
   filter(diff < 0.05) %>% 
-  mutate(seed_count_total = round(seed_count_sub * ratio)) %>% 
+  # Because this is so close to 1, we can assume 50 seeds is reasonable so set
+  # ratio to 1
+  mutate(seed_count_total = round(seed_count_sub * 1)) %>% 
   select(-inflor_mass_sub, - positive, -ratio, -diff) -> calib_data_notsubset_WI
 
-# Bind data subsets 1-4 back together
-rbind(calib_data_subsetted_WI, calib_data_noseeds_WI, calib_data_nosurvive_WI, calib_data_notsubset_WI) %>% 
+# Create data subset 5: harvested seeds that weren't subsetted because all were
+# counted
+harvestWI %>% 
+  filter(complete.cases(inflor_mass) & complete.cases(biomass_sub) & complete.cases(seed_mass_sub)) %>% 
+  filter(seed_count_sub < 50 & seed_count_sub > 0) %>% 
+  mutate(seed_count_total = seed_count_sub) -> calib_data_nosubsetWI
+
+# Bind data subsets 1-5 back together
+rbind(calib_data_subsetted_WI, calib_data_noseeds_WI, calib_data_nosurvive_WI,
+      calib_data_notsubset_WI, calib_data_nosubsetWI) %>% 
   arrange(id) -> data_most_WI
 
-# Still missing 23 observations that have issues
+# Still missing 1 observations that have issues
 harvestWI %>% 
-  filter(id %notin% data_most_WI$id) %>% 
-  select(id, biomass_whole, inflor_mass, seed_count_sub, seed_mass_sub, biomass_sub) %>% 
-  print(n = Inf) 
+  filter(id == "7.4_low_white_10_4") %>% 
+  mutate(seed_count_total = 0) -> add_extra_WI 
+
+data_allWI <- rbind(data_most_WI, add_extra_WI)
 
 # Read in notes information
 notes_actions_WI <- read_csv("gardens/deriveddata/WI2022_harvest_notes_actions.csv")
@@ -168,16 +171,19 @@ notes_actions_WI %>%
   select(notes, standard_note) -> notes_actions_keep_WI
 
 # Merge together with the rest of the data
-merge(data_most_WI, notes_actions_keep_WI, all.x = T) %>% 
-  mutate(all_seed_drop = ifelse(standard_note == "allseeddrop", 1, 0),
-         all_unripe = ifelse(standard_note == "allunripe", 1, 0),
-         herbivory = ifelse(standard_note == "herbivory", 1, 0),
-         physical_damage = ifelse(standard_note == "physicaldamage", 1, 0),
+merge(data_allWI, notes_actions_keep_WI, all.x = T) %>% 
+  mutate(all_seed_drop = ifelse(standard_note == "allseeddrop", 1, NA),
+         all_unripe = ifelse(standard_note == "allunripe", 1, NA),
+         herbivory = ifelse(standard_note == "herbivory", 1, NA),
+         physical_damage = ifelse(standard_note == "physicaldamage", 1, NA),
          seed_drop = case_when(standard_note == "seeddrop" ~ 1,
-                               drop_seed == "Y" ~ 1,
-                               T ~ 0),
-         smut = ifelse(standard_note == "smut", 1, 0),
-         location_issue = ifelse(standard_note == "location_issue", 1, 0)) -> data_most_WI
+                               T ~ NA),
+         smut = ifelse(standard_note == "smut", 1, NA),
+         location_issue = ifelse(standard_note == "location_issue", 1, NA)) -> data_allWI
+
+# Add additional seed drop information
+data_allWI %>% 
+  mutate(seed_drop = ifelse(drop_seed == "Y" | drop_seed == "y", 1, seed_drop)) -> data_allWI
 
 ## Boise High (BA) ####
 # Filter to be just sheep station and make unique ID
@@ -188,11 +194,11 @@ harvest %>%
 # Create data subset 1: plants that did not survive to harvest
 harvestBA %>% 
   filter(is.na(live) & is.na(seed_count_sub) & is.na(biomass_whole)) %>% 
-  mutate(seed_count_total = NA) -> calib_data_nosurvive_BA
+  mutate(seed_count_total = 0) -> calib_data_nosurvive_BA
 
 # Create data subset 2: plants that survived but didn't make seeds
 harvestBA %>% 
-  filter(live == "Y" & (biomass_whole)>0 & inflor_mass ==0) %>% 
+  filter(live == "Y" & (biomass_whole)>0 & seed_count_sub ==0) %>% 
   mutate(seed_count_total = 0)-> calib_data_noseeds_BA
 
 # Create data subset 3: harvested seeds that were subsetted
@@ -203,10 +209,8 @@ harvestBA %>%
   # Some plants have more inflor_mass_sub than inflor_mass which doesn't make
   # sense
   mutate(positive = ifelse(ratio >= 1, 1, 0)) %>% 
-  filter(positive == 1) %>% 
+  filter(positive == 1 & seed_count_sub >=50) %>% 
   mutate(seed_count_total = round(seed_count_sub * ratio)) %>%
-  # There are 3 reps that have 1 seed with 0 weight
-  mutate(seed_count_total = ifelse(seed_count_total == Inf, 1, seed_count_total)) %>% 
   select(-positive, -inflor_mass_sub, -ratio) -> calib_data_subsetted_BA
 
 # Create data subset 4
@@ -215,22 +219,26 @@ harvestBA %>%
   mutate(inflor_mass_sub = biomass_sub + seed_mass_sub,
          ratio = inflor_mass / inflor_mass_sub) %>% 
   mutate(positive = ifelse(ratio >= 1, 1, 0)) %>% 
-  filter(positive == 0) %>% 
+  filter(positive == 0 & seed_count_sub >=50) %>% 
   mutate(diff = inflor_mass_sub - inflor_mass) %>% 
   # Most of these are just rounding errors
   filter(diff < 0.05) %>% 
-  mutate(seed_count_total = round(seed_count_sub * ratio)) %>% 
+  # Because this is so close to 1, we can assume 50 seeds is reasonable so set
+  # ratio to 1
+  mutate(seed_count_total = round(seed_count_sub * 1)) %>% 
   select(-inflor_mass_sub, - positive, -ratio, -diff) -> calib_data_notsubset_BA
 
-# Bind data subsets 1-4 back together
-rbind(calib_data_subsetted_BA, calib_data_noseeds_BA, calib_data_nosurvive_BA, calib_data_notsubset_BA) %>% 
-  arrange(id) -> data_most_BA
-
-# Still missing 3 observations that have issues
+# Create data subset 5: harvested seeds that weren't subsetted because all were
+# counted
 harvestBA %>% 
-  filter(id %notin% data_most_BA$id) %>% 
-  select(id, biomass_whole, inflor_mass, seed_count_sub, seed_mass_sub, biomass_sub) %>% 
-  print(n = Inf)
+  filter(complete.cases(inflor_mass) & complete.cases(biomass_sub) & complete.cases(seed_mass_sub)) %>% 
+  filter(seed_count_sub < 50 & seed_count_sub > 0) %>% 
+  mutate(seed_count_total = seed_count_sub) -> calib_data_nosubset_BA
+
+# Bind data subsets 1-4 back together
+rbind(calib_data_subsetted_BA, calib_data_noseeds_BA, calib_data_nosurvive_BA, calib_data_notsubset_BA,
+      calib_data_nosubset_BA) %>% 
+  arrange(id) -> data_allBA
 
 # Read in notes information
 notes_actions_BA <- read_csv("gardens/deriveddata/BA2022_harvest_notes_actions.csv")
@@ -239,17 +247,18 @@ notes_actions_BA %>%
   select(notes, standard_note) -> notes_actions_keep_BA
 
 # Merge together with the rest of the data
-merge(data_most_BA, notes_actions_keep_BA, all.x = T) %>% 
-  mutate(all_seed_drop = ifelse(standard_note == "allseeddrop", 1, 0),
-         all_unripe = ifelse(standard_note == "allunripe", 1, 0),
-         herbivory = ifelse(standard_note == "herbivory", 1, 0),
-         physical_damage = ifelse(standard_note == "physicaldamage", 1, 0),
-         seed_drop = case_when(standard_note == "seeddrop" ~ 1,
-                               drop_seed == "Y" ~ 1,
-                               T ~ 0),
-         smut = ifelse(standard_note == "smut", 1, 0),
-         location_issue = ifelse(standard_note == "location_issue", 1, 0)) -> data_most_BA
+merge(data_allBA, notes_actions_keep_BA, all.x = T) %>% 
+  mutate(all_seed_drop = ifelse(standard_note == "allseeddrop", 1, NA),
+         all_unripe = ifelse(standard_note == "allunripe", 1, NA),
+         herbivory = ifelse(standard_note == "herbivory", 1, NA),
+         physical_damage = ifelse(standard_note == "physicaldamage", 1, NA),
+         seed_drop = ifelse(standard_note == "seeddrop", 1, NA),
+         smut = ifelse(standard_note == "smut", 1, NA),
+         location_issue = ifelse(standard_note == "location_issue", 1, NA)) -> data_allBA
 
+# Add additional seed drop information
+data_allBA %>% 
+  mutate(seed_drop = ifelse(drop_seed == "Y" | drop_seed == "y", 1, seed_drop)) -> data_allBA
 
 ## Cheyenne (CH) ####
 harvest %>% 
@@ -297,9 +306,7 @@ rbind(calib_data_subsettedCH, calib_data_noseedsCH, calib_data_nosurviveCH,
       calib_data_notsubsetCH, calib_data_inflornoseedsCH) %>% 
   arrange(id) -> data_mostCH
 
-data_mostCH %>% 
-  distinct() -> data_mostCH
-
+# Fix observations by hand that aren't being pulled above
 harvestCH %>% 
   filter(id %notin% data_mostCH$id) %>% 
   filter(seed_count_sub == 0 | seed_count_sub == 3 | is.na(seed_count_sub) | seed_count_sub == 24) %>% 
@@ -308,6 +315,7 @@ harvestCH %>%
                    seed_count_sub == 24 ~ 24,
                    is.na(seed_count_sub) ~ 0)) -> add_extra_cases
 
+# Fix last set of observations that have close to 1 ratio
 harvestCH %>% 
   filter(id %notin% data_mostCH$id) %>% 
   filter(seed_count_sub == 50) %>% 
@@ -322,35 +330,66 @@ harvestCH %>%
   
 rbind(data_mostCH, add_extra_cases, add_extra_cases2) -> data_mostCH
 
+# Read in notes information
+notes_actions_CH <- read_csv("gardens/deriveddata/CH2022_harvest_notes_actions.csv")
+notes_actions_CH %>% 
+  filter(action == "flag") %>% 
+  select(notes, standard_note) -> notes_actions_keep_CH
+
+# Merge together with the rest of the data
+merge(data_mostCH, notes_actions_keep_CH, all.x = T) %>% 
+  mutate(all_seed_drop = ifelse(standard_note == "allseeddrop", 1, NA),
+         all_unripe = ifelse(standard_note == "allunripe", 1, NA),
+         herbivory = ifelse(standard_note == "herbivory", 1, NA),
+         physical_damage = ifelse(standard_note == "physicaldamage", 1, NA),
+         seed_drop = ifelse(standard_note == "seeddrop", 1, NA),
+         smut = ifelse(standard_note == "smut", 1, NA),
+         location_issue = ifelse(standard_note == "location_issue", 1, NA)) -> data_mostCH
+
+# Add additional seed drop information
+data_mostCH %>% 
+  mutate(seed_drop = ifelse(drop_seed == "Y" | drop_seed == "y", 1, seed_drop)) -> data_mostCH
+
+
 ## Bring data sets together ####
-data_most %>% select(site, date, block, plot, density, albedo, x, y, genotype,
+data_allSS %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                      source, live, v, biomass_whole, seed_count_total,
                      inflor_mass, standard_note, all_seed_drop, herbivory,
-                     physical_damage, seed_drop, smut) -> data_most
+                     physical_damage, seed_drop, smut) -> data_allSS
 
-data_most_BA %>% select(site, date, block, plot, density, albedo, x, y, genotype,
+data_allBA %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                         source, live, v, biomass_whole, seed_count_total,
                         inflor_mass, standard_note, all_seed_drop, herbivory,
-                        physical_damage, seed_drop, smut) -> data_most_BA
+                        physical_damage, seed_drop, smut) -> data_allBA
 
-data_most_WI %>% select(site, date, block, plot, density, albedo, x, y, genotype,
+data_allWI %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                         source, live, v, biomass_whole, seed_count_total,
                         inflor_mass, standard_note, all_seed_drop, herbivory,
-                        physical_damage, seed_drop, smut) -> data_most_WI
+                        physical_damage, seed_drop, smut) -> data_allWI
 
 data_mostCH %>% 
+  select(site, date, block, plot, density, albedo, x, y, genotype,
+         source, live, v, biomass_whole, seed_count_total,
+         inflor_mass, standard_note, all_seed_drop, herbivory,
+         physical_damage, seed_drop, smut) -> data_mostCH
 
-data_all <- rbind(data_most, data_most_BA, data_most_WI)
+data_all <- rbind(data_allSS, data_allBA, data_allWI, data_mostCH)
+
+# Remove all other sub data sets 
+rm(list=setdiff(ls(), "data_all"))
 
 # Subset out seed_drop, physical damage, and herbivory
 data_all %>% 
-  mutate(all_seed_drop = ifelse(is.na(all_seed_drop), 0, all_seed_drop),
-         physical_damage = ifelse(is.na(physical_damage), 0, physical_damage),
-         smut = ifelse(is.na(smut), 0, smut),
-         herbivory = ifelse(is.na(herbivory), 0, herbivory)) -> data_all
+  mutate(all_seed_drop = ifelse(is.na(all_seed_drop),NA, all_seed_drop),
+         physical_damage = ifelse(is.na(physical_damage), NA, physical_damage),
+         smut = ifelse(is.na(smut), NA, smut),
+         herbivory = ifelse(is.na(herbivory), NA, herbivory)) -> data_all
 
 data_all %>% 
-  filter(seed_drop == 0 & all_seed_drop == 0 & herbivory == 0 & physical_damage == 0 & smut == 0) -> data_all_sub
+  filter(is.na(seed_drop) & is.na(all_seed_drop) & is.na(herbivory) & is.na(physical_damage) & is.na(smut)) -> data_all_sub
+
+data_all_sub %>% 
+  filter(seed_count_total < 50 & inflor_mass > 0.3)
 
 data_all_sub %>% 
   ggplot(aes(x = seed_count_total, y = inflor_mass)) +
