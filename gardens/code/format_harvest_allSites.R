@@ -401,6 +401,19 @@ data_all <- rbind(data_allSS, data_allBA, data_allWI, data_mostCH)
 # Remove all other sub data sets 
 rm(list=setdiff(ls(), "data_all"))
 
+# We have some plants that are highlighted in the CG seeds document. These
+# either mean the plant should have been there but wasn't (most), or that a
+# plant was there at harvest that shouldn't be there (a few). Upon a cursory
+# look, it's not clear why there were so many plants (n = 223) where this was a
+# problem (no systematic patterns). 
+data_problems <- read_csv("gardens/rawdata/CG_harvest2022_problems.csv")
+names(data_problems) <- tolower(names(data_problems))
+data_problems$id <- paste(data_problems$plot, data_problems$density,
+                          data_problems$albedo, data_problems$x,
+                          data_problems$y, sep = "_")
+# Remove extra NA rows
+data_problems <- data_problems[1:223,]
+
 # Subset out seed_drop, physical damage, and herbivory
 data_all %>% 
   mutate(all_seed_drop = ifelse(is.na(all_seed_drop),NA, all_seed_drop),
@@ -408,53 +421,48 @@ data_all %>%
          smut = ifelse(is.na(smut), NA, smut),
          herbivory = ifelse(is.na(herbivory), NA, herbivory)) -> data_all
 
-data_all %>% 
-  filter(is.na(seed_drop) & is.na(all_seed_drop) & is.na(herbivory) & is.na(physical_damage) & is.na(smut)) -> data_all_sub
-
 data_all_sub %>% 
-  filter(seed_count_total < 50 & inflor_mass > 0.3)
-
-data_all_sub %>% 
-  ggplot(aes(x = seed_count_total, y = inflor_mass)) +
-  geom_point()
-
-data_all_sub %>% 
-  filter(seed_count_total == 0 & inflor_mass > 0)
-
-data_all_sub %>% 
-  filter(seed_count_total > 0) -> data_all_sub_seeds
-
-library(lme4)
+  filter(seed_count_total > 0 & inflor_mass > 0) -> data_all_sub_seeds
 
 data_all_sub_seeds %>% 
   mutate(site_plot = as.factor(paste(site, plot, sep = "_")),
          genotype = as.factor(genotype)) -> data_all_sub_seeds
 
-data_all_sub %>% 
-  mutate(site_plot = as.factor(paste(site, plot, sep = "_"))) -> data_all_sub
-
-data_all_sub_model <- data_all_sub %>% filter(seed_count_total > 0 & inflor_mass > 0)
-data_all_sub_model <- data_all_sub_model %>% mutate(genotype = as.factor(genotype))
-
 ## Comparison of analyses: seed count, inflor mass, total plant biomass
 
 # Get summary stats
-nrow(data_all_sub_model) 
-# 4949
+nrow(data_all_sub_seeds) 
+# 5832
 nrow(data_all %>% filter(seed_count_total > 0 & inflor_mass > 0))
-# 5760
+# 6849
 nrow(data_all)
-# 11856
+# 15199
 
 # Get counts by site × density treatment
-data_all_sub_model %>% 
+data_all_sub_seeds %>% 
   group_by(site, density) %>% 
   summarize(n = n())
 
 # Fit model to seed count data
-seed_mod <- lmer(log(seed_count_total) ~ density*albedo*site +
-                   (1 + albedo*density + site | genotype) +
-                   (1|site_plot), data = data_all_sub_model)
+seed_mod <- glmer(seed_count_total ~ density*albedo*site +
+                   (1|genotype:site) + (1|genotype) +
+                   (1|site_plot), data = data_all_sub_seeds,
+                  family = "poisson")
+MuMIn::r.squaredGLMM(seed_mod)
+
+summary(seed_mod)
+
+seed_mod2 <- lmer(log(seed_count_total) ~ density*albedo*site +
+                   (0+site|genotype) +
+                   (1|site_plot), data = data_all_sub_seeds)
+
+plot(predict(seed_mod2)~ log(data_all_sub_seeds$seed_count_total))
+abline(a = 0, b = 1)
+
+sjPlot::plot_model(seed_mod2, type = "pred", pred.type = "re",
+                   terms = c("site", "genotype"), ci.lvl = NA) +
+  theme(legend.position = "none") + scale_color_manual(values = rainbow(95)) +
+  geom_line()
 
 # Fit model to inflorescence mass data
 inflor_mass_mod <- lmer(log(inflor_mass) ~ density*albedo*site +
