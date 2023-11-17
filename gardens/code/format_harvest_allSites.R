@@ -27,31 +27,46 @@ harvestSS %>%
   filter(live == "Y" & (biomass_whole)> 0 & seed_count_sub == 0) %>% 
   mutate(seed_count_total = 0)-> calib_data_noseeds
 
-# Create data subset 3: harvested seeds that were subsetted
+# Up through SS plot 14, there was a distinction between seed_count_whole and
+# seed_count_sub such that we only will consider all seeds counted if they are
+# in the seed_count_whole column. After that plot (and for the rest of the data
+# across sites), all counts were recorded as seed_count_sub. For those, if they
+# were less than 50 seeds, we can assume all seeds were counted.
+
+# Create data subset 3: harvested seeds that were subsetted for plots (1-14)
 harvestSS %>% 
+  filter(plot <= 14) %>% 
   filter(complete.cases(inflor_mass) & complete.cases(biomass_sub) & complete.cases(seed_mass_sub)) %>% 
   mutate(inflor_mass_sub = biomass_sub + seed_mass_sub,
          ratio = inflor_mass / inflor_mass_sub) %>% 
   # Some plants have more inflor_mass_sub than inflor_mass which doesn't make
   # sense
   mutate(positive = ifelse(ratio >= 1, 1, 0)) %>% 
-  filter(positive == 1 & seed_count_sub >= 50) %>% 
+  filter(positive == 1) %>% 
   mutate(seed_count_total = round(seed_count_sub * ratio)) %>%
   # There are 3 reps that have 1 seed with 0 weight
   mutate(seed_count_total = ifelse(seed_count_total == Inf, 1, seed_count_total)) %>% 
-  select(-positive, -inflor_mass_sub, -ratio) -> calib_data_subsetted
+  select(-positive, -inflor_mass_sub, -ratio) -> calib_data_subsetted_14
+
+# Create data subset 3: harvested seeds that were subsetted for plots (15-50)
+harvestSS %>% 
+  filter(plot > 14) %>% 
+  filter(complete.cases(inflor_mass) & complete.cases(biomass_sub) & complete.cases(seed_mass_sub)) %>% 
+  mutate(inflor_mass_sub = biomass_sub + seed_mass_sub,
+         ratio = inflor_mass / inflor_mass_sub) %>% 
+  # Some plants have more inflor_mass_sub than inflor_mass which doesn't make
+  # sense
+  mutate(positive = ifelse(ratio >= 1, 1, 0)) %>% 
+  filter(positive == 1) %>% 
+  mutate(seed_count_total = round(seed_count_sub * ratio)) %>%
+  # There are 3 reps that have 1 seed with 0 weight
+  mutate(seed_count_total = ifelse(seed_count_total == Inf, 1, seed_count_total)) %>% 
+  select(-positive, -inflor_mass_sub, -ratio) -> calib_data_subsetted_rest
 
 # Create data subset 4: harvested seeds where all were counted
 harvestSS %>% 
   filter(complete.cases(seed_count_whole)) %>% 
   mutate(seed_count_total = seed_count_whole) -> calib_data_whole
-
-# Create data subset 5: harvested seeds that weren't subsetted because all were
-# counted
-harvestSS %>% 
-  filter(complete.cases(inflor_mass) & complete.cases(biomass_sub) & complete.cases(seed_mass_sub)) %>% 
-  filter(seed_count_sub < 50 & seed_count_sub > 0) %>% 
-  mutate(seed_count_total = seed_count_sub) -> calib_data_nosubset
 
 # Create data subset 5
 harvestSS %>% 
@@ -59,7 +74,7 @@ harvestSS %>%
   mutate(inflor_mass_sub = biomass_sub + seed_mass_sub,
          ratio = inflor_mass / inflor_mass_sub) %>% 
   mutate(positive = ifelse(ratio >= 1, 1, 0)) %>% 
-  filter(positive == 0 & seed_count_sub >= 50) %>% 
+  filter(positive == 0) %>% 
   mutate(diff = inflor_mass_sub - inflor_mass) %>% 
   # Most of these are just rounding errors
   filter(diff < 0.05) %>% 
@@ -70,13 +85,21 @@ harvestSS %>%
 
 # Create data subset 6
 harvestSS %>% 
-  filter(id %in% c("8_high_white_8_2", "19_high_white_4_4")) %>% 
-  mutate(seed_count_total = 0) -> add_extras2
+  filter(id %in% c("8_high_white_8_2", "19_high_white_4_4",
+                   "17_high_black_7_1", "19_high_white_5_3")) %>% 
+  mutate(seed_count_total = c(0,0,1,1)) -> add_extras2
 
 # Bind data subsets 1-5 back together
-rbind(calib_data_subsetted, calib_data_whole, calib_data_noseeds,
-      calib_data_nosurvive, add_extras, add_extras2, calib_data_nosubset) %>% 
+rbind(calib_data_subsetted_14, calib_data_subsetted_rest, calib_data_whole,
+      calib_data_noseeds, calib_data_nosurvive, add_extras, add_extras2) %>% 
   arrange(id) -> data_allSS
+
+data_allSS %>% 
+  distinct() -> data_allSS
+
+data_allSS %>% 
+  filter(seed_count_total < 100 & inflor_mass > 1) %>% 
+  select(id, seed_count_sub, notes)
 
 # Read in notes information
 notes_actions <- read_csv("gardens/deriveddata/SS2022_harvest_notes_actions.csv")
