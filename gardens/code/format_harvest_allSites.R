@@ -4,8 +4,8 @@ library(tidyverse)
 # Set 'not in' operator
 `%notin%` <- Negate(`%in%`)
 
-# Read in harvest data (last updated 10/2/2023)
-harvest <- read_csv("gardens/rawdata/CG_harvest2022 - 11-13-2023.csv")
+# Read in harvest data (last updated 11/29/2023)
+harvest <- read_csv("gardens/rawdata/CG_harvest2022 - 11-29-2023.csv")
 
 # Make column names all lower case
 names(harvest) <- tolower(names(harvest))
@@ -285,8 +285,7 @@ data_allBA %>%
 
 ## Cheyenne (CH) ####
 harvest %>% 
-  # Right now we have complete data up to block 8
-  filter(site == "Cheyenne" & block < 9) %>% 
+  filter(site == "Cheyenne") %>% 
   mutate(id = paste(block, density, albedo, x, y, sep = "_")) -> harvestCH
 
 # Create data subset 1: plants that did not survive to harvest
@@ -421,7 +420,7 @@ data_all %>%
          smut = ifelse(is.na(smut), NA, smut),
          herbivory = ifelse(is.na(herbivory), NA, herbivory)) -> data_all
 
-data_all_sub %>% 
+data_all %>% 
   filter(seed_count_total > 0 & inflor_mass > 0) -> data_all_sub_seeds
 
 data_all_sub_seeds %>% 
@@ -432,11 +431,9 @@ data_all_sub_seeds %>%
 
 # Get summary stats
 nrow(data_all_sub_seeds) 
-# 5832
-nrow(data_all %>% filter(seed_count_total > 0 & inflor_mass > 0))
-# 6849
+# 7050
 nrow(data_all)
-# 15199
+# 15998
 
 # Get counts by site × density treatment
 data_all_sub_seeds %>% 
@@ -444,20 +441,49 @@ data_all_sub_seeds %>%
   summarize(n = n())
 
 # Fit model to seed count data
-seed_mod <- glmer(seed_count_total ~ density*albedo*site +
+seed_mod <- lmer(log(seed_count_total) ~ density*albedo*site +
                    (1|genotype:site) + (1|genotype) +
+                   (1|site_plot), data = data_all_sub_seeds)
+
+seed_mod_pois <- glmer(seed_count_total ~ density*albedo*site +
+                   (1|genotype:site)+ (1|genotype)+
                    (1|site_plot), data = data_all_sub_seeds,
-                  family = "poisson")
-MuMIn::r.squaredGLMM(seed_mod)
+                   family = "poisson")
+
+anova(seed_mod_pois)
+
+logLik(seed_mod)
+
+sjPlot::plot_model(seed_mod_pois, type = "diag")
+
 
 summary(seed_mod)
+
+anova(seed_mod)
+
+MuMIn::r.squaredGLMM(seed_mod)
 
 seed_mod2 <- lmer(log(seed_count_total) ~ density*albedo*site +
                    (0+site|genotype) +
                    (1|site_plot), data = data_all_sub_seeds)
+plot(seed_mod)
 
-plot(predict(seed_mod2)~ log(data_all_sub_seeds$seed_count_total))
-abline(a = 0, b = 1)
+summary(seed)
+
+sjPlot::plot_model(seed_mod_pois, type = "pred", pred.type = "re",
+                   terms = c("site", "genotype")) +
+  theme(legend.position = "none") +
+  geom_line()
+
+
+plot(exp(predict(seed_mod_pois)), exp(predict(seed_mod)),
+     xlim = c(0,4000))
+plot(exp(predict(seed_mod)), data_all_sub_seeds$seed_count_total,
+     xlim = c(0,4000))
+
+abline(a = 0, b = 1, col = "blue")
+
+MuMIn::r.squaredGLMM(seed_mod_pois)
 
 sjPlot::plot_model(seed_mod2, type = "pred", pred.type = "re",
                    terms = c("site", "genotype"), ci.lvl = NA) +
