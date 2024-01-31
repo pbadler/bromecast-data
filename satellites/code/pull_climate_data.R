@@ -18,9 +18,16 @@ names(tmp) <- c("SiteCode" ,"Lat","Lon")
 
 siteD <- rbind(siteD,tmp)
 
+tmp <- read.csv("../rawdata/SiteInfo_2022-2023.csv",header=T)
+tmp <- tmp[,1:3]
+names(tmp) <- c("SiteCode" ,"Lat","Lon")
+
+siteD <- rbind(siteD,tmp)
+
 # remove duplicates
 siteD <- unique(siteD, MARGIN=2)
-siteD <- siteD[-41,] # remove SymstadS1 w/ bad coords
+tmp <- which(siteD$SiteCode=="SymstadS1" & siteD$Lat==43.35620) # remove SymstadS1 w/ bad coords
+siteD <- siteD[-tmp,]
 
 # drop Lehnoff sites (no data)
 tmp <- grep("LEHN", siteD$SiteCode)
