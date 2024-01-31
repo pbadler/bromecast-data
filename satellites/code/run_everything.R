@@ -15,7 +15,7 @@ library(dplyr)
 library(tidyr)
 library(maps)
 
-# load and clean 2021 and 2022 demography data
+# load and clean 2021, 2022, and 2023 demography data
 source("load_and_clean_demography_data.R")
 
 # pull Daymet data for each site, multiple years
