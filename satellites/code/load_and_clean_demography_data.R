@@ -142,7 +142,7 @@ D <- read.csv("../rawdata/Satellite_demography_2022-2023.csv",header=T)
 # rename some columns
 names(D)[which(names(D)=="Treatment..control.OR.removal.")] <- "Treatment"
 names(D)[which(names(D)=="Emerged..Yes.or.No.")] <- "Emerged"
-names(D)[which(names(D)=="Seeds..Yes.or.No.")] <- "Reproduced"
+names(D)[which(names(D)=="Seeds..Y.N.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
@@ -157,16 +157,23 @@ D$Treatment[D$Treatment=="Control"] <- "control"
 D$Treatment[D$Treatment=="Control "] <- "control"
 
 # fix bad values in Emerged column
-D$Emerged[D$Emerged=="-"] <- "missing"
-D$Emerged[D$Emerged=="?"] <- "missing"
-D$Emerged[D$Emerged=="No_skewer"] <- "missing"
-D$Emerged[D$Emerged=="No_skewer?"] <- "missing"
-D$Emerged[D$Emerged=="Unk"] <- "missing"
-D$Emerged[D$Emerged=="Y?"] <- "Y"
+D$Emerged[D$Emerged=="MISSING"] <- "missing"
+D$Emerged[D$Emerged=="no"] <- "N"
+D$Emerged[D$Emerged=="No"] <- "N"
+D$Emerged[D$Emerged=="Yes"] <- "Y"
+D$Emerged[D$Emerged=="yes"] <- "Y"
 
 # fix some bad values in Reproduced column
-D$Reproduced[D$Emerged=="missing"] <- "missing"
-D$Reproduced[D$Reproduced=="dead"] <- "N"
+D$Reproduced[D$Reproduced==""] <- NA
+D$Reproduced[D$Reproduced==" "] <- NA
+D$Reproduced[D$Reproduced=="no"] <- "N"
+D$Reproduced[D$Reproduced=="No"] <- "N"
+D$Reproduced[D$Reproduced=="not found"] <- "missing"
+D$Reproduced[D$Reproduced=="y"] <- "Y"
+D$Reproduced[D$Reproduced=="yes"] <- "Y"
+D$Reproduced[D$Reproduced=="Yes"] <- "Y"
+D$Reproduced[D$Reproduced=="Y?"] <- "Y"
+
 # fill NAs for "Reproduced" when we know fecundity > 0
 tmp <- which(is.na(D$Reproduced) & D$Fecundity > 0)
 D$Reproduced[tmp] <- "Y"
@@ -177,16 +184,13 @@ D$Reproduced[is.na(D$Reproduced)] <- "missing"
 # fix bad values in Fecundity column
 # TO DO: use notes column to find and retain "real" NAs (missing plants),
 # in this version, these may be a mix of zeros and NAs
-D$Fecundity[D$Fecundity=="unk"] <- NA
-tmp <- which(D$Fecundity=="*seed head broke")
-D$Fecundity[tmp] <- NA
-D$Fecundity <- as.numeric(D$Fecundity)
-D$Fecundity[is.na(D$Fecundity) & D$Reproduced=="N"] <- 0
+#D$Fecundity <- as.numeric(D$Fecundity)
 D$Fecundity <- round(D$Fecundity)  # a couple monster plants were subsampled, have non-integer fecundity
+D$Fecundity[is.na(D$Fecundity) & D$Reproduced=="N"] <- 0
 
 # flag records where Reproduced = Y and Fecundity is NA
 D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
-# flag two records where Emerged and Reproduced = N and Fecundity is > 0
+# flag one record where Emerged and Reproduced = N and Fecundity is > 0
 tmp <- which(D$Emerged=="N" & D$Reproduced=="N" & D$Fecundity > 0)
 D$fecundityflag[tmp] <- 1
 
@@ -195,19 +199,20 @@ tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
 # remove and reorder columns
-D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag")]
+D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag")]
 
 sapply(D2022, function(x) sum(is.na(x)))
 
 ### COMBINE YEARS
 
 # # make sure siteCodes match
-# print(sort(unique(D2021$SiteCode)))
-# print(sort(unique(D2022$SiteCode)))
+print(sort(unique(D2021$SiteCode)))
+print(sort(unique(D2022$SiteCode)))
+print(sort(unique(D2023$SiteCode)))
 
 # fix one SiteCode
 D2021$SiteCode[D2021$SiteCode=="SymstadS1"] <- "Symstad1"
 
-D <- rbind(D2021,D2022)
+D <- rbind(D2021,D2022,D2023)
 
-rm(D2021,D2022)
+rm(D2021,D2022,D2023)
