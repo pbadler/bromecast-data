@@ -1,14 +1,24 @@
 Site code,Latitude (decimal degrees),Longitude (decimal degrees),Aspect (degrees),Slope (degrees),Grazing comments
-FtK_Cottonwood_Coulee,46.3863,-105.9526,NA,NA,ungrazed
-FtK_Lone_Pine,46.347,-105.8464,180,?,grazed
-SymstadS1,43.3562,-103.54046,81,0.12,Ungrazed
-GreenCanyon,41.766018,-111.789327,NA,NA,ungrazed
-CastValley,38.677,-109.417,NA,NA,
-MPG_IR,46.691,-114.022,350,15.11,Wildlife and feral horses
-MPG_SR,46.664,-114.001,274,9.09,Wildlife and feral horses
-MPG_TH,46.673,-114.006,203,7.97,Wildlife and feral horses
-PMR- Brome,40.625,-105.271,350,Slope,Ungrazed
-PMR- Pine,40.625,-105.271,350,Slope,Ungrazed
+GreenCanyon,41.766018,-111.789327,NA,NA,Ungrazed
+Woodruff,41.56042,-111.172565,NA,NA,"Deer grazing, light"
+SouthEden,41.926717,-111.275659,,,"Deer grazing, moderate"
+HardwareRanch,41.613286,-111.567217,,,"Likely sheep and deer grazing, moderate"
+SSHQ,44.246799,-112.213263,NA,NA,Ungrazed
+SSHigh,44.295988,-112.096947,NA,NA,"Cattle grazing, moderate"
+RedBluff,45.579969,-111.664617,flat,1.00,Ungrazed 
+TB LC Control,43.327853,-105.112892,,Flat,Ungrazed
+TB FIRE,43.31193,-105.125329,,Flat,Ungrazed
+TB PRAIRIE DOG,43.338797,-105.133254,,Flat,Ungrazed
+FAR NORTH CPER,40.856915,-104.713075,,Flat,"2021 - rotationally grazed, 60 head, (Jun 25 - Jul 22); 2022 - rotationally grazed, 89 head, (Jul 18 - Jul 31); 2023 - rotationally grazed & re-grazed, 60 head, (May 17 - Jun22 & Jul 13 - Jul 31)"
+NEAR 4WAY CPER,40.812673,-104.714491,,Flat,"2021 - rotationally grazed, 60 head, (Jul 22 - Aug 27); 2022 - rotationally grazed, 89 head , (May 23 - Jun 23); 2023 - rotationally grazed & vence-managed, 60 head, (Jun 27 - Jul 31)"
+NEAR NUTNET,40.839464,-104.717125,,Flat,Holding pasture
+NEAR HQ CPER,40.835791,-104.763785,,Flat,Ungrazed 
+HPGRS AGCR,41.177913,-104.899046,,Flat,Ungrazed
+CG PASTURE,41.21283,-104.852501,135,Slope,Ungrazed
+CaseAoyamaS1,43.47110267,-119.6833963,7,14,Ungrazed
+,,,,,
+,,,,,
+,,,,,
 ,,,,,
 ,,,,,
 ,,,,,
