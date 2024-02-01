@@ -73,7 +73,9 @@ points(x=site_means$Lon[site_means$Year==2021],y=site_means$Lat[site_means$Year=
        pch=0, cex=1.5,col=mypurple)
 points(x=site_means$Lon[site_means$Year==2022],y=site_means$Lat[site_means$Year==2022],
        pch=1, cex=1.5,col=myorange)
-legend("bottomright",c("2021","2022"),pch=c(0,1),col=c(mypurple,myorange))
+points(x=site_means$Lon[site_means$Year==2023],y=site_means$Lat[site_means$Year==2023],
+       pch=2, cex=1.5,col=myblue)
+legend("bottomright",c("2021","2022","2023"),pch=c(0,1,2),col=c(mypurple,myorange,myblue))
 dev.off()
 
 # treatment effects on prob of reproduction

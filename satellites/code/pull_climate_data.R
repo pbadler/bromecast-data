@@ -65,7 +65,7 @@ climD <- climD[,c(1:3,11,12,4:10)]
 names(climD)[6:12] <- c("daylength","prcp","radiation","swe","tmax","tmin","vp")
 
 # save daily data to file (~ 30 MB)
-# write.csv(climD,"../deriveddata/Satellites_daymet_daily.csv",row.names=F)
+write.csv(climD,"../deriveddata/Satellites_daymet_daily.csv",row.names=F)
 
 ###
 ### aggregate to climate year
