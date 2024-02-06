@@ -283,3 +283,6 @@ plot(log(removal),log(control/removal))
 
 rm(removal,control)
 
+# scratch
+plot(site_means$swe_mean,site_means$mean_logF_control)
+
