@@ -113,10 +113,9 @@ dev.off()
 threshold <- 0.05
 tmp <- which(site_means$pR_control >= threshold & site_means$pR_removal >= threshold)
 
-# treatment 1:1
 png("../figures/fecundity_treatments.png",height=3.5,width=5,units="in",res=600)
 par(tcl=-0.2,mgp=c(2,0.5,0),mar=c(3,5,1,1))
-plot(site_means$mean_logF_removal[tmp],site_means$mean_logF_control[tmp], col="black",
+plot(site_means$mean_logF_removal[tmp],site_means$mean_logF_control[tmp], col=mycol,
      xlab="Removal",ylab="Control", xlim=c(0,7), ylim=c(0,7),pch=16,main="log Fecundity")
 abline(0,1,lty="dashed")
 # removals confidence intervals
