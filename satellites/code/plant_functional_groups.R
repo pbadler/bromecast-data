@@ -12,6 +12,9 @@ setwd(dirname(current_path )) # set working directory to location of this file
 # Load libraries
 library(tidyverse)
 
+# Make %notin% operator
+`%notin%` <- Negate(`%in%`)
+
 # Read in 2020-2021 composition data
 comp20 <- read_csv("../rawdata/Satellite_composition_2020-2021.csv")
 # Read in 2021-2022 composition data
@@ -62,13 +65,25 @@ rm(comp20,comp21,comp22)
 unique(comp_all$species) %>% 
   sort() -> species_list
 
-exists("../deriveddata/species_list.csv")
-
 # Write csv file to code these as functional groups manually and to fix any issues
-# write_csv(tibble(species = species_list), "satellites/deriveddata/species_list.csv")
+write_csv(tibble(species = species_list), "../deriveddata/species_list_raw.csv" )
 
-# Read in updated csv
-species_codes <- read_csv("../deriveddata/species_list.csv")
+# did a previous species list exist?
+tmp <- file.exists("../deriveddata/species_list_updates.csv")
+  # if so, add any new entries to that list 
+  if(tmp==T){
+    update_list <- read.csv("../deriveddata/species_list_updates.csv")
+    update_list <- update_list[,c("species","update")]
+    tmp <- species_list %notin% update_list$species
+    tmp <- data.frame("species" = species_list[tmp], "update" = NA)
+    update_list <- rbind(update_list,tmp)
+    update_list <- update_list[order(update_list$species),]
+    #write to file
+    write.csv(update_list,"../deriveddata/species_list_updates.csv",row.names=F)
+  }
+
+
+
 
 # Make updates to names when needed
 species_codes %>% 
@@ -99,8 +114,7 @@ for (i in 1:nrow(coded_spp)){
 coded_spp %>% 
   mutate(sitecode = site_codes) -> coded_spp
 
-# Make %notin% operator
-`%notin%` <- Negate(`%in%`)
+
 
 # Add back the rest of the observations
 species_codes_to_check %>% 
