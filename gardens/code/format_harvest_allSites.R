@@ -420,6 +420,7 @@ data_all %>%
          smut = ifelse(is.na(smut), NA, smut),
          herbivory = ifelse(is.na(herbivory), NA, herbivory)) -> data_all
 
+
 data_all %>% 
   filter(seed_count_total > 0 & inflor_mass > 0) -> data_all_sub_seeds
 
