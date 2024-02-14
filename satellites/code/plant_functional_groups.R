@@ -82,6 +82,15 @@ tmp <- file.exists("../deriveddata/species_list_updates.csv")
     write.csv(update_list,"../deriveddata/species_list_updates.csv",row.names=F)
   }
 
+# complete "update" column in "../deriveddata/species_list_updates.csv" by hand
+
+# look up sitecode for a species code
+findspp <- "Exotic forb"
+comp_all[comp_all$species==findspp,]
+
+# then read in those data:
+
+
 
 
 
