@@ -1,4 +1,35 @@
 species,update,site
+LARA,Lagophylla ramosissima,Boise High
+EPBR,Epilobium brachycarpum,BoiseHigh
+PHAC,Phlox aculeata,BoiseHigh
+ANDI,Antennaria dimorpha,CaseAoyama
+ANDI2,Antennaria dimorpha,CaseAoyama
+ANMI,Antennaria microphylla,CaseAoyama
+ASSC,Astragalus sclerocarpus,CaseAoyama
+COPA3,Collinsia parviflora,CaseAoyama
+CORA5,Cordylanthus ramosus ,CaseAoyama
+CRIN,Crepis intermedia,CaseAoyama
+CRIN4,Crepis intermedia,CaseAoyama
+eb,biocrust,CaseAoyama
+EB,biocrust,CaseAoyama
+EFRI,Erigeron filifolius,CaseAoyama
+EHLO,Phlox longifolia,CaseAoyama
+ERAP,Erigeron aphanactis,CaseAoyama
+ERAR,Erigeron aphanactis,CaseAoyama
+GADE,Gayophytum decipiens,CaseAoyama
+lb,biocrust,CaseAoyama
+LB,biocrust,CaseAoyama
+LEPU,Lepidium pubecarpum,CaseAoyama
+LESB,biocrust,CaseAoyama
+LOTR2,Lomatium triternatum,CaseAoyama
+LSB,biocrust,CaseAoyama
+ob,biocrust,CaseAoyama
+SEIN,Senecio integerrimus,CaseAoyama
+ZIPA,Zigadenus paniculatus ,CaseAoyama
+COSP,,Hardware2023
+SPSP,,Hardware
+NOSP,,SouthEden
+UNCH,,Woodruff
 Achillea millefolium,,
 Achillea.millefolia,Achillea millefolium,
 Achnatherum thurberianum,,
@@ -18,14 +49,11 @@ Alyssum desertorum,,
 Alyssum.simplex,Alyssum simplex,
 Amaranthus albus,,
 Ambrosia psilostachya,,
-ANDI,,CaseAoyama
-ANDI2,,CaseAoyama
 Androsace occidentalis,,
 Androsace spp,,
 animal droppings,scat,
 Animal scat,scat,
 Animal Scat,scat,
-ANMI,,CaseAoyama
 annual Brassicacae,Brassica annual spp,
 Annual forb,annual forb,
 Annual grass,annual grass,
@@ -55,7 +83,6 @@ Artemisia.ludovisiana,Artemisia ludovisiana,
 ARTR,Artemisia tridentata,
 Asclepias pumila,,
 ASCO,Astragalus convallarius,
-ASSC,,CaseAoyama
 Astragalus americanus,,
 Astragalus convallarius,,
 Astragalus filipes,,
@@ -131,16 +158,11 @@ Convolvulus arvensis,,
 Convolvulus spp,,
 Conyza canadensis,,
 COPA,Collinsia parviflora,
-COPA3,,CaseAoyama
-CORA5,,CaseAoyama
 Cordylanthus parviflorus,,
 Cordylanthus spp,,
 Coryphantha vivipara,,
-COSP,,Hardware
 Crepis accumenata,Crepis acuminata,
 Crepis acuminata,,
-CRIN,,CaseAoyama
-CRIN4,,CaseAoyama
 crust,biocrust,
 Cryptantha minima,,
 Crypthantha sp.,Cryptantha spp,
@@ -162,20 +184,13 @@ dung,scat,
 Dung,scat,
 early crust,biocrust,
 Early successional biocrust,biocrust,
-eb,,CaseAoyama
-EB,,CaseAoyama
 Echinacea angustifolia,,
-EFRI,,CaseAoyama
-EHLO,,CaseAoyama
 ELEL,Elymus elymoides,
 Elymus elymoides,,
-EPBR,,BoiseHigh
 Ephedra viridis,,
-ERAP,,CaseAoyama
-ERAR,,CaseAoyama
 ERCI,Erodium cicutarium,
 ERCO,Erigeron corymbosus,
-ERCO6,Erigeron coulteri ,
+ERCO6,Erigeron coulteri,
 ERFI,Eriastrum filifolium,
 Eriastrum sparsiflorum,,
 Eriastrum spp,,
@@ -208,7 +223,6 @@ forb1,unknown forb,
 forb2,unknown forb,
 forb3,unknown forb,
 forb4,unknown forb,
-GADE,,CaseAoyama
 Gaillardia aristata,,
 Gaillardia pinnatifida,,
 Galium spurium,,
@@ -237,18 +251,13 @@ Lappula occidentalis,,
 Lappula occidentalis var occidentalis,Lappula occidentalis,
 Lappula redowskii,,
 Lappula spp,,
-LARA,,
-LASE,,
-LASP,,
-late biocr,,
+LASE,Lactuca serriola,
+LASP,Lactuca serriola,
+late biocr,biocrust,
 late successional biocrust,biocrust,
 Late successional biocrust,biocrust,
-lb,,
-LB,,
 Lepidium,Lepidium spp,
 Lepidium densiflorum,,
-LEPU,,
-LESB,,
 Leucocrinum montanum,,
 Lewisia rediviva,,
 Liatrus punctata,Liatris punctata,
@@ -260,7 +269,7 @@ Linanthus septentrionalis,,
 Linaria dalmatica,,
 Linum lewisii,,
 Linum perenne,,
-LISE,,
+LISE,Linanthus septentrionalis,
 Lithophragma parviflorum,,
 Lithospemum incisum,Lithospermum incisum,
 Lithospermum ruderale,,
@@ -271,8 +280,6 @@ Logfia arvensis,,
 Lomatium foeniculaceum,,
 Lomatium triternatum,,
 Lonicera arizonica,,
-LOTR2,,
-LSB,,
 LUAR,Lupinus arboreus,
 Lupinus argenteus,,
 Lupinus sericeus,,
@@ -285,7 +292,7 @@ Melilotus officinalis,,
 Mertensia lanceolata,,
 Microsteris gracilis,,
 Mirabilis linearis,,
-missing,not-plant,
+missing,,
 moss,biocrust,
 Moss,biocrust,
 MOSS,biocrust,
@@ -295,26 +302,23 @@ Mushroom,biocrust,
 Myosotis micrantha,,
 Myosotis stricta,,
 N/A,missing,
-Nasella viridula,NA,
+Nasella viridula,Nassella viridula,
 Nassella viridula,,
 neighbor Bromus tectorum,Bromus tectorum,
-NOSP,,
 not found,missing,
-Nothocalis,Nothocalis spp,
-ob,,
+Nothocalis,Nothocalais spp,
 Oenothera suffrutescens,,
 Oligoneuron rigidum,,
 Opuntia,Opuntia spp,
 Opuntia polyacantha,,
 Orthocarpus tenuifolius,,
-Pascopyrum smithii,,
-Penstemon virens,NA,
+Pascopyrum smithii,Agropyron smithii,
+Penstemon virens,,
 Perennial forb,unknown perennial forb,
 Perennial grass,unknown perennial grass,
 Perennial short grass,unknown perennial grass,
 Perennial tall grass,unknown perennial grass,
-PHAC,,
-PHHO,,
+PHHO,Phlox hoodii,
 Phleum pratense,,
 PHLO,Phlox longifolia,
 Phlox andicola,,
@@ -334,8 +338,8 @@ Poa sandbergii,,
 Poa secunda,,
 Poa secunda (dead),litter,
 Poa sp.,Poa spp,
-POAV,,
-POBU,,
+POAV,Polygonum aviculare,
+POBU,Poa bulbosa,
 Polygonum aviculare,,
 Polygonum douglasii,,
 POPR,Poa pratensis,
@@ -348,7 +352,7 @@ Pseudoroegneria.spicata,Pseudoroegneria spicata,
 Psoralidium tenuiflorum,,
 PSSP6,Pseudoroegneria spicata,
 Rabbit feces,scat,
-RATE,,
+RATE,Ceratocephala testiculata,
 Ratibida columnifera,,
 Rhus trilobata,,
 Ribes cereum,,
@@ -358,9 +362,8 @@ Rocks,rock,
 Rosa sp.,Rose spp,
 Rubus idaeus,,
 Salsola tragus,,
-SATR,,
+SATR,Salsola tragus,
 Schedonnardus paniculatus,,
-SEIN,,CaseAoyama
 Shrub,unknown shrub,
 Sisymbrium altissimum,,
 Sisymbrium.altimissimum,Sisymbrium altissimum,
@@ -370,14 +373,13 @@ Solanum triflorum,,
 Solidago missouriensis,,
 Solidago ridiga,Solidago rigida,
 Solidago speciosa,,
-SPCR,,
+SPCR,Sporobolus cryptandrus,
 Sphaeralcea coccinea,,
 Sphaeralcea spp,,
 Sphaercia.coccinea,Sphaeralcea coccinea,
 Sporobolus,Sporobolus spp,
 Sporobolus cryptandrus,,
 Sporobulus cryptandrus,Sporobolus cryptandrus,
-SPSP,,
 standing dead,litter,
 Standing dead,litter,
 standing dead Opuntia polyacantha,litter,
@@ -401,7 +403,6 @@ Tragapogon.dubius,Tragopogon dubius,
 Tragopogon dubius,,
 TRDU,Tragopogon dubius,
 Tree,unknown tree,
-UNCH,,
 unk ann forb,unknown annual forb,
 unk forb,unknown forb,
 unk per forb,unknown perennial forb,
@@ -421,8 +422,8 @@ unknown grass 1,unknown grass,
 unknown grass 4,unknown grass,
 Unknown pink,unknown,
 unknown seedling forb,unknown forb,
-UNPF,,
-Verbascum thapsis,,
+UNPF,unknown perennial forb,
+Verbascum thapsis,Verbascum thapsus,
 Verbascum thapsus,,
 Veronica peregrina,,
 Veronica verna,,
@@ -433,4 +434,3 @@ Viola sp. (perenn.),Viola spp,
 Vulpia octoflora,,
 Vulpia spp,,
 Wood,litter,
-ZIPA,,
