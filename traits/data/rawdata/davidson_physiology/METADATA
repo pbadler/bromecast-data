@@ -1,0 +1,17 @@
+Data from Davidson et al. Bromus tectorum physiology manuscript
+
+Year = sampling year (2022 or 2023)
+Site = location of common garden (Balzor = [43.208482, -116.9952]; Wildcat = [43.47437, -116.90177])
+Year_site = unique combination of site and year (2022_Balzor, 2022_Wildcat, 2023_Wildcat; Note: there is no data from Balzor in 2022)
+Gravel color = gravel/albedo treatment in the common garden (White or Black; Note: only Black gravel plots were sampled at Wildcat and only White gravel plots were sampled at Balzor)
+Density = density treatment in the common garden (Low; Note: there were two density treatments in the common garden experiment but only Low density plots were sampled for these measurements)
+Genotype = numeric genotype code (26 unique genotypes)
+Block = spatial block (numeric 1-10)
+Unique ID = unique plant ID
+Phen_score = phenology score at time of measurement (0 = V0, single leaf visible but not fully developed; 1 = V1, one fully developed leaf; 2 = V2, two fully developed leaves; 3 = V3, three fully developed leaves; 4 = V3+, more than three fully developed leaves)
+Phen_score_plus1 = Phen_score with 1 added
+Freezing_Point = temperature at which freezing occurs (°C). See Davidson et al. for details
+Min_Temp_Reached = ice nucleation temperature (°C); minimum temperature reached immediately preceding the freezing of extracellular water (an exothermic reaction)
+dFvFm = Fv/Fm loss, calculated as the decrease in Fv/Fm values from initial measurements and post-freezing measurements, where Fv/Fm is the potential quantum efficiency of photosystem II in dark-adapted leaves measured with a chlorophyll fluorometer. Fv/Fm quantifies the extent of stress due to freezing. See Davidson et al. for details
+SLA_m2_kg = specific leaf area (m2/kg)
+lnSLA = natural log of SLA_m2_kg

@@ -1,0 +1,32 @@
+Data from Hana Walker's summer 2023 greenhouse experiment
+
+ID = unique plant ID
+Genotype ID = numeric genotype code
+Seed wt. (g) = weight of individual seed before planting (grams)
+Seed ProjArea (cm2) = 2D area of individual seed before planting (cm2)
+Time to emergence (d) = number of days until emergence observed
+Plant ht. 21d (cm) = plant height measured 21 days after seed planting (cm)
+Plant ht. 35d (cm) = plant height measured 35 days after seed planting (cm)
+Leaf no. 21d = number of leaves on plant observed 21 days after seed planting
+Leaf no. 35d = number of leaves on plant observed 35 days after seed planting
+Tiller no. 35d = number of tillers on plant observed 35 days after seed planting
+Shoot dry wt. (g) = dry aboveground biomass (grams)
+Shoot leaf area (cm2) = surface area of aboveground biomass (cm2)
+Root dry wt (g) = dry belowground biomass (grams)
+Root length (cm) = cumulative root length (cm)
+Root ProjArea(cm2) = 2D root area (cm2)
+Root SurfArea (cm2) = root surface area (cm2)
+Root AvgDiamm (mm) = average root diameter (mm)
+Root vol. (cm3) = root volume (cm3)
+Root no. tips = number of root tips
+Root no. crossings = number of root crossings
+Root length (cm) by diam class (mm). 0<.L.<=0.5 = cumulative root length for root diameter > 0cm and <= 0.5cm
+Root length (cm) by diam class (mm). 0.5<.L.<=1.0 = cumulative root length for root diameter > 0.5cm and <= 1.0cm
+Root length (cm) by diam class (mm). 1.0<.L.<=1.5 = cumulative root length for root diameter > 1.0cm and <= 1.5cm
+Root length (cm) by diam class (mm). 1.5<.L.<=2.0 = cumulative root length for root diameter > 1.5cm and <= 2.0cm
+Root length (cm) by diam class (mm). 2.0<.L.<=2.5 = cumulative root length for root diameter > 2.0cm and <= 2.5cm
+Root length (cm) by diam class (mm). 2.5<.L.<=3.0 = cumulative root length for root diameter > 2.5cm and <= 3.0cm
+Root length (cm) by diam class (mm). 3.0<.L.<=3.5 = cumulative root length for root diameter > 3.0cm and <= 3.5cm
+Root length (cm) by diam class (mm). 3.5<.L.<=4.0 = cumulative root length for root diameter > 3.5cm and <= 4.0cm
+Root length (cm) by diam class (mm). 4.0<.L.<=4.5 = cumulative root length for root diameter > 4.0cm and <= 4.5cm
+Root length (cm) by diam class (mm). L.>4.5 = cumulative root length for root diameter > 4.5cm 
