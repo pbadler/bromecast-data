@@ -1,0 +1,31 @@
+Gamba et al. growth chamber data
+
+cheatgrass_biomass_cg.csv
+PopNum = numeric code for population; note: this is different than the numeric genotype code
+tray = tray in the growth chamber in which plant was grown (numeric; 1-15)
+veg_biomass_mg = dry vegetative biomass (milligrams)
+rep_biomass_mg = dry reproductive / inflorescence biomass (milligrams)
+TotalDryBiomass_mg = total dry biomass (veg_biomass_mg + rep_biomass_mg)
+
+cheatgrass_Rpheno_cg.csv
+PopNum = numeric code for population; note: this is different than the numeric genotype code
+tray = tray in the growth chamber in which plant was grown (numeric; 1-15)
+DaysToFlower = number of days from seed planting to observed first day of flowering (when awn tips could be seen through the boot)
+InflorHeight_cm = height of the inflorescence? or height of the plant where inflorescence starts? (centimeters)
+InflorNumber = number of inflorescences
+
+cheatgrass_seed_cg.csv
+PopNum = numeric code for population; note: this is different than the numeric genotype code
+tray = tray in the growth chamber in which plant was grown (numeric; 1-15)
+seedM = dry seed mass (milligrams)
+seedN = estimated seed count (calculated from seedM / seed1M)
+seed1M = mass of individual seed (milligrams)
+
+cheatgrass_Vpheno_cg.csv
+PopNum = numeric code for population; note: this is different than the numeric genotype code
+tray = tray in the growth chamber in which plant was grown (numeric; 1-15)
+SeedlingHeight_cm = height of seedling measured ??? (centimeters)
+AdultHeight_cm = height of adult plant measured at harvest ~250 days after planting (centimeters)
+SpringGrowth_cm = growth of plant between ??? and harvest at ~250 after planting
+tillersN = total number of tillers at harvest 
+leavesN = total number of leaves at harvest
