@@ -11,7 +11,7 @@ cheatgrass_Rpheno_cg.csv
 PopNum = numeric code for population; note: this is different than the numeric genotype code
 tray = tray in the growth chamber in which plant was grown (numeric; 1-15)
 DaysToFlower = number of days from seed planting to observed first day of flowering (when awn tips could be seen through the boot)
-InflorHeight_cm = height of the inflorescence? or height of the plant where inflorescence starts? (centimeters)
+InflorHeight_cm = total plant height from the soil surface to the top of the longest inflorescence (centimeters). Inflorescences were straightened for measurement so more of "length" than "height".
 InflorNumber = number of inflorescences
 
 cheatgrass_seed_cg.csv
@@ -24,8 +24,8 @@ seed1M = mass of individual seed (milligrams)
 cheatgrass_Vpheno_cg.csv
 PopNum = numeric code for population; note: this is different than the numeric genotype code
 tray = tray in the growth chamber in which plant was grown (numeric; 1-15)
-SeedlingHeight_cm = height of seedling measured ??? (centimeters)
+SeedlingHeight_cm = height of seedling measured after 10 week vernalization, ~12 weeks after planting (centimeters)
 AdultHeight_cm = height of adult plant measured at harvest ~250 days after planting (centimeters)
-SpringGrowth_cm = growth of plant between ??? and harvest at ~250 after planting
+SpringGrowth_cm = growth of plant between 10 week vernalization and harvest at ~250 after planting (AdultHeight_cm - SeedlingHeight_cm; centimeters)
 tillersN = total number of tillers at harvest 
 leavesN = total number of leaves at harvest
