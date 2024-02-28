@@ -23,8 +23,9 @@ comp21 <- read_csv("../rawdata/Satellite_composition_2021-2022.csv")
 comp22 <- read_csv("../rawdata/Satellite_composition_2022-2023.csv")
 
 # Rename columns for brevity
-comp20 %>% 
+comp20 %>% mutate(year=2021) %>%
   select(sitecode = SiteCode,
+         year=year,
          transect = `Transect (N, E, S, or W)`,
          treatment = `Treatment (control OR removal)`,
          distance_m = `Distance from center (m)`,
@@ -37,8 +38,9 @@ comp20$litter_depth_cm <- NA
 comp20$notes <- NA
 
 
-comp21 %>% 
+comp21 %>% mutate(year=2022) %>%
   select(sitecode = SiteCode,
+         year=year,
          transect = `Transect (N, E, S, or W)`,
          treatment = `Treatment (control OR removal)`,
          distance_m = `Distance from center (m)`,
@@ -47,8 +49,9 @@ comp21 %>%
          litter_depth_cm = `Litter depth (cm)`,
          notes = Notes) -> comp21
 
-comp22 %>% 
+comp22 %>% mutate(year=2023) %>%
   select(sitecode = SiteCode,
+         year=year,
          transect = `Transect (N, E, S, or W)`,
          treatment = `Treatment (control OR removal)`,
          distance_m = `Distance from center (m)`,
@@ -89,8 +92,8 @@ if(tmp==T){
 # "../deriveddata/species_list_updates.csv" as needed
 
 # # look up sitecode for a species code
-# findspp <- "ZIPA"
-# comp_all[comp_all$species==findspp,]
+findspp <- "NOSP"
+comp_all[comp_all$species==findspp,]
 
 # Read in species updates
 updated_names <- read.csv("../deriveddata/species_list_updates.csv",header=T)
