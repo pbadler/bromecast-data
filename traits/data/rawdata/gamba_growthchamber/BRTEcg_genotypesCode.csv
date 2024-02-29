@@ -6,6 +6,7 @@ genotype,source,NewSiteCode,PopNum,SNPmatrix_column,IBSmatrix_order
 6,AAFC09,AAFC9,117,8,5
 7,AAFC10,AAFC10,118,9,6
 9,Adler05,Adler5,121,10,7
+11,Adler09,Adler9,3,NA,NA
 14,Adler13,Adler13,123,11,8
 16,Adler16,Adler16,125,12,9
 17,Adler17,Adler17,126,13,10
@@ -73,6 +74,7 @@ genotype,source,NewSiteCode,PopNum,SNPmatrix_column,IBSmatrix_order
 86,Schupp03,Schupp3,202,75,72
 87,Schupp04,Schupp4,203,76,73
 88,Schupp05,Schupp5,204,77,74
+101,Shriver01,Shriver1,1,NA,NA
 102,Shriver02,Shriver2,205,78,75
 89,Symstad1,Symstad1,206,79,76
 90,Symstad2,Symstad2,207,80,77
