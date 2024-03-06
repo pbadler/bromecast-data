@@ -215,5 +215,11 @@ merge(catalog_v2, genotype_info, all.x = T) %>%
   distinct() %>% 
   select(genotype, site_code, latitude, longitude, study, trait, `measured?`) -> full_catalog
 
-write_csv(full_catalog, "traits/data/deriveddata/genotype_catalog.csv")
+#write_csv(full_catalog, "traits/data/deriveddata/genotype_catalog.csv")
 
+full_catalog %>% 
+  filter(`measured?` == "yes") %>% 
+  group_by(trait, study) %>% 
+  summarize(n = n()) -> genotype_count
+
+write_csv(genotype_count, "traits/data/deriveddata/genotypes_by_trait.csv")  
