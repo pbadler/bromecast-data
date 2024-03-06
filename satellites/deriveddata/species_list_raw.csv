@@ -4,6 +4,7 @@ Achillea.millefolia
 Achnatherum thurberianum
 ACMI
 Aegilops cylindrica
+AGCR
 AGGL
 AGRO
 Agropyron cristatum
@@ -27,6 +28,7 @@ Animal Scat
 ANMI
 annual Brassicacae
 annual Linanthus
+annual mustard
 Antenarria spp
 Antennaria dimorpha
 Antennaria rosea
@@ -52,7 +54,11 @@ Artemisia.ludovisiana
 ARTR
 Asclepias pumila
 ASCO
+ASFI
+ASLE
+ASPU
 ASSC
+ASSP (Astragalus sp)
 Astragalus americanus
 Astragalus convallarius
 Astragalus filipes
@@ -73,6 +79,7 @@ Bare
 bare (dog disturbance)
 bare soil
 Bare soil
+BASA
 BIND
 Biocrust
 Biocrust - Early
@@ -95,15 +102,18 @@ Bromus japonicus
 Bromus tectorum
 BRTE
 Buglossoides arvensis
+CAAN
 Cacti
 calacortus
 calicortus
+Calochortus
 CAMA
 Camelina microcarpa
 Camisonia
 Carex
 Carex duriuscula
 Carex filifolia
+Carex sp
 Carex sp.
 Carex spp
 Carex.spp.
@@ -113,8 +123,10 @@ Castilleja thompsonii
 Centaurea stoebe
 Ceratocephala testiculata
 Chamaesyce glyptosperma
+Chenopodium leptoph.
 Chenopodium leptophyllum
 Chenopodium sp.
+CHLE
 Chrysothamnus viscidiflorus
 CHVI
 Cirsium arvense
@@ -126,12 +138,15 @@ Convolvulus arvensis
 Convolvulus spp
 Conyza canadensis
 COPA
+COPA (Collinsia parviflora)
 COPA3
 CORA5
 Cordylanthus parviflorus
 Cordylanthus spp
 Coryphantha vivipara
 COSP
+COUM
+CRAC
 Crepis accumenata
 Crepis acuminata
 CRIN
@@ -182,9 +197,11 @@ Erigeron speciosus
 Eriogonum effusum
 Eriogonum heracleoides
 Eriogonum shrub
+Eriogonum sp (ERSP)
 Eriogonum spp
 Erodium cicutarium
 ERPU
+ERSP
 Escobaria vivipara
 Euphorbia
 Euphorbia esula
@@ -223,6 +240,7 @@ Heterotheca villosa
 Holosteum umbellatum
 Hordeum pusillum
 HOUM
+KOCR
 Koeleria macrantha
 Koeleria micrantha
 Lactuca serriola
@@ -231,6 +249,8 @@ Lappula occidentalis var occidentalis
 Lappula redowskii
 Lappula spp
 LARA
+LARE
+LARE - Lappula red.
 LASE
 LASP
 late biocr
@@ -248,6 +268,7 @@ Liatrus punctata
 lichen
 Lichen
 Light cyanobacteria
+LILE
 Linanthus pungens
 Linanthus septentrionalis
 Linaria dalmatica
@@ -269,6 +290,7 @@ LSB
 LUAR
 Lupinus argenteus
 Lupinus sericeus
+Lupinus sp
 Lupinus sp.
 Lupinus spp
 Lygodesmia juncea
@@ -293,6 +315,7 @@ Nassella viridula
 neighbor Bromus tectorum
 NOSP
 not found
+Nothocalais trox.
 Nothocalis
 ob
 Oenothera suffrutescens
@@ -335,6 +358,7 @@ Pseudoroegnaria spicata
 Pseudoroegneria spicata
 Pseudoroegneria.spicata
 Psoralidium tenuiflorum
+PSSP
 PSSP6
 Rabbit feces
 RATE
@@ -371,6 +395,7 @@ standing dead
 Standing dead
 standing dead Opuntia polyacantha
 Stipa comata
+Stipa sp
 stipa.comata
 stump
 Symphoricarpos albus
@@ -382,6 +407,8 @@ Taeniatherum caput-medusae
 TAOF
 Taraxacum officinale
 Taraxacum.officinalis
+TECA
+TECA (Tetrademia canescens)
 Tetradymia canescens
 Thinopyrum intermedium
 Tradescantia bracteata
@@ -402,11 +429,13 @@ unknown annual
 unknown annual forb
 unknown annual forb (colomia?)
 unknown annual grass
+unknown aster
 unknown forb
 unknown forb 3
 "unknown forb, hairy, linear leaves, no flowers"
 unknown grass 1
 unknown grass 4
+unknown peren. forb
 Unknown pink
 unknown seedling forb
 UNPF
@@ -415,6 +444,8 @@ Verbascum thapsus
 Veronica peregrina
 Veronica verna
 Vicia villosa
+VINE
+VINU - Viola nuttalii
 Viola
 Viola nuttallii
 Viola sp. (perenn.)

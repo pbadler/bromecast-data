@@ -1,5 +1,5 @@
-# conduct individual level analysis of climate and competition
-# effects on cheatgrass fitness in satellite experiments
+# do a not very thorough data cleaning and 
+# then run preliminary analyses on satellite site data
 
 # start clean
 rm(list=ls())
@@ -16,17 +16,27 @@ library(tidyr)
 library(maps)
 
 # load and clean 2021, 2022, and 2023 demography data
+source("load_and_clean_demography_data.R")
 
 # pull Daymet data for each site, multiple years
 # this takes a few minutes, no need to run more than once
 # source("pull_climate_data.R")
-source("load_and_clean_demography_data.R")
 
 # load site info and site climate data
 source("load_site_climate_data.R")
 
-# load and clean composition data, and add functional group info
-source("composition2functional_groups.R")
+# analyze site means for prob. reproduction, fecundity, fitness
+# and make figures
+source("site_means_analysis&figures.R")
 
+# TO DO: format composition data
+# assign functional groups (we now have more 2021-2022 data)
+# load composition data
+  # join to functional groups
+  # aggregate functional groups to individual plant level
+  # write to file
 
+# analyze individual plant data
+  # join demography data, site info/climate data, and functional group neighborhood data
+  # do stats
 

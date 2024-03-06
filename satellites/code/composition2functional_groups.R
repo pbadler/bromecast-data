@@ -1,7 +1,9 @@
-# This code compiles species level Bromus tectorum "competitors" and assigns
-# each unique species to a functional group
+# This code 
+# 1. cleans up and combines compositional data from all years into one composition
+# file written to deriveddata,
+# 2. compiles and cleans species names for Bromus tectorum "competitors" and 
+# 3. joins functional type data to species names 
 
-rm(list=ls())
 
 # To use relative paths, we need to set working directory to source file location 
 # (this method only works on Rstudio)
@@ -64,6 +66,9 @@ comp22 %>% mutate(year=2023) %>%
 comp_all <- rbind(comp20, comp21, comp22)
 rm(comp20,comp21,comp22)
 
+# write clean composition data to file
+write.csv(comp_all,"../deriveddata/composition_clean.csv", row.names=F)
+
 # Figure out unique species for each data set
 unique(comp_all$species) %>% 
   sort() -> species_list
@@ -84,7 +89,6 @@ if(tmp==T){
       update_list <- update_list[order(update_list$species),]
       #write to file
       write.csv(update_list,"../deriveddata/species_list_updates.csv",row.names=F)
-      rm(update_list)
     }
 }
 
@@ -92,8 +96,8 @@ if(tmp==T){
 # "../deriveddata/species_list_updates.csv" as needed
 
 # # look up sitecode for a species code
-findspp <- "NOSP"
-comp_all[comp_all$species==findspp,]
+# findspp <- "ERSP"
+# comp_all[comp_all$species==findspp,]
 
 # Read in species updates
 updated_names <- read.csv("../deriveddata/species_list_updates.csv",header=T)
@@ -113,52 +117,50 @@ comp_all <- dplyr::select(comp_all,-update) # drop update column
 species_list_clean <- data.frame(species=sort(unique(comp_all$species)))
 write.csv(species_list_clean,"../deriveddata/species_list_clean.csv",row.names=F)
 
-# # old code
-# 
-# # Make updates to names when needed
-# species_codes %>% 
-#   mutate(species = case_when(complete.cases(update) ~ update,
-#                              T ~ species)) %>% 
-#   select(-update) %>% 
-#   distinct() %>% 
-#   arrange(species) -> species_codes_to_check
-# 
-# # Add information about where unknown coded species are from
-# species_codes_to_check %>% 
-#   filter(notes %in% c("not sure based on USDA database")) %>% 
-#   filter(species != "Draba repens" & species != "Epilobium spp")-> coded_spp
-# 
-# # Write a loop to go through coded species and figure out site
-# site_codes <- NULL
-# for (i in 1:nrow(coded_spp)){
-#   spp_temp <- coded_spp$species[i]
-#   site_temp <- comp_all %>% filter(species == spp_temp) %>% pull(sitecode)
-#   if(length(site_codes > 1)){
-#     site_codes[i] <- paste(unique(site_temp), sep = "_", collapse = "")
-#   }else{
-#     site_codes[i] <- site_temp
-#   }
-# }
-# 
-# # Put site back onto coded species data frame
-# coded_spp %>% 
-#   mutate(sitecode = site_codes) -> coded_spp
-# 
-# 
-# 
-# # Add back the rest of the observations
-# species_codes_to_check %>% 
-#   mutate(sitecode = NA) %>% 
-#   filter(species %notin% coded_spp$species) -> uncoded_spp
-# 
-# species_codes_to_check <- rbind(coded_spp, uncoded_spp) %>% 
-#   arrange(species)
-# 
-# # Write csv to check species codes
-# #write_csv(species_codes_to_check, "satellites/deriveddata/species_codes_to_check.csv")
-# 
-# # Get summary stats for groupings
-# species_codes_to_check %>% 
-#   group_by(type, duration, c3c4) %>% 
-#   summarize(n = n())
-# 
+# clean up
+rm(tmp,update_list,updated_names,species_list_clean,species_list)
+
+###
+
+# join species list with functional type data
+spp_list <- read.csv("../deriveddata/species_list_clean.csv",header=T)
+fgroups <- read.csv("../deriveddata/species2functionalgroups.csv",header=T)
+spp_list <- merge(spp_list,fgroups, all.x=T)
+write.csv(spp_list,"../deriveddata/species2functionalgroups.csv", row.names=F)
+
+# fill out functional type data by hand
+
+# read in latest version of functional type data
+fgroups <- read.csv("../deriveddata/species2functionalgroups.csv",header=T)
+
+
+
+### define functional groups
+
+# annual, perennial, shrub, biocrust
+fgroups$ftypes1 <- NA
+fgroups$ftypes1[fgroups$duration=="annual" | fgroups$duration=="biennial"] <- "annual"
+fgroups$ftypes1[fgroups$duration=="perennial"] <- "perennial"
+fgroups$ftypes1[fgroups$type=="shrub"] <- "shrub"
+fgroups$ftypes1[fgroups$type=="biocrust"] <- "biocrust"
+# unknowns and non-plants are NAs, these will be CUT 
+
+# annual forb, annual grass, perennial forb, perennial grass, shrub, biocrust
+fgroups$ftypes2 <- fgroups$ftypes1
+tmp <- which(fgroups$ftypes1=="annual")
+fgroups$ftypes2[tmp] <- paste0(fgroups$ftypes2[tmp],fgroups$type[tmp])
+tmp <- which(fgroups$ftypes1=="perennial")
+fgroups$ftypes2[tmp] <- paste0(fgroups$ftypes2[tmp],fgroups$type[tmp])
+
+# annual forb, annual grass, perennial forb, perennial grass c3,  perennial grass c4, shrub, biocrust
+fgroups$ftypes3 <- fgroups$ftypes2
+tmp <- which(fgroups$ftypes2=="perennialgrass")
+fgroups$ftypes3[tmp] <- paste0(fgroups$ftypes3[tmp],fgroups$c3c4[tmp])
+
+fgroups <- fgroups[,c("species","ftypes1","ftypes2","ftypes3")]
+
+
+
+### join functional group data to composition data and aggregate cover to ftypes
+
+
