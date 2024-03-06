@@ -92,7 +92,7 @@ if(tmp==T){
 # "../deriveddata/species_list_updates.csv" as needed
 
 # # look up sitecode for a species code
-# findspp <- "NOSP"
+# findspp <- "ERSP"
 # comp_all[comp_all$species==findspp,]
 
 # Read in species updates
@@ -114,14 +114,15 @@ species_list_clean <- data.frame(species=sort(unique(comp_all$species)))
 write.csv(species_list_clean,"../deriveddata/species_list_clean.csv",row.names=F)
 
 # clean up
-rm(tmp, update_list,updated_names,species_list_clean,species_list)
+rm(tmp,updated_names,species_list_clean,species_list)
 
 ###
 
 # join species list with functional type data
 spp_list <- read.csv("../deriveddata/species_list_clean.csv",header=T)
 fgroups <- read.csv("../deriveddata/species2functionalgroups.csv",header=T)
-
+spp_list <- merge(spp_list,fgroups, all.x=T)
+write.csv(spp_list,"../deriveddata/species2functionalgroups.csv", row.names=F)
 
 # # old code
 # 
