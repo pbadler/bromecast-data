@@ -1,5 +1,8 @@
-# This code compiles species level Bromus tectorum "competitors" and assigns
-# each unique species to a functional group
+# This code 
+# 1. cleans up and combines compositional data from all years into one composition
+# file written to deriveddata,
+# 2. compiles and cleans species names for Bromus tectorum "competitors" and 
+# 3. joins functional type data to species names 
 
 rm(list=ls())
 
@@ -64,6 +67,9 @@ comp22 %>% mutate(year=2023) %>%
 comp_all <- rbind(comp20, comp21, comp22)
 rm(comp20,comp21,comp22)
 
+# write clean composition data to file
+write.csv(comp_all,"../deriveddata/composition_clean.csv", row.names=F)
+
 # Figure out unique species for each data set
 unique(comp_all$species) %>% 
   sort() -> species_list
@@ -123,6 +129,8 @@ spp_list <- read.csv("../deriveddata/species_list_clean.csv",header=T)
 fgroups <- read.csv("../deriveddata/species2functionalgroups.csv",header=T)
 spp_list <- merge(spp_list,fgroups, all.x=T)
 write.csv(spp_list,"../deriveddata/species2functionalgroups.csv", row.names=F)
+
+# fill out functional type data by hand
 
 # # old code
 # 
