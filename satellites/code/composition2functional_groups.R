@@ -66,9 +66,6 @@ comp22 %>% mutate(year=2023) %>%
 comp_all <- rbind(comp20, comp21, comp22)
 rm(comp20,comp21,comp22)
 
-# write clean composition data to file
-write.csv(comp_all,"../deriveddata/composition_clean.csv", row.names=F)
-
 # Figure out unique species for each data set
 unique(comp_all$species) %>% 
   sort() -> species_list
@@ -127,6 +124,7 @@ spp_list <- read.csv("../deriveddata/species_list_clean.csv",header=T)
 fgroups <- read.csv("../deriveddata/species2functionalgroups.csv",header=T)
 spp_list <- merge(spp_list,fgroups, all.x=T)
 write.csv(spp_list,"../deriveddata/species2functionalgroups.csv", row.names=F)
+rm(spp_list)
 
 # fill out functional type data by hand
 
@@ -137,10 +135,11 @@ fgroups <- read.csv("../deriveddata/species2functionalgroups.csv",header=T)
 
 ### define functional groups
 
-# annual, perennial, shrub, biocrust
+# annual, perennial, shrub, biocrust, unknown
 fgroups$ftypes1 <- NA
 fgroups$ftypes1[fgroups$duration=="annual" | fgroups$duration=="biennial"] <- "annual"
 fgroups$ftypes1[fgroups$duration=="perennial"] <- "perennial"
+fgroups$ftypes1[fgroups$duration=="unknown"] <- "unknown"
 fgroups$ftypes1[fgroups$type=="shrub"] <- "shrub"
 fgroups$ftypes1[fgroups$type=="biocrust"] <- "biocrust"
 # unknowns and non-plants are NAs, these will be CUT 
@@ -161,6 +160,53 @@ fgroups <- fgroups[,c("species","ftypes1","ftypes2","ftypes3")]
 
 
 
-### join functional group data to composition data and aggregate cover to ftypes
+### join functional group data to composition data and do some cleaning
+comp_all <- merge(comp_all,fgroups,all.x=T)
 
+# remove records where cover == NA. These are missing toothpicks and 2 bare ground obs 
+tmp <- which(is.na(comp_all$cover))
+comp_all <- comp_all[-tmp,]
+
+# remove other missing records flagged by value of cover = -1
+tmp <- which(comp_all$cover == -1)
+comp_all <- comp_all[-tmp,]
+tmp <- which(comp_all$cover == "missing")
+comp_all <- comp_all[-tmp,]
+tmp <- which(comp_all$cover == "M")
+comp_all <- comp_all[-tmp,]
+
+# other checks
+table(comp_all$ftypes1)
+table(comp_all$cover)
+
+# fix non-numeric cover values
+comp_all$cover[comp_all$cover == "<1"] <- 0.5
+comp_all$cover[comp_all$cover == ">5"] <- 7.5
+comp_all$cover[comp_all$cover == "105"] <- 100
+comp_all$cover[comp_all$cover == "775"] <- 75  # PBA: I checked this one in the raw data, plant cover at this site = 25
+comp_all$cover <- as.numeric(comp_all$cover)
+
+# remove non-plant records
+table(comp_all$species[is.na(comp_all$ftypes1)]) # first check NAs in ftypes
+comp_all <- subset( comp_all, !is.na(comp_all$ftypes1))
+
+# check NOTES? PBA: I don't see high priority problems here
+
+
+
+### aggregate neighborhood cover to functional group level for each individual
+
+comp_ftypes1 <- comp_all %>% group_by(sitecode,year,transect,treatment,distance_m, ftypes1) %>%
+                  summarize(cover = sum(cover)) %>%
+                  pivot_wider(names_from = ftypes1, values_from = cover, values_fill = 0)
+
+comp_ftypes2 <- comp_all %>% group_by(sitecode,year,transect,treatment,distance_m, ftypes2) %>%
+                  summarize(cover = sum(cover)) %>%
+                  pivot_wider(names_from = ftypes2, values_from = cover, values_fill = 0)
+
+comp_ftypes3 <- comp_all %>% group_by(sitecode,year,transect,treatment,distance_m, ftypes3) %>%
+                 summarize(cover = sum(cover)) %>%
+                 pivot_wider(names_from = ftypes3, values_from = cover, values_fill = 0)
+
+rm(comp_all)
 

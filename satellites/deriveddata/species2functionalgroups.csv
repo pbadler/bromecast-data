@@ -28,14 +28,13 @@
 "Arnica cordifolia","perennial",NA,"forb",NA,NA,NA
 "Arnica fulgens","perennial",NA,"forb",NA,NA,NA
 "Artemisia dracunculus","perennial",NA,"forb","subshrub",NA,NA
-"Artemisia frigida","perennial",NA,"subshrub",NA,NA,NA
+"Artemisia frigida","perennial",NA,"shrub",NA,NA,NA
 "Artemisia ludovisiana","perennial",NA,"forb","subshrub",NA,NA
 "Artemisia tridentata","perennial",NA,"shrub",NA,NA,NA
 "Asclepias pumila","perennial",NA,"forb",NA,NA,NA
 "Astragalus americanus","perennial",NA,"forb",NA,NA,NA
 "Astragalus convallarius","perennial",NA,"forb",NA,NA,NA
 "Astragalus filipes","perennial",NA,"forb",NA,NA,NA
-"Astragalus inflexus","perennial",NA,"forb","subshrub",NA,NA
 "Astragalus inflexus","perennial",NA,"forb",NA,NA,NA
 "Astragalus lentiginosus","perennial",NA,"forb",NA,NA,NA
 "Astragalus missouriensis","perennial",NA,"forb","subshrub",NA,NA
@@ -121,9 +120,8 @@
 "Erigeron pumilis","perennial",NA,"forb",NA,NA,NA
 "Erigeron pumilus","perennial",NA,"forb","subshrub",NA,NA
 "Erigeron speciosus","perennial",NA,"forb","subshrub",NA,NA
-"Eriogonum effusum","perennial",NA,"shrub","subshrub",NA,NA
+"Eriogonum effusum","perennial",NA,"forb","subshrub",NA,NA
 "Eriogonum heracleoides","perennial",NA,"forb","subshrub",NA,NA
-"Eriogonum spp","perennial",NA,"forb","subshrub",NA,"possibly classify as shrub?"
 "Eriogonum spp","perennial",NA,"forb","subshrub",NA,NA
 "Erodium cicutarium","annual","biennial","forb",NA,NA,NA
 "Escobaria vivipara","perennial",NA,"shrub",NA,NA,NA
@@ -201,7 +199,7 @@
 "Phlox hoodii","perennial",NA,"forb",NA,NA,NA
 "Phlox longifolia","perennial",NA,"forb","subshrub",NA,NA
 "Picradeniopsis oppositifolia","perennial",NA,"forb","subshrub",NA,NA
-"Pinus ponderosa","perennial",NA,"tree",NA,NA,NA
+"Pinus ponderosa","perennial",NA,"shrub",NA,NA,NA
 "Plantago patagonica","annual",NA,"forb",NA,NA,NA
 "Pleiacanthus spinosus","perennial",NA,"forb","subshrub",NA,NA
 "Pleuraphis jamesii","perennial",NA,"grass",NA,"c4",NA
