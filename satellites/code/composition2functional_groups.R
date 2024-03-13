@@ -64,7 +64,15 @@ comp22 %>% mutate(year=2023) %>%
 
 # Combine species observation lists
 comp_all <- rbind(comp20, comp21, comp22)
+comp_all <- comp_all[order(comp_all$site,comp_all$year,comp_all$transect,comp_all$distance_m),]
 rm(comp20,comp21,comp22)
+
+# check notes column for issues
+all_notes <- data.frame("comp_notes" = sort(unique(comp_all$notes)))
+write.csv(all_notes,"../deriveddata/composition_notes_raw.csv",row.names=F)
+# look at notes
+tmp <- which(comp_all$notes=="disturbed by burrowing animal")
+comp_all[tmp,]
 
 # Figure out unique species for each data set
 unique(comp_all$species) %>% 

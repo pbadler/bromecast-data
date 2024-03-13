@@ -17,6 +17,7 @@ names(D)[which(names(D)=="Seeds..Y.or.No.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+names(D)[which(names(D)=="Notes..Herbivore.damage..Disease..")] <- "Notes"
 
 D$Year <- 2021
 
@@ -35,9 +36,7 @@ tmp <- which(D$Fecundity=="*seed head broke")
 D$Fecundity[tmp] <- NA
 D$Fecundity <- as.numeric(D$Fecundity)
 
-# replace NAs with real zeros
-# TO DO: use notes column to find and retain "real" NAs (missing plants),
-# in this version, those are included as zeros
+# replace NAs with real zeros (missing plants will be removed later based on Notes)
 D$Reproduced[is.na(D$Reproduced) & D$Emerged=="N"] <- "N"
 D$Fecundity[is.na(D$Fecundity) & D$Reproduced=="N"] <- 0
 
@@ -57,7 +56,7 @@ D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
 D <- subset(D,!is.na(D$Fecundity))
 
 # remove and reorder columns
-D2021 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag")]
+D2021 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
 
 sapply(D2021, function(x) sum(is.na(x)))
 
@@ -78,6 +77,7 @@ names(D)[which(names(D)=="Seeds..Yes.or.No.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+names(D)[which(names(D)=="Notes..Herbivore.damage..Disease..")] <- "Notes"
 
 D$Year <- 2022
 
@@ -125,7 +125,7 @@ tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
 # remove and reorder columns
-D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag")]
+D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
 
 sapply(D2022, function(x) sum(is.na(x)))
 
@@ -146,6 +146,7 @@ names(D)[which(names(D)=="Seeds..Y.N.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+names(D)[which(names(D)=="Notes..Herbivore.damage..Disease..")] <- "Notes"
 
 D$Year <- 2023
 
@@ -199,7 +200,7 @@ tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
 # remove and reorder columns
-D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag")]
+D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
 
 sapply(D2022, function(x) sum(is.na(x)))
 
@@ -216,3 +217,10 @@ D2021$SiteCode[D2021$SiteCode=="SymstadS1"] <- "Symstad1"
 D <- rbind(D2021,D2022,D2023)
 
 rm(D2021,D2022,D2023)
+
+### take action on issues in Notes column
+tmp <- data.frame("demography_notes" = sort(unique(D$Notes)))
+write.csv(tmp,"../deriveddata/demography_notes_raw.csv",row.names=F)
+tmp <- which(D$Notes=="NP, 2 GREEN SEEDS")
+D[tmp,]
+
