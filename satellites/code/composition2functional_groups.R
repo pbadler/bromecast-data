@@ -64,21 +64,16 @@ comp22 %>% mutate(year=2023) %>%
 
 # Combine species observation lists
 comp_all <- rbind(comp20, comp21, comp22)
-comp_all <- comp_all[order(comp_all$site,comp_all$year,comp_all$transect,comp_all$distance_m),]
+comp_all <- comp_all[order(comp_all$sitecode,comp_all$year,comp_all$transect,comp_all$distance_m),]
 rm(comp20,comp21,comp22)
 
-# check notes column for issues
-all_notes <- data.frame("comp_notes" = sort(unique(comp_all$notes)))
-write.csv(all_notes,"../deriveddata/composition_notes_raw.csv",row.names=F)
-# look at notes
-tmp <- which(comp_all$notes=="disturbed by burrowing animal")
-comp_all[tmp,]
+# PBA: I'm ignoring the problematic "notes" because I cleaned the demography
+# data very carefully. That catches the real problems. Leftover notes for composition
+# mostly concern species ID, which don't matter much at functional group level.
 
-# Figure out unique species for each data set
-unique(comp_all$species) %>% 
-  sort() -> species_list
 
-# Write csv file to code these as functional groups manually and to fix any issues
+# Write csv file to code species as functional groups manually and to fix any issues
+species_list <- sort(unique(comp_all$species))
 write_csv(tibble(species = species_list), "../deriveddata/species_list_raw.csv" )
 
 # did a previous species list exist?
@@ -123,7 +118,7 @@ species_list_clean <- data.frame(species=sort(unique(comp_all$species)))
 write.csv(species_list_clean,"../deriveddata/species_list_clean.csv",row.names=F)
 
 # clean up
-rm(tmp,update_list,updated_names,species_list_clean,species_list)
+rm(tmp,update_list,updated_names,species_list_clean)
 
 ###
 

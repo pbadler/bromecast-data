@@ -105,8 +105,6 @@ D$Reproduced[is.na(D$Reproduced) & D$Emerged=="N"] <- "N"
 D$Reproduced[is.na(D$Reproduced)] <- "missing"
 
 # fix bad values in Fecundity column
-# TO DO: use notes column to find and retain "real" NAs (missing plants),
-# in this version, these may be a mix of zeros and NAs
 D$Fecundity[D$Fecundity=="unk"] <- NA
 tmp <- which(D$Fecundity=="*seed head broke")
 D$Fecundity[tmp] <- NA
@@ -183,8 +181,6 @@ D$Reproduced[is.na(D$Reproduced) & D$Emerged=="N"] <- "N"
 D$Reproduced[is.na(D$Reproduced)] <- "missing"
 
 # fix bad values in Fecundity column
-# TO DO: use notes column to find and retain "real" NAs (missing plants),
-# in this version, these may be a mix of zeros and NAs
 #D$Fecundity <- as.numeric(D$Fecundity)
 D$Fecundity <- round(D$Fecundity)  # a couple monster plants were subsampled, have non-integer fecundity
 D$Fecundity[is.na(D$Fecundity) & D$Reproduced=="N"] <- 0
@@ -221,6 +217,23 @@ rm(D2021,D2022,D2023)
 ### take action on issues in Notes column
 tmp <- data.frame("demography_notes" = sort(unique(D$Notes)))
 write.csv(tmp,"../deriveddata/demography_notes_raw.csv",row.names=F)
-tmp <- which(D$Notes=="NP, 2 GREEN SEEDS")
-D[tmp,]
+
+# # look up individual notes
+# tmp <- which(D$Notes=="TOOTHPICK UPROOTED")
+# D[tmp,]
+
+# to do by hand: go through demography_notes_raw.csv
+# and record actions for real problems, save to
+# demography_notes_actions.csv
+
+# read in and merge notes actions
+actions <- read.csv("../deriveddata/demography_notes_actions.csv",header=T)
+names(actions)[1] <- "Notes"
+D <- merge(D,actions,all.x=T)
+
+# do the obvious cleaning
+table(D$notesFlag)
+D <- subset(D,D$notesFlag!="remove")
+tmp <- which(D$notesFlag=="seeddrop" | D$notesFlag=="immature" | D$notesFlag=="fecundityFlag")
+D$fecundityflag[tmp] <- 1  # records that shouldn't be used for fecundity analysis (could be used for emergence and reproduction)
 
