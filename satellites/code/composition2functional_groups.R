@@ -21,7 +21,7 @@ library(tidyverse)
 comp20 <- read_csv("../rawdata/Satellite_composition_2020-2021.csv")
 # Read in 2021-2022 composition data
 comp21 <- read_csv("../rawdata/Satellite_composition_2021-2022.csv")
-# Read in 2020-2021 composition data
+# Read in 2022-2023 composition data
 comp22 <- read_csv("../rawdata/Satellite_composition_2022-2023.csv")
 
 # Rename columns for brevity
@@ -212,6 +212,7 @@ comp_all$SiteCode[comp_all$SiteCode=="EnsingS2"] <- "EnsingS2 Summerland-Princet
 comp_all$SiteCode[comp_all$SiteCode=="EnsingS3"] <- "EnsingS3 Bear Creek"
 comp_all$SiteCode[comp_all$SiteCode=="EnsingS4"] <- "EnsingS4 Lundbom"
 comp_all$SiteCode[comp_all$SiteCode=="SymstadS1"] <- "Symstad1"
+comp_all$SiteCode[comp_all$SiteCode=="South Eden"] <- "SouthEden"
 
 
 ### aggregate neighborhood cover to functional group level for each individual
@@ -233,7 +234,7 @@ comp_ftypes2 <- as.data.frame(comp_ftypes2)
 
 rm(comp_all)
 
-# where is D South Eden 2023?
 # Ensing Treatments don't match
+# EOARC removal distances don't match
 
 
