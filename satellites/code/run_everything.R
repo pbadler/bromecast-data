@@ -29,6 +29,11 @@ source("load_site_climate_data.R")
 source("composition2functional_groups.R")
 
 # merge demography and composition data, check and clean
+test <- merge(D,comp_ftypes1,all.x=T)
+sort(unique(D$SiteCode))
+sort(unique(comp_ftypes1$SiteCode))
+table(test$SiteCode[is.na(test$annual)])
 
-
-
+# to do fix comp site names Ensing site and SymstadS1 <- Symstad1
+# figure out lots of other missing matches for composition data
+# EOARC: distances for removal entered wrong in composition

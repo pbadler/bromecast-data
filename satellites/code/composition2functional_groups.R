@@ -195,19 +195,24 @@ comp_all <- subset( comp_all, !is.na(comp_all$ftypes1))
 
 # check NOTES? PBA: I don't see high priority problems here
 
-
+# edit column names to match demography file
+names(comp_all)[names(comp_all)=="sitecode"] <- "SiteCode"
+names(comp_all)[names(comp_all)=="year"] <- "Year"
+names(comp_all)[names(comp_all)=="transect"] <- "Transect"
+names(comp_all)[names(comp_all)=="treatment"] <- "Treatment"
+names(comp_all)[names(comp_all)=="distance_m"] <- "Distance"
 
 ### aggregate neighborhood cover to functional group level for each individual
 
-comp_ftypes1 <- comp_all %>% group_by(sitecode,year,transect,treatment,distance_m, ftypes1) %>%
+comp_ftypes1 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes1) %>%
                   summarize(cover = sum(cover)) %>%
                   pivot_wider(names_from = ftypes1, values_from = cover, values_fill = 0)
 
-comp_ftypes2 <- comp_all %>% group_by(sitecode,year,transect,treatment,distance_m, ftypes2) %>%
+comp_ftypes2 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes2) %>%
                   summarize(cover = sum(cover)) %>%
                   pivot_wider(names_from = ftypes2, values_from = cover, values_fill = 0)
 
-comp_ftypes3 <- comp_all %>% group_by(sitecode,year,transect,treatment,distance_m, ftypes3) %>%
+comp_ftypes3 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes3) %>%
                  summarize(cover = sum(cover)) %>%
                  pivot_wider(names_from = ftypes3, values_from = cover, values_fill = 0)
 
