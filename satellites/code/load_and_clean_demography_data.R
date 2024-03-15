@@ -203,9 +203,9 @@ sapply(D2022, function(x) sum(is.na(x)))
 ### COMBINE YEARS
 
 # # make sure siteCodes match
-print(sort(unique(D2021$SiteCode)))
-print(sort(unique(D2022$SiteCode)))
-print(sort(unique(D2023$SiteCode)))
+# print(sort(unique(D2021$SiteCode)))
+# print(sort(unique(D2022$SiteCode)))
+# print(sort(unique(D2023$SiteCode)))
 
 # fix one SiteCode
 D2021$SiteCode[D2021$SiteCode=="SymstadS1"] <- "Symstad1"
@@ -230,10 +230,14 @@ write.csv(tmp,"../deriveddata/demography_notes_raw.csv",row.names=F)
 actions <- read.csv("../deriveddata/demography_notes_actions.csv",header=T)
 names(actions)[1] <- "Notes"
 D <- merge(D,actions,all.x=T)
+D <- D[order(D$SiteCode,D$Year,D$Treatment,D$Transect),] # reorder
+D <- D[,-which(names(D)=="Notes")]
 
 # do the obvious cleaning
 table(D$notesFlag)
 D <- subset(D,D$notesFlag!="remove")
 tmp <- which(D$notesFlag=="seeddrop" | D$notesFlag=="immature" | D$notesFlag=="fecundityFlag")
 D$fecundityflag[tmp] <- 1  # records that shouldn't be used for fecundity analysis (could be used for emergence and reproduction)
+
+rm(actions)
 

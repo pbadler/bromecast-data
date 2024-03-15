@@ -202,19 +202,38 @@ names(comp_all)[names(comp_all)=="transect"] <- "Transect"
 names(comp_all)[names(comp_all)=="treatment"] <- "Treatment"
 names(comp_all)[names(comp_all)=="distance_m"] <- "Distance"
 
+# clean up bad Treatment values
+comp_all$Treatment[comp_all$Treatment == "Control"] <- "control"
+comp_all$Treatment[comp_all$Treatment == "Removal"] <- "removal"
+
+# make sure site names match demography file
+comp_all$SiteCode[comp_all$SiteCode=="EnsingS1"] <- "EnsingS1 SuRDC"
+comp_all$SiteCode[comp_all$SiteCode=="EnsingS2"] <- "EnsingS2 Summerland-Princeton"
+comp_all$SiteCode[comp_all$SiteCode=="EnsingS3"] <- "EnsingS3 Bear Creek"
+comp_all$SiteCode[comp_all$SiteCode=="EnsingS4"] <- "EnsingS4 Lundbom"
+comp_all$SiteCode[comp_all$SiteCode=="SymstadS1"] <- "Symstad1"
+
+
 ### aggregate neighborhood cover to functional group level for each individual
 
 comp_ftypes1 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes1) %>%
                   summarize(cover = sum(cover)) %>%
                   pivot_wider(names_from = ftypes1, values_from = cover, values_fill = 0)
+comp_ftypes1 <- as.data.frame(comp_ftypes1)
 
 comp_ftypes2 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes2) %>%
                   summarize(cover = sum(cover)) %>%
                   pivot_wider(names_from = ftypes2, values_from = cover, values_fill = 0)
+comp_ftypes2 <- as.data.frame(comp_ftypes2)
 
 comp_ftypes3 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes3) %>%
                  summarize(cover = sum(cover)) %>%
                  pivot_wider(names_from = ftypes3, values_from = cover, values_fill = 0)
+comp_ftypes2 <- as.data.frame(comp_ftypes2)
 
 rm(comp_all)
+
+# where is D South Eden 2023?
+# Ensing Treatments don't match
+
 

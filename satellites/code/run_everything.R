@@ -29,11 +29,29 @@ source("load_site_climate_data.R")
 source("composition2functional_groups.R")
 
 # merge demography and composition data, check and clean
-test <- merge(D,comp_ftypes1,all.x=T)
-sort(unique(D$SiteCode))
-sort(unique(comp_ftypes1$SiteCode))
+
+
+test <- merge(D,comp_ftypes1,all=T)
+colSums(is.na(test))
 table(test$SiteCode[is.na(test$annual)])
 
-# to do fix comp site names Ensing site and SymstadS1 <- Symstad1
+# figure out why demography and composition data don't match
+problems <- test[is.na(test$annual),]
+problems <- problems[,c("SiteCode", "Year","Treatment","Transect")]
+problems<-unique(problems,margin=2)
+for(i in 1:nrow(problems)){
+  tmp <- which(D$SiteCode==problems$SiteCode[i] &
+                 D$Year==problems$Year[i] &
+                 D$Treatment==problems$Treatment[i] &
+                 D$Transect==problems$Transect[i])
+  tmpD <- D[tmp,]
+  tmp <- which(comp_ftypes1$SiteCode==problems$SiteCode[i] &
+                 comp_ftypes1$Year==problems$Year[i] &
+                 comp_ftypes1$Treatment==problems$Treatment[i] &
+                 comp_ftypes1$Transect==problems$Transect[i])
+  tmpC <- comp_ftypes1[tmp,]
+  print(tmpD); print(tmpC)
+}
+
 # figure out lots of other missing matches for composition data
 # EOARC: distances for removal entered wrong in composition
