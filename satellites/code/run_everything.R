@@ -36,8 +36,14 @@ colSums(is.na(test))
 table(test$SiteCode[is.na(test$annual)])
 
 # figure out why demography and composition data don't match
-problems <- test[is.na(test$annual),]
-problems <- problems[,c("SiteCode", "Year","Treatment","Transect")]
+missingC <- test[is.na(test$annual),]
+missingC <- missingC[,c("SiteCode", "Year","Treatment","Transect","Distance")]
+
+missingD <- test[is.na(test$Emerged),]
+
+missingC[missingC$SiteCode=="L1_vanDiepen",]
+missingD[missingD$SiteCode=="L1_vanDiepen",]
+
 problems<-unique(problems,margin=2)
 for(i in 1:nrow(problems)){
   tmp <- which(D$SiteCode==problems$SiteCode[i] &
@@ -54,4 +60,5 @@ for(i in 1:nrow(problems)){
 }
 
 # figure out lots of other missing matches for composition data
+# Hardware Ranch 2023 issues with S and W
 # EOARC: distances for removal entered wrong in composition

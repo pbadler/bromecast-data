@@ -140,12 +140,13 @@ fgroups <- read.csv("../deriveddata/species2functionalgroups.csv",header=T)
 
 # annual, perennial, shrub, biocrust, unknown
 fgroups$ftypes1 <- NA
+fgroups$ftypes1[fgroups$type=="non-plant"] <- "groundcover"
 fgroups$ftypes1[fgroups$duration=="annual" | fgroups$duration=="biennial"] <- "annual"
 fgroups$ftypes1[fgroups$duration=="perennial"] <- "perennial"
 fgroups$ftypes1[fgroups$duration=="unknown"] <- "unknown"
 fgroups$ftypes1[fgroups$type=="shrub"] <- "shrub"
 fgroups$ftypes1[fgroups$type=="biocrust"] <- "biocrust"
-# unknowns and non-plants are NAs, these will be CUT 
+# unknowns  NAs, these will be CUT 
 
 # annual forb, annual grass, perennial forb, perennial grass, shrub, biocrust
 fgroups$ftypes2 <- fgroups$ftypes1
@@ -205,6 +206,16 @@ names(comp_all)[names(comp_all)=="distance_m"] <- "Distance"
 # clean up bad Treatment values
 comp_all$Treatment[comp_all$Treatment == "Control"] <- "control"
 comp_all$Treatment[comp_all$Treatment == "Removal"] <- "removal"
+tmp <- which(comp_all$SiteCode=="EnsingS1" & comp_all$Year==2022 & comp_all$Transect=="W")
+comp_all$Treatment[tmp] <- "removal"
+tmp <- which(comp_all$SiteCode=="EnsingS1" & comp_all$Year==2022 & comp_all$Transect=="E")
+comp_all$Treatment[tmp] <- "removal"
+
+# clean up bad distances
+tmp <- which(comp_all$SiteCode=="EOARC" & comp_all$Year==2022 & comp_all$Transect=="E")
+comp_all$Distance[tmp] <- comp_all$Distance[tmp] + 2
+tmp <- which(comp_all$SiteCode=="EOARC" & comp_all$Year==2022 & comp_all$Transect=="S")
+comp_all$Distance[tmp] <- comp_all$Distance[tmp] + 2
 
 # make sure site names match demography file
 comp_all$SiteCode[comp_all$SiteCode=="EnsingS1"] <- "EnsingS1 SuRDC"
