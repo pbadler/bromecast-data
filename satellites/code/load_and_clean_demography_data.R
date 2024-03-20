@@ -235,7 +235,8 @@ D <- D[,-which(names(D)=="Notes")]
 
 # do the obvious cleaning
 table(D$notesFlag)
-D <- subset(D,D$notesFlag!="remove")
+tmp <- which(D$notesFlag=="remove")
+D <- D[-tmp,]
 tmp <- which(D$notesFlag=="seeddrop" | D$notesFlag=="immature" | D$notesFlag=="fecundityFlag")
 D$fecundityflag[tmp] <- 1  # records that shouldn't be used for fecundity analysis (could be used for emergence and reproduction)
 

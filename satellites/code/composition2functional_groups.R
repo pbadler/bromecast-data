@@ -224,6 +224,7 @@ comp_all$SiteCode[comp_all$SiteCode=="EnsingS3"] <- "EnsingS3 Bear Creek"
 comp_all$SiteCode[comp_all$SiteCode=="EnsingS4"] <- "EnsingS4 Lundbom"
 comp_all$SiteCode[comp_all$SiteCode=="SymstadS1"] <- "Symstad1"
 comp_all$SiteCode[comp_all$SiteCode=="South Eden"] <- "SouthEden"
+comp_all$SiteCode[comp_all$SiteCode=="Hardware"] <- "HardwareRanch"
 
 
 ### aggregate neighborhood cover to functional group level for each individual
