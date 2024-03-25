@@ -823,3 +823,54 @@ emmeans::emmeans(mod, ~gravel)
 
 sjPlot::plot_model(mod, type = "pred", pred.type = "re", terms = c("gravel", "genotype")) +
   geom_line()
+
+### Flowering time vs fitness analysis SS vs WI ####
+
+# Only use plants that match up with phenology and harvest datasets (i.e., if
+# phenology data, we have harvest and vice versa)
+ss_phen_harvest %>% 
+  filter(first_flower > 0 & seed_count_total > 0) -> ss_true_positives
+ss_phen_harvest %>% 
+  filter(first_flower == 0 & seed_count_total == 0) -> ss_true_negatives
+
+wi_phen_harvest %>% 
+  filter(is.na(seed_drop)) %>% 
+  filter(first_flower > 0 & seed_count_total > 0) -> wi_true_positives
+wi_phen_harvest %>% 
+  # Make NAs from seed_count_total into 0s
+  mutate(seed_count_total = if_else(is.na(seed_count_total), 0, seed_count_total)) %>% 
+  filter(first_flower == 0 & seed_count_total == 0) -> wi_true_negatives
+ 
+# Bring together all true positive and true negative data sets 
+clean_ph <- rbind(ss_true_positives, ss_true_negatives,
+                  wi_true_positives, wi_true_negatives)
+
+# Get average flowering time per genotype. These will fill in observations with
+# no observed flowering time to be the average for that genotype.
+clean_ph %>% 
+  filter(first_flower > 0) %>% 
+  group_by(genotype) %>% 
+  summarize(mean_ft = mean(first_flower)) -> gt_means
+
+merge(clean_ph, gt_means) %>% 
+  mutate(first_flower = ifelse(first_flower == 0, mean_ft, first_flower)) -> clean_ph
+
+# Average across genotype by site
+clean_ph %>% 
+  group_by(genotype, site) %>% 
+  summarize(mean_ft = mean(first_flower),
+            mean_seed_count = mean(seed_count_total)) -> genotype_site 
+
+# Make plot of site * flowering time interaction
+genotype_site %>%  
+  ggplot(aes(x = mean_ft, y = mean_seed_count, color = site)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(y = "Mean seed count",
+       x = "Mean first day of flowering",
+       color = "Site") +
+  theme_bw(base_size = 14)
+
+# Fit linear model on genotype averages
+fitness_mod <- lm(mean_seed_count ~ mean_ft * site, data = genotype_site)
+summary(fitness_mod) # Very strong interaction
