@@ -5,8 +5,8 @@ EnsingS1,2022,E and W corrected to removal treatment
 Ensing2,2022,many truly missing for reproduction and composition
 Ensing3,2022,many truly missing for reproduction and composition
 Ensing4,2022,many truly missing for reproduction and composition
-EOARC,2022,fixed distances on removal transects
+EOARC,2022,fixed distances on removal transects (in code)
 FAR NORTH CPER,2022,truly missing one composition
 GreenCanyon,2021,all composition data missing
-HardwareRanch,2023,
-L1_vanDiepen,2022,all W transect composition data missing
+L1_vanDiepen,2022,all W transect composition data missing; FIXED in raw data
+Symstad2,2022,bad distances on E 5.04 and 5.17? FIXED with code

@@ -30,35 +30,23 @@ source("composition2functional_groups.R")
 
 # merge demography and composition data, check and clean
 
+# fix a couple data entry errors
+D$Distance[D$SiteCode=="Symstad2" & D$Distance==5.04] <- 5
+D$Distance[D$SiteCode=="Symstad2" & D$Distance==5.17] <- 5.2
+# 
+# test <- merge(D,comp_ftypes1,all=T)
+# colSums(is.na(test))
+# table(test$SiteCode[is.na(test$annual)])
+# 
+# # figure out why demography and composition data don't match
+# missingC <- test[is.na(test$annual),]
+# missingC <- missingC[,c("SiteCode", "Year","Treatment","Transect","Distance")]
+# 
+# missingD <- test[is.na(test$Emerged),]
+# 
+# missingC[missingC$SiteCode=="Woodruff",]
+# missingD[missingD$SiteCode=="Woodruff",]
+allD_ft1 <- merge(D,comp_ftypes1,all.x=T)
 
-test <- merge(D,comp_ftypes1,all=T)
-colSums(is.na(test))
-table(test$SiteCode[is.na(test$annual)])
 
-# figure out why demography and composition data don't match
-missingC <- test[is.na(test$annual),]
-missingC <- missingC[,c("SiteCode", "Year","Treatment","Transect","Distance")]
 
-missingD <- test[is.na(test$Emerged),]
-
-missingC[missingC$SiteCode=="L1_vanDiepen",]
-missingD[missingD$SiteCode=="L1_vanDiepen",]
-
-problems<-unique(problems,margin=2)
-for(i in 1:nrow(problems)){
-  tmp <- which(D$SiteCode==problems$SiteCode[i] &
-                 D$Year==problems$Year[i] &
-                 D$Treatment==problems$Treatment[i] &
-                 D$Transect==problems$Transect[i])
-  tmpD <- D[tmp,]
-  tmp <- which(comp_ftypes1$SiteCode==problems$SiteCode[i] &
-                 comp_ftypes1$Year==problems$Year[i] &
-                 comp_ftypes1$Treatment==problems$Treatment[i] &
-                 comp_ftypes1$Transect==problems$Transect[i])
-  tmpC <- comp_ftypes1[tmp,]
-  print(tmpD); print(tmpC)
-}
-
-# figure out lots of other missing matches for composition data
-# Hardware Ranch 2023 issues with S and W
-# EOARC: distances for removal entered wrong in composition

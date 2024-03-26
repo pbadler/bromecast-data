@@ -129,7 +129,7 @@ spp_list <- merge(spp_list,fgroups, all.x=T)
 write.csv(spp_list,"../deriveddata/species2functionalgroups.csv", row.names=F)
 rm(spp_list)
 
-# fill out functional type data by hand
+# to do by hand: fill out functional types for any new (missing) species
 
 # read in latest version of functional type data
 fgroups <- read.csv("../deriveddata/species2functionalgroups.csv",header=T)
@@ -148,14 +148,14 @@ fgroups$ftypes1[fgroups$type=="shrub"] <- "shrub"
 fgroups$ftypes1[fgroups$type=="biocrust"] <- "biocrust"
 # unknowns  NAs, these will be CUT 
 
-# annual forb, annual grass, perennial forb, perennial grass, shrub, biocrust
+# annual forb, annual grass, perennial forb, perennial grass, shrub, biocrust, , unknown
 fgroups$ftypes2 <- fgroups$ftypes1
 tmp <- which(fgroups$ftypes1=="annual")
 fgroups$ftypes2[tmp] <- paste0(fgroups$ftypes2[tmp],fgroups$type[tmp])
 tmp <- which(fgroups$ftypes1=="perennial")
 fgroups$ftypes2[tmp] <- paste0(fgroups$ftypes2[tmp],fgroups$type[tmp])
 
-# annual forb, annual grass, perennial forb, perennial grass c3,  perennial grass c4, shrub, biocrust
+# annual forb, annual grass, perennial forb, perennial grass c3,  perennial grass c4, shrub, biocrust, unknown
 fgroups$ftypes3 <- fgroups$ftypes2
 tmp <- which(fgroups$ftypes2=="perennialgrass")
 fgroups$ftypes3[tmp] <- paste0(fgroups$ftypes3[tmp],fgroups$c3c4[tmp])
