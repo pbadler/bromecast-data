@@ -28,7 +28,10 @@ source("load_site_climate_data.R")
 # load and clean composition data, add functional group info
 source("composition2functional_groups.R")
 
-# merge demography and composition data, check and clean
+# merge demography site data
+D <- merge(D,siteD,all.x=T)
+
+# merge everything with composition data, check and clean
 
 # fix a couple data entry errors
 D$Distance[D$SiteCode=="Symstad2" & D$Distance==5.04] <- 5
@@ -47,6 +50,13 @@ D$Distance[D$SiteCode=="Symstad2" & D$Distance==5.17] <- 5.2
 # missingC[missingC$SiteCode=="Woodruff",]
 # missingD[missingD$SiteCode=="Woodruff",]
 allD_ft1 <- merge(D,comp_ftypes1,all.x=T)
+allD_ft2 <- merge(D,comp_ftypes2,all.x=T)
+allD_ft3 <- merge(D,comp_ftypes3,all.x=T)
 
+#cleanup
+rm(D, fgroups, comp_ftypes1,comp_ftypes2,comp_ftypes3)
+
+# fit demography models
+source("fit_demography_models.R")
 
 
