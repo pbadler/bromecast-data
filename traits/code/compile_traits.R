@@ -170,10 +170,20 @@ walker %>%
   summarize(across(seed_wt_g:root_length_cm_by_diam_class_mm_l_4_5, \(x) mean(x, na.rm = T))) %>% 
   rename(genotype = genotype_id) -> walker_gen
 
+# Read in inflor_mass and veg_mass from harvest info
+harvest <- read_csv("~/Desktop/phen_harvests.csv")
+harvest %>% 
+  group_by(genotype) %>% 
+  summarize(inflor_mass = mean(inflor_mass, na.rm = T),
+            veg_mass = mean(biomass_whole, na.rm = T),
+            seed_count = mean(seed_count_total, na.rm = T)) %>% 
+  ungroup()-> harvest_extras
+
 # Merge together datasets
 merge(davidson_gen, gamba_gen, all = T) %>% 
   merge(walker_gen, all = T) %>% 
-  merge(cg_gen, all = T)-> all_datasets
+  merge(cg_gen %>% select(genotype, first_flower), all = T) %>% 
+  merge(harvest_extras, all = T)-> all_datasets
 
 # Replace all NaN with NAs
 all_datasets[all_datasets == "NaN"] <- NA

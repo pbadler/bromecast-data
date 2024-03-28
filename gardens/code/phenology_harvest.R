@@ -537,7 +537,7 @@ phen_SS %>%
 
 data_allSS %>% 
   select(old_plot = plot, density, gravel = albedo,
-         x, y, seed_count_total, biomass_whole, standard_note, all_seed_drop,
+         x, y, seed_count_total, inflor_mass, biomass_whole, standard_note, all_seed_drop,
          herbivory, physical_damage, seed_drop, smut) %>% 
   mutate(density = ifelse(density == "low", "lo", "hi")) -> ss_harvest_short
 
@@ -557,7 +557,7 @@ data_allWI %>%
   mutate(block = round(plot),
          plot = round(plot%%1 * 10)) %>% 
   select(block, plot, density, gravel = albedo,
-         x, y, seed_count_total, biomass_whole, standard_note, all_seed_drop,
+         x, y, seed_count_total, inflor_mass, biomass_whole, standard_note, all_seed_drop,
          herbivory, physical_damage, seed_drop, smut) %>% 
   mutate(density = ifelse(density == "low", "lo", "hi")) %>% 
   mutate(block = as.factor(block))-> wi_harvest_short
@@ -580,7 +580,7 @@ data_allBA %>%
   mutate(block = round(plot),
          plot = round(plot%%1 * 10)) %>% 
   select(block, plot, density, gravel = albedo,
-         x, y, seed_count_total, biomass_whole, standard_note, all_seed_drop,
+         x, y, seed_count_total, inflor_mass, biomass_whole, standard_note, all_seed_drop,
          herbivory, physical_damage, seed_drop, smut) %>% 
   mutate(density = ifelse(density == "low", "lo", "hi")) %>% 
   mutate(block = as.factor(block))-> BA_harvest_short
@@ -593,7 +593,7 @@ merge(BA_harvest_short, BA_phen_short) -> ba_phen_harvest
 
 data_mostCH %>% 
   select(block, density, gravel = albedo,
-         x, y, seed_count_total, biomass_whole, standard_note, all_seed_drop,
+         x, y, seed_count_total, inflor_mass, biomass_whole, standard_note, all_seed_drop,
          herbivory, physical_damage, seed_drop, smut) %>% 
   mutate(density = ifelse(density == "low", "lo", "hi")) %>% 
   mutate(block = as.factor(block))-> CH_harvest_short
@@ -874,3 +874,15 @@ genotype_site %>%
 # Fit linear model on genotype averages
 fitness_mod <- lm(mean_seed_count ~ mean_ft * site, data = genotype_site)
 summary(fitness_mod) # Very strong interaction
+
+
+ss_phen_harvest %>% 
+  select(names(ch_phen_harvest)) -> ss_phen_harvest
+wi_phen_harvest %>% 
+  select(names(ch_phen_harvest)) -> wi_phen_harvest
+ba_phen_harvest %>% 
+  select(names(ch_phen_harvest)) -> ba_phen_harvest
+
+phen_harvest_all <- rbind(ss_phen_harvest, wi_phen_harvest, ba_phen_harvest, ch_phen_harvest)
+
+write_csv(phen_harvest_all,"~/Desktop/phen_harvests.csv")
