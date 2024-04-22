@@ -1,0 +1,80 @@
+notes,action,note_standard
+"check (x,y), could be (12,5)",action,bad_position
+SAMPLE LABELED 7.3 WHITE HIGH BUT INCLUDED IN PLOT 8 BAG SO 8.1 IS ASSUMED,action,bad_position
+"SAMPLE LABELED WITH ""ID UNCERTAIN""",action,bad_position
+"SMUT  SAMPLE LABELED WITH ""ID UNCERTAIN""",action,bad_position
+"SMUT SAMPLE LABELED WITH ""ID UNCERTAIN""",action,bad_position
+ID uncertain,action,bad_position
+ID UNCERTAIN,action,bad_position
+incorrect coordinates to check,action,bad_position
+"smut, incorrect coordinates to check",action,bad_position
+"white gravel found with sample, incorrect coordinates to check",action,bad_position
+"partial smut, incorrect coordinates to check",action,bad_position
+"duplicate?, incorrect coordinates to check",action,bad_position
+DUPLICATE,action,duplicate
+DUPLICATES,action,duplicate
+second harvest not included,action,duplicate
+Duplicate,action,duplicate
+duplicates,action,duplicate
+"DUPLICATES, ONE DATED",action,duplicate
+"duplicates, unknown dates",action,duplicate
+"SECOND HARVEST NOT INCLUDED, SMUT",action,duplicate
+"SMUT, SECOND HARVEST NOT INCLUDED",action,duplicate
+Duplicates,action,duplicate
+"HEAVILY HERBIVORIZED, NO TILLERS/INFLORESCENCE",action,herbivory
+herbivory,action,herbivory
+HERBIVORY,action,herbivory
+DEAD,action,mortality
+DEAD- NO MATERIAL ENCLOSED,action,mortality
+NO DATE ON ENVELOPE,action,no_date
+"NO DATE ON ENVELOPE, SMUT",action,no_date
+No date,action,no_date
+no date,action,no_date
+NO DATE,action,no_date
+"smut, no date",action,no_date
+"no date, smut",action,no_date
+"NO DATE, BROKEN",action,no_date
+"NO DATE, SMUT",action,no_date
+"NO DATE, NO SEEDS",action,no_date
+"SMUT, NO DATE",action,no_date
+MISSING INFLORESCENCE,action,physical_damage
+NO INFLORESCENCE,action,physical_damage
+NO INFLORESENCE,action,physical_damage
+no inflorescence,action,physical_damage
+1 TILLER WITH NO INFLORESCENCE,action,physical_damage
+NO SEEDS,action,seed_drop
+no seeds,action,seed_drop
+"BOOT, NO SEEDS",action,seed_drop
+No seeds,action,seed_drop
+DEAD- NO INFLORESCENCE,action,seed_drop
+seeds fell off,action,seed_drop
+LOST IN WIND,action,seed_drop
+SEED DROP,action,seed_drop
+"SEED DROP, NO SEEDS",action,seed_drop
+SEED LOSS,action,seed_drop
+seeds lost,action,seed_drop
+No Seeds,action,seed_drop
+MINOR SEED LOSS,action,seed_drop
+HARVESTED BECAUSE SEEDS FELL OFF,action,seed_drop
+"SEED DROP, NO SEEDS TO WEIIGH",action,seed_drop
+"SEED DROP, NO SEEDS TO WEIGH",action,seed_drop
+"DROP SEED, NO SEEDS TO WEIGH",action,seed_drop
+Smut,action,smut
+SMUT,action,smut
+4/5 TILLERS WITH SMUT,action,smut
+"smut, check for duplicates",action,smut
+smut,action,smut
+2/4 TILLERS WITH SMUT,action,smut
+partial smut,action,smut
+1 tiller w/ smut,action,smut
+1 TILLER WITH SMUT,action,smut
+PARTIAL SMUT,action,smut
+2 TILLERS W/ SMUT,action,smut
+3 TILLERS WITH SMUT,action,smut
+"1 TILLER WITH SMUT, 1 TILLER PARTIAL SMUT",action,smut
+1 TILLER W/ SMUT,action,smut
+2 TILLERS WITH SMUT,action,smut
+one tiller with smut,action,smut
+Head Smut,action,smut
+NA,ignore,
+BOOT,ignore,
