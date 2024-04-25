@@ -420,8 +420,7 @@ for_checking %>%
                                   live_last_phen == "N" & harvested == "Y" ~ "phenN_harvestY",
                                    T ~ NA)) -> for_checking_all
 
-for_checking_all %>% filter(note_standard == "no_date") %>% 
-  filter(block == 2)
+## Data checking ####
 
 # Graphic for high density plots
 png("~/Desktop/high_density_plots.png", height = 10, width = 12, res = 300, units = "in")

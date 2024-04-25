@@ -1,0 +1,30 @@
+notes,action,note_standard
+not cheatgrass,action,wrong_spp
+smut,action,smut
+seed drop,action,seed_drop
+was bromus japonicus,action,wrong_spp
+Partial Smut,action,smut
+Smut,action,smut
+SMUT,action,smut
+died,action,mortality
+dead/no plant found,action,missing
+dead,action,mortality
+plant died,action,mortality
+SEED DROP,action,seed_drop
+partial smut,action,smut
+PARTIAL SMUT,action,smut
+"no infloresence, only leafy material",action,physical_damage
+MOSTLY SMUT,action,smut
+dead/no plant,action,mortality
+not present/harvested already?,action,missing
+"1 tiller w/o infloresence, intertwined w/ japonicus, harvested early",ignore,
+mostly smut,action,smut
+1 TILLER MISSING SEED HEAD,action,physical_damage
+dead/not present,action,missing
+1 BROKEN TILLER MISSING SEED HEAD,action,physical_damage
+1 TILLER MISSING SEEDS,action,physical_damage
+plant maybe died,ignore,
+"whole plant chopped off, maybe by herbivore",action,physical_damage
+weird seed heads,ignore,
+1 tiller w/ smut,action,smut
+knocked some seed heads off,action,seed_drop

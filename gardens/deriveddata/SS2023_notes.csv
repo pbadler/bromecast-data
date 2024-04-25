@@ -1,0 +1,36 @@
+notes,action,note_standard
+"DYING, FROST HEAVING AROUND TOOTHPICK",action,frost_heave
+ACCIDENTALLY TORN LEAF,action,physical_damage
+PULLED A LEAF ACCIDENTALLY,action,physical_damage
+FLOWERS BROKE OFF,action,physical_damage
+COLUMN GOT DUG OUT BY SOME ANIMAL,action,physical_damage
+1 BLADE RIPPED,action,physical_damage
+ACCIDENTLY PULLED A LEAF,action,physical_damage
+THOUGHT WAS WEED - PULLED ACCIDENTALLY,action,physical_damage
+PULLED ACCIDENTALLY,action,physical_damage
+MAY NOT BE CHEATGRASS; confirmed not cheatgrass - pulled,action,wrong_spp
+bromus japonicus,action,wrong_spp
+PULLED PLANT THAT WAS LIKELY NOT CHEATGRASS,action,wrong_spp
+confirmed not cheatgrass,action,wrong_spp
+APPEARED TO NOT BE CHEATGRASS - PULLED,action,wrong_spp
+Bromus japonicus,action,wrong_spp
+DYING,ignore,
+VERY SMALL,ignore,
+LEAVES VERY NARROW,ignore,
+SMALL,ignore,
+LARGE,ignore,
+HALF DEAD,ignore,
+LEAVES SKINNY,ignore,
+looks close to death,ignore,
+SKINNY LEAVES,ignore,
+SKINNY  LEAVES,ignore,
+MOSTLY DEAD,ignore,
+MAY BE WEED THAT LOOKS LIKE CHEATGRASS?,ignore,
+on top of anthill,ignore,
+confirm not present,ignore,
+close to dying,ignore,
+looks close to dying,ignore,
+LOOKS LIKE WILL TURN PURPLE SOON,ignore,
+COULD BE WEED,ignore,
+MAY NOT BE CHEATGRASS?,ignore,
+CLOSE TO PURPLE,ignore,

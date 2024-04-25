@@ -1,0 +1,143 @@
+notes,action,note_standard
+NO SEEDS,action,seed_drop
+Surface,ignore,
+Fungal infection,action,smut
+1ź,ignore,
+SMUT,action,smut
+Sad boi,ignore,
+No toothpick,action,bad_position
+Missing toothpick,action,bad_position
+smut,action,smut
+At surface,ignore,
+no seeds,action,seed_drop
+At surface ,ignore,
+Head smut,action,smut
+Pushed back in,ignore,
+Smut,action,smut
+Accidentally tore off boot,action,physical_damage
+Probably will be dead soon,ignore,
+2/4 TILLERS WITH SMUT,action,smut
+Above ground,ignore,
+1 leaf dying. ,ignore,
+Above ground. ,ignore,
+Upside down toothpick,ignore,
+"Above ground, almost dead. ",ignore,
+"Above ground, 1 blade cut. ",action,physical_damage
+Toothpick missing.,action,bad_position
+Not doing hot,ignore,
+Toothpick sticking far out of ground,ignore,
+Toothpick broken. ,ignore,
+1 leaf dead. ,ignore,
+Main stem looks like it was rippes off,action,physical_damage
+2 leaves dead. ,ignore,
+DEAD,action,mortality
+Harvested because seeds fell off,ignore,
+4/5 TILLERS WITH SMUT,action,smut
+No date,ignore,
+Unsure,ignore,
+no date,ignore,
+1 tiller w/ smut,action,smut
+NO DATE,ignore,
+partial smut,action,smut
+unsure if correct plant,action,bad_position
+Only root in ground with toothpick,ignore,
+Unrooted,ignore,
+"smut, no date",action,smut
+"no date, smut",action,smut
+"NO DATE, BROKEN",action,physical_damage
+"NO DATE, SMUT",action,smut
+Only root in ground,ignore,
+Probably will die soon,ignore,
+"HEAVILY HERBIVORIZED, NO TILLERS/INFLORESCENCE",action,physical_damage
+Herbivory or damage to plant,action,physical_damage
+BOOT,ignore,
+SEED DROP,action,seed_drop
+"SEED DROP, NO SEEDS",action,seed_drop
+NO INFLORESCENCE,action,physical_damage
+herbivory,action,herbivory
+SEED LOSS,action,seed_drop
+seeds lost,action,seed_drop
+Dying,ignore,
+1 TILLER WITH SMUT,action,smut
+No Seeds,action,seed_drop
+Fungal disease,action,smut
+No seed heads,action,seed_drop
+Seeds not present but it completely purple. Not sure if it put out seeds or not,action,seed_drop
+No seeds,action,seed_drop
+NO INFLORESENCE,action,physical_damage
+Sad,ignore,
+Pushed back in ground.,ignore,
+Missing,action,bad_position
+"smut, check for duplicates",action,smut
+"NO DATE, NO SEEDS",action,seed_drop
+Toothpick missing. ,ignore,
+Missing tp; dead plant where tp should be,action,mortality
+Above ground. Toothpick broke.,ignore,
+V0,ignore,
+Seed covering and root attached to pick. ,ignore,
+One leaf dead,ignore,
+"Hole in leaf, leaf dying. ",ignore,
+PARTIAL SMUT,action,smut
+On the edge of purple,ignore,
+Headsmut,action,smut
+toothpick missing,ignore,
+unsure,ignore,
+HERBIVORY,action,herbivory
+MINOR SEED LOSS,action,seed_drop
+DEAD- NO MATERIAL ENCLOSED,action,mortality
+No toothpick; plant found in right area >v3,ignore,
+Can’t tell if plant near toothpick is associated with toothpick,action,bad_position
+2 TILLERS W/ SMUT,action,smut
+3 TILLERS WITH SMUT,action,smut
+"1 TILLER WITH SMUT, 1 TILLER PARTIAL SMUT",action,smut
+Almost dead,ignore,
+Close to dying. ,ignore,
+"Seed on pick started to germinate, no plant yet. Frost heaved. ",action,frost_heave
+HARVESTED BECAUSE SEEDS FELL OFF,action,seed_drop
+Might be 2 plants,ignore,
+Toothpick missing,ignore,
+Boot stalk eatten,ignore,
+Harvested because it was no longer rooted and came up easily,ignore,
+1 TILLER W/ SMUT,action,smut
+No tp,ignore,
+2 TILLERS WITH SMUT,action,smut
+Last years toothpick,ignore,
+This BrTe looks like it may be senescing soon,ignore,
+Fungal infecrion,action,smut
+no inflorescence,action,physical_damage
+"SEED DROP, NO SEEDS TO WEIIGH",action,seed_drop
+one tiller with smut,action,smut
+1 TILLER WITH NO INFLORESCENCE,action,physical_damage
+Fungla infection,action,smut
+"SMUT, NO DATE",action,smut
+"SEED DROP, NO SEEDS TO WEIGH",action,seed_drop
+Pushed back i n,ignore,
+toothpick out,ignore,
+toothpick FH,ignore,
+"DROP SEED, NO SEEDS TO WEIGH",action,seed_drop
+Two on toothpick. Cant tell ,action,bad_position
+Two present both fh,action,frost_heave
+Head Smut,action,smut
+Two present both frost heaved,action,frost_heave
+"Plant is small and has tiny leaves, not sure if this is right phenological stage",ignore,
+MISSING INFLORESCENCE,action,physical_damage
+"Tiny plant BrTe, however, flowering green",ignore,
+Tooth pick gone,ignore,
+NO DATE ON ENVELOPE,ignore,
+"NO DATE ON ENVELOPE, SMUT",action,smut
+Had to push in,ignore,
+Tried to replant,ignore,
+DEAD- NO INFLORESCENCE,action,mortality
+On the edge of flowering purple,ignore,
+At surfqce,ignore,
+"Leaves look ripped, during weeding?",action,physical_damage
+Af surface,ignore,
+Alive,ignore,
+Dead,ignore,
+Two plants in toothpick hole,ignore,
+seeds fell off,action,seed_drop
+Seed fell off,action,seed_drop
+Stalk broken off where seedhead should be,action,physical_damage
+LOST IN WIND,action,seed_drop
+Two plants touching toothpick,ignore,
+No toothpicj,ignore,

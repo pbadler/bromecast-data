@@ -13,8 +13,6 @@ dosite <- "Boise" # code for focal site
 # through XX and (2) phenology recorded at harvest
 rawD <- read.csv(here("gardens/rawdata/wildcatphenology2023.csv"),header=T)
 rawDH <- read_csv(here("gardens/rawdata/wildcat_2023_harvestPhenology.csv"))
-# Import genotype positions for common garden
-genotype_pos <- read_csv(here("gardens/rawdata/WI_commongardenseedpositions2022_22aug2022.csv"))
 
 # remove capital letters from column headers 
 names(rawD) <- tolower(names(rawD))
@@ -53,152 +51,447 @@ rawD %>%
 sort(unique(rawD$plot)) # All good
 sort(unique(rawD$block)) # All good
 
-## Still needs edits ####
-# Get density, genotype, and growout info
-genotype_pos %>% 
-  filter(commg == "LowBoise") %>% 
+## Manually fixing phenology issues ####
+
+## Fix block 1 ####
+
+# Block 1 looks mostly fine. Some plots observed in 5/18, others observed in 7/12
+## Fix block 2 ####
+rawD %>% 
+  filter(block == 2) %>% 
+  group_by(plot, gravel) %>% 
+  summarize(n = n())
+
+rawD_2 <- rawD %>% filter(block == 2)
+# Plots 1 & 2 are fine
+rawD_2_12 <- rawD_2 %>% filter(plot %in% 1:2)
+# Plots 3 & 4 are messed up. Plot 3 "black" is correct
+rawD_2_3 <- rawD_2 %>% filter(plot == 3 & gravel == "Black")
+# Plot 4 "white" is correct but missing some values that were recorded as 2.3w
+rawD_2_4 <- rawD_2 %>% filter(plot == 4)
+rawD_2 %>% 
+  filter(plot == 3 & gravel == "White") %>% 
+  # Remove 5/11 date which seems messed up (only include 5/9 and 5/18)
+  filter(date %in% c("2023-05-09", "2023-05-18")) %>% 
+  rbind(rawD_2_4) %>% 
+  mutate(plot = 4) -> rawD_2_4
+
+# Bring all back together
+rawD_2_fixed <- rbind(rawD_2_12, rawD_2_3, rawD_2_4)
+
+## Fix block 3 ####
+# Plots 1 and 2 are fine
+rawD_3_12 <- rawD %>% filter(block == 3 & plot %in% 1:2)
+# Plot 3 should be black
+rawD_3_3 <- rawD %>% filter(block == 3 & plot == 3 & gravel == "Black")
+# Plot 4 should be white
+rawD_3_4 <- rawD %>% filter(block == 3 & plot == 4 & gravel == "White")
+# These are some extra plot 3s that should be plot 4s
+rawD %>% 
+  filter(block == 3 & plot == 3 & gravel == "White") %>% 
+  mutate(plot = 4) %>% 
+  # Bind back to rest of plot 4
+  rbind(rawD_3_4) -> rawD_3_4
+
+# Bring all data back together
+rawD_3_fixed <- rbind(rawD_3_12, rawD_3_3, rawD_3_4)
+
+## Fix block 4 ####
+# Plots 1 and 2 look good
+rawD %>% filter(block == 4 & plot %in% 1:2) -> rawD_4_12
+
+# A lot of plants have two recorded observations on 5/18 in plot 3
+rawD %>% 
+  filter(block == 4 & plot == 3 & date == "2023-05-18") 
+
+rawD %>% 
+  filter(block ==4 & plot == 3) %>% 
+  filter(date != "2023-07-12") %>% 
+  # x should only go up to 9
+  filter(x %in% 1:9) %>% 
+  distinct() %>% 
+  arrange(x, y, date) %>% 
+  filter(date == "2023-05-18") %>% 
+  group_by(x,y) %>% 
+  summarize(n = n()) %>% 
+  filter(n > 1) -> coords_to_fix_4_3
+
+rawD %>% 
+  filter(block == 4 & plot == 3) %>% 
+  filter(x %in% 1:9) %>% 
+  distinct() %>% 
+  filter(date == "2023-05-18") -> rawD_4_3_tofix
+
+# Have to fix block 4, plot 3 manually for 05/18/2023
+# write_csv(rawD_4_3_tofix, "gardens/deriveddata/wi_block4_plot3_tofix.csv")
+# Read in manually fixed data
+rawD_4_3_fixed <- read_csv("gardens/deriveddata/wi_block4_plot3_tofix.csv")
+
+rawD %>% 
+  filter(block == 4 & plot == 3 & x %in% 1:9) %>% 
+  filter(date %in% c("2023-03-23", "2023-04-26", "2023-05-02","2023-05-09")) %>% 
+  rbind(rawD_4_3_fixed %>% mutate(date = mdy(date))) -> rawD_4_3_fixed
+
+# Plot 4 has duplicates on 5/2
+rawD %>% filter(block == 4 & plot == 4 & date == "2023-05-02") %>% 
+  arrange(x,y) %>% 
+  distinct() %>% 
+  rbind(rawD %>% filter(block == 4 & plot == 4 & date != "2023-05-02"))-> rawD_4_4
+
+# Bring all block 4 subplots together
+rbind(rawD_4_12,
+      rawD_4_3_fixed,
+      rawD_4_4) -> rawD_4_fixed
+
+# There's also an observation that has x = "c"; this should be x = 7
+rawD_4_fixed[rawD_4_fixed$x == "c", "x"] <- 7
+
+## Fix block 5 ####
+# Plots 1 and 2 are good
+rawD %>% 
+  filter(block == 5 & plot %in% 1:2) -> rawD_5_12
+# Plot 4 should be white gravel
+rawD %>% 
+  filter(block == 5 & plot == 4 & gravel == "White") -> rawD_5_4
+# Plot 3 is messed up
+rawD %>% 
+  filter(block == 5 & plot == 3 & gravel == "Black") %>% 
+  group_by(x,y) %>% 
+  summarize(n = n()) %>% 
+  print(n = Inf)
+
+rawD %>% 
+  filter(block == 5 & plot == 3 & gravel == "Black") %>% 
+  arrange(x,y) -> rawD_5_3_most
+
+rawD %>% 
+  filter(block == 5 & plot == 3 & gravel == "White") %>% 
+  arrange(x,y) %>% 
+  filter(date == "2023-05-11") %>% 
+  mutate(gravel = "Black") -> rawD_5_3_rest
+
+rbind(rawD_5_12,
+      rawD_5_3_most, rawD_5_3_rest,
+      rawD_5_4) -> rawD_5_fixed
+## Fix block 6 ####
+# Plot 1 and 2 are good
+rawD_6_12 <- rawD %>% filter(block == 6 & plot %in% 1:2)
+# Plot 4 should be block gravel
+rawD_6_4 <- rawD %>% filter(block == 6 & plot == 4 & gravel == "Black")
+# Plot 3 white gravel has some assigned to plot 4
+rawD_6_3_most <- rawD %>% filter(block == 6 & plot == 3 & gravel == "White")
+rawD_6_3_rest <- rawD %>% filter(block == 6 & plot == 4 & gravel == "White") %>% 
+  mutate(plot = 3)
+# Bring all back together
+rbind(rawD_6_12, rawD_6_3_most, rawD_6_3_rest, rawD_6_4) -> rawD_6_fixed
+## Fix block 7 ####
+# Plot 1 is good
+rawD_7_1 <- rawD %>% filter(block == 7 & plot == 1)
+
+# Plot 2 has repeats for 3/23 and is missing observations for 4/26
+rawD_7_2 <- rawD %>% filter(block == 7 & plot == 2) %>% 
+  filter(date == "2023-03-23") %>% 
+  arrange(x,y) %>% 
+  distinct() %>% 
+  rbind(rawD %>% filter(block == 7 & plot == 2 & date != "2023-03-23")) %>% 
+  arrange(x, y, date)
+
+rawD %>% 
+  filter(block == 7 & plot == 3 & gravel == "White" & x %in% 1:9) %>% 
+  arrange(x, y, date) %>% 
+  group_by(x, y) %>% 
+  summarize(n = n()) %>% 
+  print(n = Inf)
+
+rawD_7_3 <- rawD %>% 
+  filter(block == 7 & plot == 3 & gravel == "White") %>% 
+  # Only 3 dates are complete and make sense
+  filter(date %in% c("2023-03-23", "2023-04-27", "2023-05-18")) %>% 
+  arrange(x,y)
+
+rawD %>% 
+  filter(block == 7 & plot == 4 & gravel == "White") %>%
+  filter(date == "2023-05-04") %>% 
+  arrange(x,y) -> some_7_4_may
+
+rawD %>% 
+  filter(block == 7 & plot == 3 & gravel == "White") %>%
+  filter(date == "2023-05-04")  %>% 
+  arrange(x,y) %>% 
+  distinct() %>% 
+  mutate(plot = 4) %>% 
+  rbind(some_7_4_may) %>% 
+  arrange(x,y) %>% 
+  # (1,2) (1,3) (1,4) (1,5) all have duplicates so need to choose one. They are
+  # all pretty similar across the 2 observations (v doesn't change much if at
+  # all)
+  mutate(v = case_when(x == 1 & y == 2 ~ "FG",
+                       x == 1 & y == 5 ~ "Bootstage",
+                       T ~ v),
+         live = case_when(x == 1 & y == 3 ~ "N",
+                          x == 1 & y == 5 ~ "Y",
+                          T ~ live),
+         harvested = ifelse(x == 1 & y == 5, "N", harvested),
+         herbivory = ifelse(x == 1 & y == 5, "N", herbivory),
+         frost_heave = ifelse(x == 1 & y == 5, "N", frost_heave)) %>% 
+  distinct() %>% 
+  filter(y %in% 1:5) %>% 
+  rbind(rawD %>% filter(block == 7 & plot == 4 & date != "2023-05-04")) -> rawD_7_4
+
+# Bring all back together
+rbind(rawD_7_1, rawD_7_2, rawD_7_3, rawD_7_4) -> rawD_7_fixed
+
+## Fix block 8 ####
+
+# Block 8 looks mostly fine. Plot 3 is missing observations on 5/18 and for plot
+# 4 there are only 5 observations on 5/4
+
+# rawD %>% filter(block == 8 & plot == 4 & date == "2023-05-04") 
+
+## Fix block 9 ####
+
+rawD %>% filter(block == 9) %>% 
+  group_by(plot, date) %>% 
+  summarize(n = n())
+# Duplicate observations in Plot 3 for 4/27 and in Plot 4 for 5/4
+
+# Plots 1 and 2 are fine
+rawD_9_12 <- rawD %>% filter(block == 9 & plot %in% 1:2)
+
+# Remove extras in plot 3
+rawD %>% 
+  filter(block == 9 & plot == 3 & gravel == "Black") %>% 
+  filter(date == "2023-04-27") %>% 
+  arrange(x,y) %>% 
+  rbind(rawD %>% filter(block == 9 & plot == 3 & date != "2023-04-27")) -> rawD_9_3
+
+# Remove extras in plot 4
+rawD %>% 
+  filter(block == 9 & plot == 4) %>% 
+  arrange(x,y) %>% 
+  filter(x %in% 1:9) -> plot4_most
+
+plot4_most %>% 
+  filter(date == "2023-05-04") %>% 
+  arrange(x,y) -> block9_plot4_tofix
+
+# Need to fix block 9, plot 4 manually
+# write_csv(block9_plot4_tofix,"~/Desktop/block9_plot4_tofix.csv")
+
+# Read back in manually altered csv. Made best guesses for which observation was
+# correct based on other dates.
+block9_plot4_fixed <- read_csv("~/Desktop/block9_plot4_tofix.csv")
+block9_plot4_fixed %>% 
+  mutate(date = mdy(date)) -> block9_plot4_fixed
+
+# Bring everything back together
+plot4_most %>% 
+  filter(date != "2023-05-04") %>% 
+  rbind(block9_plot4_fixed) %>% 
+  rbind(rawD %>% filter(block == 9 & plot == 3 & gravel == "White") %>% 
+          mutate(plot = 4)) %>% 
+  arrange(x,y, date) %>% 
+  rbind(rawD_9_12, rawD_9_3) -> rawD_9_fixed
+
+
+## Fix block 10 ####
+
+# Plot 1 is missing observations on 4/27 - seems like they could be mislabeled
+# as plot 3 - check densities (plot 1 should be low, 3 should be high)
+
+rawD %>% filter(block == 10 & plot == 3 & gravel == "White") %>% 
+  mutate(plot = 1) %>% 
+  rbind(rawD %>% filter(block == 10 & plot == 1 & gravel == "White")) -> rawD_10_1
+
+# Plot 2 seems fine
+rawD %>% filter(block == 10 & plot == 2) -> rawD_10_2 
+
+# Plot 3 has duplicate observations on 5/11
+rawD %>% 
+  filter(block == 10 & plot == 3) %>% 
+  filter(date == "2023-05-11") %>% 
+  arrange(x,y) %>% 
+  # Remove duplicates
+  distinct() %>% 
+  rbind(rawD %>% filter(block == 10 & plot == 3 & gravel == "Black" & date != "2023-05-11")) -> rawD_10_3
+
+# Plot 4 seems fine so bind rest together
+rbind(rawD_10_1, rawD_10_2, rawD_10_3, rawD %>% filter(block == 10 & plot == 4)) -> rawD_10_fixed
+
+## Bring all blocks back together ####
+rbind(rawD_2_fixed,
+      rawD_3_fixed,
+      rawD_4_fixed,
+      rawD_5_fixed,
+      rawD_6_fixed,
+      rawD_7_fixed,
+      rawD_9_fixed,
+      rawD_10_fixed,
+      rawD %>% filter(block %in% c(1,8))) -> rawD_fixed
+
+# Set x to be numeric to match y's
+rawD_fixed$x <- as.numeric(rawD_fixed$x)
+
+# There are a number of observations that were recorded as being made on 7/12...
+# this isn't possible given the field season length. It seems like these should
+# be 5/18 since these plots are missing observations from 5/18.
+
+rawD_fixed %>% 
+  mutate(date = case_when(date == ymd("2023-07-12") ~ ymd("2023-05-18"),
+                          T ~ date)) -> rawD_fixed
+
+# Change phenology codes
+rawD_fixed %>% 
+  mutate(v = ifelse(v == "Bootstage", "BS", v)) %>% 
+  mutate(v = ifelse(v == ">V3", "V3+", v)) -> rawD_fixed
+
+# Remove all intermediate datasets
+rm(list=setdiff(ls(), "rawD_fixed"))
+
+## Bring in harvest data set ####
+v_harvest <- read_csv("gardens/rawdata/CG_harvest2023.csv")
+
+v_harvest %>% 
+  filter(Site == "BoiseLow") %>% 
+  select(notes) %>% 
+  distinct() -> v_harvest_notes
+
+# Write notes csv to code manually
+#write_csv(v_harvest_notes, "gardens/deriveddata/WI_harvest23_notes_actions.csv")
+
+v_harvest %>% 
+  filter(Site == "BoiseLow") %>% 
   mutate(site = "WI",
-         growout = bulkyear,
-         genotype = parse_number(genotypeid),
-         density = ifelse(density == "lo", "Low", "High"),
-         gravel = ifelse(albedo == "black", "Black", "White")) %>% 
-  select(site, density, gravel, plot, x, y, genotype, growout)
+         date = mdy(Date),
+         block = Block,
+         plot = Plot,
+         gravel = ifelse(Albedo == "white", "White", "Black"),
+         density = ifelse(Density == "high", "High", "Low"),
+         live = Live,
+         v = V,
+         biomass_whole = biomass_whole) %>% 
+  select(site, date, block, plot, gravel, density, x, y,
+         live, v, biomass_whole, notes) %>% 
+  # Fix phenology codes - use the latest stage if multiple stages
+  mutate(v = case_when(v == "FP_FG" ~ "FP",
+                       v == "FB_FP" ~ "FB",
+                       v == "FG_FP" ~ "FP",
+                       v == "FG_BS" ~ "FG",
+                       v == "FP_FB" ~ "FB",
+                       v == "FG_FB" ~ "FB",
+                       v == "FG_FP_FB" ~ "FB",
+                       v == "FB_FG" ~ "FB",
+                       v == "FP_FG_FB" ~ "FB",
+                       v == "FB_FG_FP" ~ "FB",
+                       v == "UNK" ~ NA,
+                       T ~ v)) -> v_harvest
+
+# Read in standardized notes and drop bad coordinates, duplicates, etc.
+v_harvest_notes_std <- read_csv("gardens/deriveddata/WI_harvest23_notes_actions.csv")
+v_harvest_notes_std %>% 
+  filter(action == "action") %>% 
+  select(notes, note_standard) %>% 
+  merge(v_harvest, all = T)  %>%  
+  # This removes bad positions, duplicates, and harvests without recorded date
+  filter(is.na(note_standard) | note_standard %in% c("smut", "seed_drop",
+                                                     "physical_damage", "no_date",
+                                                     "mortality", "herbivory")) -> v_harvest
+
+# Only keep ones that are low density and go up to x = 18 or high density and go
+# up to x = 9 (everything but block 1, plot 1 that has issues)
+v_harvest %>% 
+  # Include only observations that make sense with the grid for right now
+  # filter(block*plot != 1) %>% 
+  filter(density == "High" & x %in% 1:9 | density == "Low" & x %in% 1:18) -> v_harvest_most
+
+# Add in plants from block 1 and plot 1, including those from x = 10
+# v_harvest %>% 
+#   filter(block*plot == 1) -> v_harvest_rest
+
+# Bring these two datasets back together
+# v_harvest <- rbind(v_harvest_most, v_harvest_rest) %>% 
+#   arrange(block, plot, gravel, x, y)
+v_harvest <- rbind(v_harvest_most) %>%
+  arrange(block, plot, gravel, x, y)
+
+# Pull out columns needed to merge with phenology data
+v_harvest %>% 
+  select(date, block, plot, gravel, density, x, y, live, v, notes) %>% 
+  mutate(site = "WI",
+         harvested = NA,
+         herbivory = NA,
+         frost_heave = NA) %>% 
+  select(names(rawD_fixed)) %>% 
+  rbind(rawD_fixed) -> rawD_with_harvest
+
+# If v stage is recorded, should be live
+rawD_with_harvest %>% 
+  mutate(live = ifelse(complete.cases(v), "Y", "N")) -> rawD_with_harvest
+
+# Add in density information
+v_harvest %>% 
+  group_by(block, plot, gravel, density) %>% 
+  summarize() -> plot_info
+rawD_with_harvest %>% 
+  merge(plot_info) -> rawD_with_harvest
 
 # assign each individual plant a unique ID, link to grid positions
-plant_key <- rawD[,c("site","block","plot","x","y","gravel", "density")]
+plant_key <- rawD_with_harvest[,c("site","block","plot","x","y","gravel", "density")]
 plant_key %>% 
   distinct(site, block, plot, gravel, density, x, y) -> plant_key
 
 nrow(plant_key)
-# There are 8011 unique combinations of site, block, plot, gravel, density, x &
-# y (11 too many). MLV is fixed what we could manually but there are 11
-# observations that I can't figure out.
+# 3600 plants
 
-# Pull out times where there is just one observation of a unique ID
-rawD %>% 
-  mutate(ids = paste(site, block, plot, gravel, density, x, y, sep = "_")) -> rawD 
+# Get genotype information
+# Import genotype positions for common garden
+genotype_pos <- read_csv(here("gardens/rawdata/WI_commongardenseedpositions2022_22aug2022.csv"))
 
-rawD %>% 
-  group_by(ids) %>% 
-  summarize(n = n()) %>% 
-  filter(n == 1) %>% 
-  pull(ids) -> bad_ids
-
-# Remove remaining bad_ids that I can't figure out from the dataset
-rawD %>% 
-  filter(ids %notin% bad_ids) -> rawD
-
-# Check to see how many unique plants there are
-length(unique(rawD$ids))
-
-## Fix coordinate switching that happened after the first census #
-
-# Get the first census for each plant position that has the CORRECT genotype
-rawD %>% 
-  filter(year(date) == 2021) -> rawD_survey1
-
-# Create data frame of just positions and correct genotype codes
-rawD_survey1 %>% 
-  select(site, block, plot, density, gravel, x, y, genotype, source) -> genotype_codes_correct
-
-# Get the rest of the data
-rawD %>% 
-  filter(year(date) != 2021) -> rawD_surveyrest
-
-# For the rest of the data, need to switch direction of the Y coordinates
-rawD_surveyrest %>% 
-  mutate(y= case_when(density == "Low" & y == 1 ~ 5,
-                      density == "Low" & y == 2 ~ 4,
-                      density == "Low" & y == 4 ~ 2,
-                      density == "Low" & y == 5 ~ 1,
-                      density == "Low" & y == 3 ~ 3,
-                      density == "High" & y == 1 ~ 10,
-                      density == "High" & y == 2 ~ 9,
-                      density == "High" & y == 3 ~ 8,
-                      density == "High" & y == 4 ~ 7,
-                      density == "High" & y == 5 ~ 6,
-                      density == "High" & y == 6 ~ 5,
-                      density == "High" & y == 7 ~ 4,
-                      density == "High" & y == 8 ~ 3,
-                      density == "High" & y == 9 ~ 2,
-                      density == "High" & y == 10 ~ 1)) -> rawD_surveyrest
-
-# Reset y column and remove genotype and source columns
-rawD_surveyrest %>% 
-  dplyr::select(-genotype, -source) -> rawD_surveyrest
-
-# Merge dataset with genotype information
-merge(rawD_surveyrest, genotype_codes_correct) -> rawD_surveyrest
-
-# Put two datasets back together
-rawD_surveyrest %>% 
-  select(names(rawD_survey1)) %>% 
-  rbind(rawD_survey1) %>% 
-  arrange(site, block, plot, x, y, date) -> rawD
+genotype_pos %>%
+  filter(CommG == "LowBoise") %>% 
+  mutate(site = "WI",
+         genotype = parse_number(genotypeID)) %>% 
+  select(site,
+         block = plot,
+         density = Density,
+         gravel = Albedo,
+         x, y, 
+         genotype,
+         growout = bulkYear) %>% 
+  mutate(density = ifelse(density == "lo", "Low", "High"),
+         gravel = ifelse(gravel == "black", "Black", "White")) %>% 
+  merge(plot_info) %>% 
+  select(block, plot, gravel, density, x, y, growout, genotype) -> genotype_info
 
 # Format IDs to be the same as Sheep Station
-plant_key <- rawD_survey1[,c("site","block","plot","x","y", "genotype")]
+merge(plant_key, genotype_info) %>% 
+  select(site, block, plot, x, y, genotype) -> plant_key
 
-plant_key$plantID <- paste0(dosite,doyear,"_",1:nrow(plant_key))
-rawD <- merge(rawD,plant_key)
+plant_key$plantID <- paste0("Boise","2023","_",1:nrow(plant_key))
+rawD_with_harvest <- merge(rawD_with_harvest,plant_key)
 
-plant_key$year <- doyear
+plant_key$year <- 2023
 plant_key <- plant_key %>% dplyr::select(plantID, site, year, block, plot, x, y, genotype)
 
 write.csv(plant_key,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_plantID.csv"),row.names=F)
 rm(plant_key)
 
 # pull out and format phenology and growth data and notes for each plant
-pgD <- rawD[,c("plantID","date","live","v","length_mm","herbivory","frost_heave","harvested","notes")]
+pgD <- rawD_with_harvest[,c("plantID","date","live","v","herbivory","frost_heave","harvested","notes")]
 # get Julian day
 pgD$jday <-yday(pgD$date)
 # make fall days negative
 pgD$jday <- ifelse(pgD$jday < 270, pgD$jday, pgD$jday-365)
 pgD <- dplyr::select(pgD, -date) # drop date column
-pgD <- pgD[,c(1,9,2:8)] # reorder columns
+pgD <- pgD[,c(1,8,2:7)] # reorder columns
 pgD <- pgD[order(pgD$plantID,pgD$jday),] # sort by plantID then Julian day
 
 # check for bad "live" values
-table(pgD$live) # Null, Dead, N, no, No, unk, Unknown, Y, yes, Yes
-#change live column to factor
-pgD$live<-as.factor(pgD$live)
-#Change ("Dead","No", "no") to "N" + ("Yes" and "yes")to "Y"
-levels(pgD$live)[levels(pgD$live) %in%  c("Dead","No","no")] <- 'N'
-levels(pgD$live)[levels(pgD$live) %in%  c("Yes","yes")] <- 'Y'
-# PBA: I inspected each plant with one or more missing 
-# values, decided that cleanest solution is to simply
-# remove all missing records (dates). Most occur at
-# first visit or after a plant had already died.
-##If  technicians were unsure of plant location, unknown was entered (Boise)
-# remove missing and unknown values
-pgD <- subset(pgD, pgD$live %in% c("Y","N"))
-
-# check for bad "v" values
-table(pgD$v)  # Blank, >V3, bootstage, Bootstage, Fb, Fg, Fp, V0, V1, V2, V3
-#change v values to match sheep station (NA, V3+, BS, FB?, FG, FP?, etc.)
-#convert all entries to uppercase
-pgD$v <- toupper(pgD$v)
-#change column to factor
-pgD$v<-as.factor(pgD$v)
-#Change blanks to "NA", ">V3" to "V3+" and "Bootstage" to "BS"
-levels(pgD$v)[levels(pgD$v)==""] <- 'NA'
-levels(pgD$v)[levels(pgD$v)==">V3"] <- 'V3+'
-levels(pgD$v)[levels(pgD$v)=="BOOTSTAGE"] <- 'BS'
-levels(pgD$v)[levels(pgD$v)=="FB "] <- 'FB'
-levels(pgD$v)[levels(pgD$v)=="FP "] <- 'FP'
-# There are also two "FL". For the phenology analyses we can change this to "FP"
-# without any consequence, but should check with ID folks (MLV)
-levels(pgD$v)[levels(pgD$v)=="FL"] <- 'FP'
-
-unique(pgD$v)
-
-# check for bad length values
-# first turn missing values into NAs then make length numeric
-pgD$length_mm <- as.numeric(pgD$length_mm)
-hist(pgD$length_mm) # a few very high values
-#subset out values less than 250
-pgD<-subset(pgD, pgD$length_mm<250 | is.na(length_mm)) 
-min(pgD$length_mm,na.rm=T) # looks good
+table(pgD$live) # N, NA, Y
+# Set live to be Y if there was a v stage recorded and N otherwise. Should check
+# this later!
+pgD %>% 
+  mutate(live = ifelse(v %in% names(table(pgD$v)), "Y", "N")) -> pgD
 
 # compile notes
 tmp <- pgD$notes
@@ -206,10 +499,8 @@ tmp[tmp==""] <- NA
 tmp <- tmp[!is.na(tmp)]
 tmp <- unique(tmp,MARGIN=2)
 tmp <- data.frame(notes=tmp,action=NA)
-# write.csv(tmp,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_notes_actions.csv"),row.names=F)
-# Mlva updated on 22 June 2023
-
-rm(rawD)
+# write.csv(tmp,file=paste0(here("gardens/deriveddata/"),"Boise","2023","_notes_actions.csv"),row.names=F)
+# MLV updated on 25 April 2024
 
 # write pgD to file
-write.csv(pgD,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)
+write.csv(pgD,file=paste0(here("gardens/deriveddata/"),"Boise","2023","_growthphenology_by_plantID.csv"),row.names=F)
