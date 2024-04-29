@@ -611,13 +611,19 @@ ch_phen_harvest %>%
 
 ### Preliminary analysis with Sheep Station and Cheyenne ####
 
-# Remove all datasets except the phen-harvest for Sheep Station and Cheyenne
-rm(list=setdiff(ls(), c("ss_phen_harvest", "ch_phen_harvest")))
+# Remove all datasets except the phen-harvests for all sites
+rm(list=setdiff(ls(), c("ss_phen_harvest", "ch_phen_harvest",
+                        "ba_phen_harvest", "wi_phen_harvest")))
 
 # Join together datasets
 ss_phen_harvest$site <- "SS"
 ch_phen_harvest$site <- "CH"
-phen_harvest <- rbind(ss_phen_harvest %>% select(-plot), ch_phen_harvest)
+ba_phen_harvest$site <- "BA"
+wi_phen_harvest$site <- "WI"
+
+phen_harvest <- rbind(ss_phen_harvest %>% select(-plot), ch_phen_harvest,
+                      ba_phen_harvest %>% select(-plot),
+                      wi_phen_harvest %>% select(-plot))
 
 phen_harvest %>% 
   mutate(seed_count_total = ifelse(is.na(seed_count_total), 0, seed_count_total)) -> phen_harvest
@@ -646,7 +652,6 @@ phen_harvest %>%
 png("~/Desktop/fitness_trt.png", height = 5, width = 8.5, res = 300, units = "in")
 phen_harvest %>% 
   mutate(seed_count_total = ifelse(is.na(seed_count_total), 0, seed_count_total)) %>%
-  mutate(site = ifelse(site == "SS", "Sheep Station", "Cheyenne")) %>% 
   mutate(treatment = paste(gravel, density, sep = "-")) %>% 
   ggplot(aes(x = treatment, y = seed_count_total)) +
   geom_jitter(aes(color = gravel), alpha = 0.2) +
@@ -657,172 +662,6 @@ phen_harvest %>%
   scale_color_manual(values = c("black", "maroon")) +
   theme(legend.position = "none")
 dev.off()
-
-phen_harvest %>% 
-  filter(seed_count_total > 0) -> phen_harvest_seeds
-
-phen_harvest_seeds$plot_unique <- paste(phen_harvest_seeds$site, phen_harvest_seeds$block,
-                                        phen_harvest_seeds$gravel, phen_harvest_seeds$density, sep ="_")
-phen_harvest_seeds$block_unique <- paste(phen_harvest_seeds$site, phen_harvest_seeds$block, sep ="_")
-
-library(lme4)
-options(contrasts = c("contr.sum", "contr.poly"))
-mod <- glmer(seed_count_total ~ density*gravel*site + (1|genotype) + (1|block_unique) +
-               (1|plot_unique), data = phen_harvest_seeds, family = Gamma(link = "log"))
-car::Anova(mod, type = 3)
-
-mod_lin <- lmer(log(seed_count_total) ~ density*gravel*site + (1|genotype) + (1|block_unique) +
-               (1|plot_unique), data = phen_harvest_seeds)
-car::Anova(mod_lin, type = 3)
-
-sjPlot::plot_model(mod, type = "emm", terms = c("density", "gravel", "site"))
-out <- sjPlot::plot_model(mod, type = "re")
-
-exp(ranef(mod)$genotype)
-
-mean <- exp(fixef(mod)[1] + log(out[[1]]$data$estimate))
-lower <- exp(fixef(mod)[1] + log(out[[1]]$data$conf.low))
-upper <- exp(fixef(mod)[1] + log(out[[1]]$data$conf.high))
-genotype <- as.factor(out[[1]]$data$term)
-
-png("~/Desktop/seeds_by_genotype.png", height = 5, width = 10, res = 300, units = "in")
-tibble(mean = mean,
-       lower = lower,
-       upper = upper,
-       genotype = genotype) %>% 
-  ggplot(aes(x = reorder(genotype, mean), y = mean)) +
-  geom_point(size = 3) +
-  geom_segment(aes(x = reorder(genotype, mean), xend = reorder(genotype, mean),
-                   y = lower, yend = upper)) +
-  theme_bw(base_size = 16) +
-  theme(axis.text.x = element_blank()) +
-  labs(x = "Genotype", y = "Predicted number of seeds") +
-  geom_hline(aes(yintercept = exp(fixef(mod)[1])))
-dev.off()
-
-tibble(mean = mean,
-       lower = lower,
-       upper = upper,
-       genotype = factor(genotype)) -> genotype_summary
-
-genotype_summary %>% 
-  arrange(-mean)
-
-mod_phen <- lmer(first_flower ~ density*gravel*site + (1|genotype) +
-               (1|plot_unique), data = phen_harvest_seeds)
-
-mean_phen <- fixef(mod_phen)[1] + ranef(mod_phen)$genotype
-genotype <- rownames(ranef(mod_phen)$genotype)
-genotype_summary_phen <- tibble(first_flower = mean_phen[,1], genotype = factor(genotype))
-
-png("~/Desktop/fitness_flower.png", height = 6, width = 7.5, res = 300, units = "in")
-merge(genotype_summary, genotype_summary_phen) %>% 
-  ggplot(aes(x = first_flower, y = mean)) +
-  geom_point(size = 4, shape = 21, color = "black", fill = "gray") +
-  theme_classic(base_size = 16) +
-  labs(y = "Predicted seed count", x = "Date of first flower")
-dev.off()
-
-merge(genotype_summary, genotype_summary_phen) %>% 
-  filter(first_flower > 167) %>% 
-  arrange(first_flower)
-
-options(contrasts = c("contr.sum", "contr.poly"))
-mod <- glmer(seed_count_total ~ density*gravel*site + (1|genotype) + (1|block_unique) +
-               (1|plot_unique) + (1|genotype:site), data = phen_harvest_seeds, family = Gamma(link = "log"))
-
-tibble(est = ranef(mod)$`genotype:site`[,1],
-       genotype = parse_number(rownames(ranef(mod)$`genotype:site`)),
-       site = rep(c("CH", "SS"), 84)) %>% 
-  spread(key = site, value = est) %>% 
-mutate(intercept = ranef(mod)$genotype[,1]) -> gxe 
-
-png("~/Desktop/gxe.png", height = 5, width = 7, res = 300, units = "in")
-gxe %>% 
-  mutate(CH = exp(intercept + CH + as.numeric(fixef(mod)[4]) + as.numeric(fixef(mod)[1])),
-         SS = exp(intercept + SS - as.numeric(fixef(mod)[4]) + as.numeric(fixef(mod)[1]))) %>% 
-  mutate(color_diff = case_when(CH>SS ~ "a",
-                                SS>200 ~ "b",
-                                T ~ "c")) %>% 
-  select(genotype, CH, SS, color_diff) %>% 
-  gather(key = site, value = pred, CH:SS) %>% 
-  ggplot(aes(x = site, y = pred, group = genotype)) +
-  #geom_line(aes(color = color_diff, alpha = color_diff, linewidth= color_diff)) +
-  #geom_point(aes(color = color_diff, size = color_diff)) +
-  geom_line(linewidth = 1, alpha = 0.5) + geom_point(size = 2) +
-  #scale_color_manual(values = c("green", "blue", "black")) +
-  #scale_alpha_manual(values = c(1,1,0.5)) +
-  #scale_size_manual(values = c(5,5,2)) +
-  #scale_linewidth_manual(values = c(2,2,1)) +
-  theme_bw(base_size = 16) +
-  labs(x = "Site",
-       y = "Predicted seed count") +
-  theme(legend.position = "none")
-dev.off()
-
-options(contrasts = c("contr.sum", "contr.poly"))
-phen_harvest_seeds$density <- factor(phen_harvest_seeds$density, levels = c("lo", "hi"))
-phen_harvest_seeds$site <- factor(phen_harvest_seeds$site, levels = c("SS", "CH"))
-
-mod <- glmer(seed_count_total ~ site*gravel*density + (1|genotype) +
-               (1|genotype:site) + (1|genotype:gravel), data = phen_harvest_seeds, family = Gamma(link = "log"))
-
-sjPlot::plot_model(mod, type = "emm", terms = c("density", "gravel", "site"))
-sjPlot::plot_model(mod, type = "pred",
-                   pred.type = "re", terms = c("gravel", "genotype"), ci.lvl = NA) +
-  geom_line() + theme(legend.position = "none")
-
-emmeans::emmeans(mod, ~site)
-summary(mod)
-
-png("~/Desktop/gxe_density.png", height = 5, width = 7, res = 300, units = "in")
-
-tibble(est = ranef(mod)$`genotype:density`[,1],
-       genotype = parse_number(rownames(ranef(mod)$`genotype:density`)),
-       site = rep(c("hi", "lo"), 84)) %>% 
-  spread(key = site, value = est) %>% 
-  mutate(intercept = ranef(mod)$genotype[,1]) -> gxe_density
-
-gxe_density %>% 
-  mutate(hi = exp(intercept + hi + as.numeric(fixef(mod)[2]) + as.numeric(fixef(mod)[1])),
-         lo = exp(intercept + lo - as.numeric(fixef(mod)[2]) + as.numeric(fixef(mod)[1]))) %>% 
-  select(genotype, lo, hi) %>% 
-  gather(key = density, value = pred, lo:hi) %>% 
-  ggplot(aes(x = density, y = pred, group = genotype)) +
-  geom_line(linewidth = 1, alpha = 0.3) + geom_point(size = 2) +
-  theme_bw(base_size = 16) +
-  labs(x = "Density",
-       y = "Predicted seed count") +
-  theme(legend.position = "none")
-
-dev.off()
-
-
-png("~/Desktop/gxe_gravel.png", height = 5, width = 7, res = 300, units = "in")
-
-tibble(est = ranef(mod)$`genotype:gravel`[,1],
-       genotype = parse_number(rownames(ranef(mod)$`genotype:gravel`)),
-       site = rep(c("black", "white"), 84)) %>% 
-  spread(key = site, value = est) %>% 
-  mutate(intercept = ranef(mod)$genotype[,1]) -> gxe_gravel
-
-gxe_gravel %>% 
-  mutate(black = exp(intercept + black + as.numeric(fixef(mod)[3]) + as.numeric(fixef(mod)[1])),
-         white = exp(intercept + white - as.numeric(fixef(mod)[3]) + as.numeric(fixef(mod)[1]))) %>% 
-  select(genotype, black, white) %>% 
-  gather(key = gravel, value = pred, black:white) %>% 
-  ggplot(aes(x = gravel, y = pred, group = genotype)) +
-  geom_line(linewidth = 1, alpha = 0.3) + geom_point(size = 2) +
-  theme_bw(base_size = 16) +
-  labs(x = "Gravel",
-       y = "Predicted seed count") +
-  theme(legend.position = "none")
-dev.off()
-summary(mod)
-emmeans::emmeans(mod, ~gravel)  
-
-sjPlot::plot_model(mod, type = "pred", pred.type = "re", terms = c("gravel", "genotype")) +
-  geom_line()
 
 ### Flowering time vs fitness analysis SS vs WI ####
 
@@ -840,10 +679,31 @@ wi_phen_harvest %>%
   # Make NAs from seed_count_total into 0s
   mutate(seed_count_total = if_else(is.na(seed_count_total), 0, seed_count_total)) %>% 
   filter(first_flower == 0 & seed_count_total == 0) -> wi_true_negatives
- 
+
+ba_phen_harvest %>% 
+  filter(is.na(seed_drop)) %>% 
+  filter(first_flower > 0 & seed_count_total > 0) -> ba_true_positives
+ba_phen_harvest %>% 
+  # Make NAs from seed_count_total into 0s
+  mutate(seed_count_total = if_else(is.na(seed_count_total), 0, seed_count_total)) %>% 
+  filter(first_flower == 0 & seed_count_total == 0) -> ba_true_negatives
+
+ch_phen_harvest %>% 
+  filter(is.na(seed_drop)) %>% 
+  filter(first_flower > 0 & seed_count_total > 0) -> ch_true_positives
+ch_phen_harvest %>% 
+  # Make NAs from seed_count_total into 0s
+  mutate(seed_count_total = if_else(is.na(seed_count_total), 0, seed_count_total)) %>% 
+  filter(first_flower == 0 & seed_count_total == 0) -> ch_true_negatives
+
 # Bring together all true positive and true negative data sets 
-clean_ph <- rbind(ss_true_positives, ss_true_negatives,
-                  wi_true_positives, wi_true_negatives)
+clean_ph <- rbind(ss_true_positives %>% select(names(ch_true_positives)),
+                  ss_true_negatives %>% select(names(ch_true_positives)),
+                  wi_true_positives %>% select(names(ch_true_positives)),
+                  wi_true_negatives %>% select(names(ch_true_positives)),
+                  ba_true_positives %>% select(names(ch_true_positives)),
+                  ba_true_negatives %>% select(names(ch_true_positives)),
+                  ch_true_positives, ch_true_negatives)
 
 # Get average flowering time per genotype. These will fill in observations with
 # no observed flowering time to be the average for that genotype.
@@ -863,13 +723,20 @@ clean_ph %>%
 
 # Make plot of site * flowering time interaction
 genotype_site %>%  
+  mutate(site = factor(site, levels = c("SS", "CH", "WI", "BA"))) %>% 
   ggplot(aes(x = mean_ft, y = mean_seed_count, color = site)) +
-  geom_point() +
+  geom_point(alpha = 0.5) +
+  stat_poly_eq(use_label(c("eq", "P"))) +
   geom_smooth(method = "lm") +
   labs(y = "Mean seed count",
        x = "Mean first day of flowering",
        color = "Site") +
-  theme_bw(base_size = 14)
+  theme_bw(base_size = 14) +
+  #facet_wrap(~site, scales = "free") +
+  facet_wrap(~site, nrow = 1) +
+  theme(legend.position = "none") +
+  ggtitle("Flowering vs fitness 2022") + 
+  scale_color_manual(values = c("#332288", "#AA4499", "#44AA99", "#6699CC")) -> flower_fit_22
 
 # Fit linear model on genotype averages
 fitness_mod <- lm(mean_seed_count ~ mean_ft * site, data = genotype_site)
@@ -886,3 +753,43 @@ ba_phen_harvest %>%
 phen_harvest_all <- rbind(ss_phen_harvest, wi_phen_harvest, ba_phen_harvest, ch_phen_harvest)
 
 write_csv(phen_harvest_all,"~/Desktop/phen_harvests.csv")
+
+# Read in 2023 data and add to this data set for plotting
+ss_phen_harvest_23 <- read_csv("gardens/deriveddata/SS2023_flower_fit.csv")
+wi_phen_harvest_23 <- read_csv("gardens/deriveddata/Boise2023_flower_fit.csv")
+ch_phen_harvest_23 <- read_csv("gardens/deriveddata/CH2023_flower_fit.csv")
+
+# Join 2023 datasets together
+library(ggpmisc)
+
+rbind(ss_phen_harvest_23  %>% select(genotype, site, inflor_mass, jday),
+      wi_phen_harvest_23 %>% select(genotype, site, inflor_mass, jday),
+      ch_phen_harvest_23 %>% select(genotype, site, inflor_mass, jday)) %>% 
+  group_by(site, genotype) %>% 
+  summarize(mean_ft = mean(jday),
+            mean_inflor_mass = mean(inflor_mass)) %>% 
+  ungroup() %>% 
+  mutate(site = factor(site, levels = c("SS", "CH", "WI", "BA"))) %>% 
+  ggplot(aes(x = mean_ft, y = mean_inflor_mass, color = site)) +
+  geom_point(alpha = 0.5) +
+  stat_poly_eq(use_label(c("eq", "P"))) +
+  geom_smooth(method = "lm") +
+  labs(y = "Mean inflorescence mass",
+       x = "Mean first day of flowering",
+       color = "Site") +
+  theme_bw(base_size = 14) +
+  facet_wrap(~site) +
+  theme(legend.position = "none") +
+  ggtitle("Flowering vs fitness 2023") +
+  scale_color_manual(values = c("#332288", "#AA4499", "#44AA99", "#6699CC")) -> flower_fit_23
+
+png("~/Desktop/flower_fit.png", height = 7, width = 10, res = 300, units = "in")
+flower_fit_22 / flower_fit_23
+dev.off()
+
+ch_phen_harvest_23 %>%
+  group_by(genotype) %>% 
+  summarize(mean = mean(inflor_mass),
+            n = n()) %>% 
+  filter(mean > 4)
+

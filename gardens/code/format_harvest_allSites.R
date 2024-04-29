@@ -400,6 +400,10 @@ data_all <- rbind(data_allSS, data_allBA, data_allWI, data_mostCH)
 # Remove all other sub data sets 
 rm(list=setdiff(ls(), "data_all"))
 
+names(data_all)
+
+## Checking harvest data problems ####
+
 # We have some plants that are highlighted in the CG seeds document. These
 # either mean the plant should have been there but wasn't (most), or that a
 # plant was there at harvest that shouldn't be there (a few). Upon a cursory
@@ -428,7 +432,7 @@ data_all_sub_seeds %>%
   mutate(site_plot = as.factor(paste(site, plot, sep = "_")),
          genotype = as.factor(genotype)) -> data_all_sub_seeds
 
-## Comparison of analyses: seed count, inflor mass, total plant biomass
+## Comparison of analyses: seed count, inflor mass, total plant biomass ####
 
 # Get summary stats
 nrow(data_all_sub_seeds) 
