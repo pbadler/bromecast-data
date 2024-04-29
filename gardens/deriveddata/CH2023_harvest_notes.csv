@@ -1,0 +1,23 @@
+notes,action,note_standard
+BROKEN TILLER,action,physical_damage
+seed drop,action,seed_drop
+Ant hill,ignore,
+partial smut,action,smut
+"1 large harvest, 1 small harvest",ignore,
+"1 large sample, 1 small sample",ignore,
+ON AN ANTHILL,ignore,
+double check,action,bad_position
+ONE TILLER HAS DROPPED SEEDS ALREADY,action,seed_drop
+"SEED DROP, 1 BROKEN TILLER WITH NO SEED HEAD",action,seed_drop
+1 BROKEN TILLER WITH NO SEED HEAD,action,physical_damage
+1 BROKEN TILLER,action,physical_damage
+"SEEDS ALREADY DROPPED, NO INFLUORESCENCE",action,seed_drop
+NO INFLUORESCENCE,action,physical_damage
+VULPIA PRESENT,action,wrong_spp
+1 TILLER W/O INFLUORESCENCE,action,physical_damage
+"Unknown date for one of the samples, using known dates",ignore,
+Annual Aster sp found with sample,ignore,
+SMUT,action,smut
+ANTHILL,ignore,
+NO DATE LISTED,action,no_date
+1 TILLER WITH SMUT,action,smut
