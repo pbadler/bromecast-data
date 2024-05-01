@@ -138,7 +138,7 @@ fgroups <- read.csv("../deriveddata/species2functionalgroups.csv",header=T)
 
 ### define functional groups
 
-# annual, perennial, shrub, biocrust, unknown
+# annual, perennial, shrub, biocrust, unknown, groundcover
 fgroups$ftypes1 <- NA
 fgroups$ftypes1[fgroups$type=="non-plant"] <- "groundcover"
 fgroups$ftypes1[fgroups$duration=="annual" | fgroups$duration=="biennial"] <- "annual"
@@ -148,7 +148,7 @@ fgroups$ftypes1[fgroups$type=="shrub"] <- "shrub"
 fgroups$ftypes1[fgroups$type=="biocrust"] <- "biocrust"
 # unknowns  NAs, these will be CUT 
 
-# annual forb, annual grass, perennial forb, perennial grass, shrub, biocrust, , unknown
+# annual forb, annual grass, perennial forb, perennial grass, shrub, biocrust, unknown
 fgroups$ftypes2 <- fgroups$ftypes1
 tmp <- which(fgroups$ftypes1=="annual")
 fgroups$ftypes2[tmp] <- paste0(fgroups$ftypes2[tmp],fgroups$type[tmp])

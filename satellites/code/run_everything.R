@@ -33,30 +33,29 @@ D <- merge(D,siteD,all.x=T)
 
 # merge everything with composition data, check and clean
 
-# fix a couple data entry errors
-D$Distance[D$SiteCode=="Symstad2" & D$Distance==5.04] <- 5
-D$Distance[D$SiteCode=="Symstad2" & D$Distance==5.17] <- 5.2
 # 
 # test <- merge(D,comp_ftypes1,all=T)
 # colSums(is.na(test))
 # table(test$SiteCode[is.na(test$annual)])
-# 
+
+# fix a couple data entry errors
+D$Distance[D$SiteCode=="Symstad2" & D$Distance==5.04] <- 5
+D$Distance[D$SiteCode=="Symstad2" & D$Distance==5.17] <- 5.2
+
 # # figure out why demography and composition data don't match
 # missingC <- test[is.na(test$annual),]
 # missingC <- missingC[,c("SiteCode", "Year","Treatment","Transect","Distance")]
-# 
-# missingD <- test[is.na(test$Emerged),]
-# 
-# missingC[missingC$SiteCode=="Woodruff",]
-# missingD[missingD$SiteCode=="Woodruff",]
+
 allD_ft1 <- merge(D,comp_ftypes1,all.x=T)
+write.csv(allD_ft1,"../deriveddata/all_plants_ftypes1.csv",row.names=F)
 allD_ft2 <- merge(D,comp_ftypes2,all.x=T)
+write.csv(allD_ft2,"../deriveddata/all_plants_ftypes2.csv",row.names=F)
 allD_ft3 <- merge(D,comp_ftypes3,all.x=T)
+write.csv(allD_ft3,"../deriveddata/all_plants_ftypes3.csv",row.names=F)
 
 #cleanup
 rm(D, fgroups, comp_ftypes1,comp_ftypes2,comp_ftypes3)
 
-# fit demography models
-source("fit_demography_models.R")
+
 
 
