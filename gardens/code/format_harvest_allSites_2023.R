@@ -428,6 +428,12 @@ harvest_wi %>%
   mutate(date = ifelse(date %in% c("NO DATE", "no date"), NA, date),
          date = mdy(date)) -> harvest_wi
 
+# Fix some of the observations that are missing dates (checked by Boise crew)
+harvest_wi %>% 
+  mutate(date = case_when(is.na(date) & block == 2 & plot == 1 & biomass_whole > 0 ~ as.Date("2023-05-31"),
+                          is.na(date) & block == 4 & plot == 3 & biomass_whole > 0 ~ as.Date("2023-05-31"),
+                          T ~ date)) -> harvest_wi
+
 # Create action list for notes
 # compile notes
 tmp <- harvest_wi$notes
