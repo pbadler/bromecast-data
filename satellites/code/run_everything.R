@@ -1,4 +1,4 @@
-# conduct individual level analysis of climate and competition
+# prepare data for individual level analysis of climate and competition
 # effects on cheatgrass fitness in satellite experiments
 
 # start clean
