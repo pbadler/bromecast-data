@@ -111,7 +111,7 @@ tmp <- tmp[!is.na(tmp)]
 tmp <- unique(tmp,MARGIN=2)
 tmp <- data.frame(notes=tmp,action=NA)
 # write.csv(tmp,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_notes_actions.csv"),row.names=F)
-# STILL NEED TO DO THIS!
+# MLV completed 13 May 2024
 
 # Create final columns
 phen_WY %>% 
@@ -152,10 +152,13 @@ tmp <- unique(tmp,MARGIN=2)
 tmp <- data.frame(notes=tmp,action=NA)
 # write.csv(tmp,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_notes_actions.csv"),row.names=F)
 # MLV updated on 29 June 2023
+tmp <- read_csv("gardens/deriveddata/CH2023_notes_actions.csv")
+# Merge back together with data
+merge(pgD, tmp) -> pgD
 
 # Order and select pgD columns
 pgD %>% 
-  select(plantID, jday, live, v, herbivory, frost_heave, harvested, notes) -> pgD
+  select(plantID, jday, live, v, herbivory, frost_heave, harvested, note_standard) -> pgD
 
 # write pgD to file
 write.csv(pgD,file=paste0(here("gardens/deriveddata/"),dosite,doyear,"_growthphenology_by_plantID.csv"),row.names=F)

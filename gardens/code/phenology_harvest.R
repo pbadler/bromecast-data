@@ -722,6 +722,8 @@ clean_ph %>%
             mean_seed_count = mean(seed_count_total)) -> genotype_site 
 
 # Make plot of site * flowering time interaction
+library(ggpmisc)
+
 genotype_site %>%  
   mutate(site = factor(site, levels = c("SS", "CH", "WI", "BA"))) %>% 
   ggplot(aes(x = mean_ft, y = mean_seed_count, color = site)) +
@@ -752,7 +754,7 @@ ba_phen_harvest %>%
 
 phen_harvest_all <- rbind(ss_phen_harvest, wi_phen_harvest, ba_phen_harvest, ch_phen_harvest)
 
-write_csv(phen_harvest_all,"~/Desktop/phen_harvests.csv")
+#write_csv(phen_harvest_all,"~/Desktop/phen_harvests.csv")
 
 # Read in 2023 data and add to this data set for plotting
 ss_phen_harvest_23 <- read_csv("gardens/deriveddata/SS2023_flower_fit.csv")
@@ -761,6 +763,8 @@ ch_phen_harvest_23 <- read_csv("gardens/deriveddata/CH2023_flower_fit.csv")
 
 # Join 2023 datasets together
 library(ggpmisc)
+
+
 
 rbind(ss_phen_harvest_23  %>% select(genotype, site, inflor_mass, jday),
       wi_phen_harvest_23 %>% select(genotype, site, inflor_mass, jday),
