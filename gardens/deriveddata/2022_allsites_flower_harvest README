@@ -19,3 +19,6 @@ herbivory = standard_note for herbivory recoded as yes = 1 and no = NA
 physical_damage = standard_note for physicaldamage recoded as yes = 1 and no = NA
 seed_drop = standard_note for seeddrop recoded as yes = 1 and no = NA
 smut = standard_note for smut recoded as yes = 1 and no = NA
+
+2022_allsite_flower_harvest.csv = all data
+2022_allsite_flower_harvest_cleanest.csv = drops observations for which there was a plant recorded at the last phenology check, but not harvested OR if there was no plant recorded at last phenology check and there was one harvested for that position. These are the data we are most confident about.
