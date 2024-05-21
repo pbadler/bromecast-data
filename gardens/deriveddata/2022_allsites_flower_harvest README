@@ -1,0 +1,21 @@
+plantID = unique plant ID code
+site = common garden site (SS = Sheep Station, WI = Wildcat, BA = Baltzor, CH = Cheyenne)
+block = numeric code for block (1-10)
+gravel = gravel/temperature/albedo treatment ("black" = high temperature / low albedo, "white" = low temperature / high albedo)
+density = cheatgrass density treatment ("hi" = 100 seeds per 0.04m2, "lo" = 100 seeds per 1m2)
+x = x-coordinate position of plant in plot (1-10 in high density plots and 1-20 in low density plots)
+y = y-coordinate position of plant in plot (1-10 in high density plots and 1-5 in low density plots)
+genotype = numeric code for genotype ID
+first_flower = day of year that plant was first observed flowering (1 = January 1, 2022; flowering means that it was at least at the FG stage)
+live = living status (Y or N) at the last phenology check
+v = phenological stage at the last phenology check (V0, V1, V2, V3, V3+, FG, FP, or FB)
+seed_count_total = true (or estimated using subsetting) number of seeds produced by the plant
+inflor_mass = reproductive biomass (total biomass of plant = inflor_mass + biomass_whole)
+biomass_whole = vegetative (non-reproductive) biomass (total biomass of plant = inflor_mass + biomass_whole)
+tillers = number of tillers for each plant at time of harvest
+standard_note = standardized note (allseeddrop = all seeds missing, allunripe = seeds are not ripe, herbivory, location_issue = might be in wrong location, mortality = recorded as dead, physicaldamage = some damage to plant, samplemissing = sample not in envelope, seeddrop = some seeds were lost, smut = fungal infection on seeds of plant at harvest, wrongspp = not cheatgrass)
+all_seed_drop = standard_note for allseeddrop recoded as yes = 1 and no = NA
+herbivory = standard_note for herbivory recoded as yes = 1 and no = NA
+physical_damage = standard_note for physicaldamage recoded as yes = 1 and no = NA
+seed_drop = standard_note for seeddrop recoded as yes = 1 and no = NA
+smut = standard_note for smut recoded as yes = 1 and no = NA
