@@ -10,19 +10,10 @@ model{
   sigma.psi ~ dunif(0, 100)
   tau.psi <- 1/(sigma.psi^2)
 
-  # Prior for deviations for each plot from global intercept (fecundity)
-  sigma.kappa ~ dunif(0, 100) 
-  tau.kappa <- 1/(sigma.kappa^2)
-
-  # Loop through random intercepts for each genotype
+  # Loop through random intercept for each genotype
   for(j in 1:nalpha){
     alpha[j] ~ dnorm(mu.fecund, tau.alpha)
     psi[j] ~ dnorm(mu.survive, tau.psi)
-  }
-
-  # Loop through random intercept deviations for each plot
-  for(k in 1:nplot){
-   kappa[k] ~ dnorm(0, tau.kappa)
   }
 
   # likelihood
@@ -36,7 +27,7 @@ model{
     # Link functions
 
     # Fecundity model
-    log(mu[i]) <- alpha[genotype[i]] + kappa[plot[i]]
+    log(mu[i]) <- alpha[genotype[i]]
     
     # Survival model
     logit(r[i]) <- psi[genotype[i]] 
