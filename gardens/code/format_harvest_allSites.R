@@ -97,10 +97,6 @@ rbind(calib_data_subsetted_14, calib_data_subsetted_rest, calib_data_whole,
 data_allSS %>% 
   distinct() -> data_allSS
 
-data_allSS %>% 
-  filter(seed_count_total < 100 & inflor_mass > 1) %>% 
-  select(id, seed_count_sub, notes)
-
 # Read in notes information
 notes_actions <- read_csv("gardens/deriveddata/SS2022_harvest_notes_actions.csv")
 notes_actions %>% 
@@ -376,23 +372,23 @@ data_mostCH %>%
 ## Bring data sets together ####
 data_allSS %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                      source, live, v, biomass_whole, seed_count_total,
-                     inflor_mass, standard_note, all_seed_drop, herbivory,
+                     inflor_mass, tillers, standard_note, all_seed_drop, herbivory,
                      physical_damage, seed_drop, smut) -> data_allSS
 
 data_allBA %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                         source, live, v, biomass_whole, seed_count_total,
-                        inflor_mass, standard_note, all_seed_drop, herbivory,
+                        inflor_mass, tillers, standard_note, all_seed_drop, herbivory,
                         physical_damage, seed_drop, smut) -> data_allBA
 
 data_allWI %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                         source, live, v, biomass_whole, seed_count_total,
-                        inflor_mass, standard_note, all_seed_drop, herbivory,
+                        inflor_mass, tillers, standard_note, all_seed_drop, herbivory,
                         physical_damage, seed_drop, smut) -> data_allWI
 
 data_mostCH %>% 
   select(site, date, block, plot, density, albedo, x, y, genotype,
          source, live, v, biomass_whole, seed_count_total,
-         inflor_mass, standard_note, all_seed_drop, herbivory,
+         inflor_mass, tillers, standard_note, all_seed_drop, herbivory,
          physical_damage, seed_drop, smut) -> data_mostCH
 
 data_all <- rbind(data_allSS, data_allBA, data_allWI, data_mostCH)
@@ -424,125 +420,11 @@ data_all %>%
          smut = ifelse(is.na(smut), NA, smut),
          herbivory = ifelse(is.na(herbivory), NA, herbivory)) -> data_all
 
-
 data_all %>% 
-  filter(seed_count_total > 0 & inflor_mass > 0) -> data_all_sub_seeds
+  filter(seed_count_total > 0 & inflor_mass > 0) %>% 
+  ggplot(aes(x = log(inflor_mass), y = log(seed_count_total))) +
+  geom_point()
 
-data_all_sub_seeds %>% 
-  mutate(site_plot = as.factor(paste(site, plot, sep = "_")),
-         genotype = as.factor(genotype)) -> data_all_sub_seeds
-
-## Comparison of analyses: seed count, inflor mass, total plant biomass ####
-
-# Get summary stats
-nrow(data_all_sub_seeds) 
-# 7050
-nrow(data_all)
-# 15998
-
-# Get counts by site × density treatment
-data_all_sub_seeds %>% 
-  group_by(site, density) %>% 
-  summarize(n = n())
-
-# Fit model to seed count data
-seed_mod <- lmer(log(seed_count_total) ~ density*albedo*site +
-                   (1|genotype:site) + (1|genotype) +
-                   (1|site_plot), data = data_all_sub_seeds)
-
-seed_mod_pois <- glmer(seed_count_total ~ density*albedo*site +
-                   (1|genotype:site)+ (1|genotype)+
-                   (1|site_plot), data = data_all_sub_seeds,
-                   family = "poisson")
-
-anova(seed_mod_pois)
-
-logLik(seed_mod)
-
-sjPlot::plot_model(seed_mod_pois, type = "diag")
-
-
-summary(seed_mod)
-
-anova(seed_mod)
-
-MuMIn::r.squaredGLMM(seed_mod)
-
-seed_mod2 <- lmer(log(seed_count_total) ~ density*albedo*site +
-                   (0+site|genotype) +
-                   (1|site_plot), data = data_all_sub_seeds)
-plot(seed_mod)
-
-summary(seed)
-
-sjPlot::plot_model(seed_mod_pois, type = "pred", pred.type = "re",
-                   terms = c("site", "genotype")) +
-  theme(legend.position = "none") +
-  geom_line()
-
-
-plot(exp(predict(seed_mod_pois)), exp(predict(seed_mod)),
-     xlim = c(0,4000))
-plot(exp(predict(seed_mod)), data_all_sub_seeds$seed_count_total,
-     xlim = c(0,4000))
-
-abline(a = 0, b = 1, col = "blue")
-
-MuMIn::r.squaredGLMM(seed_mod_pois)
-
-sjPlot::plot_model(seed_mod2, type = "pred", pred.type = "re",
-                   terms = c("site", "genotype"), ci.lvl = NA) +
-  theme(legend.position = "none") + scale_color_manual(values = rainbow(95)) +
-  geom_line()
-
-# Fit model to inflorescence mass data
-inflor_mass_mod <- lmer(log(inflor_mass) ~ density*albedo*site +
-                          (1 + albedo*density + site | genotype) +
-                          (1|site_plot), data = data_all_sub_model)
-
-# Fit model to total plant biomass data
-data_all_sub_model %>% 
-  mutate(whole_biomass = inflor_mass + biomass_whole) -> data_all_sub_model
-
-whole_mass_mod <- lmer(log(whole_biomass) ~ density*albedo*site +
-                          (1 + albedo*density + site | genotype) +
-                          (1|site_plot), data = data_all_sub_model)
-
-# Compare the relative weight of random effects
-seed_re <- as.data.frame(VarCorr(seed_mod))$sdcor[c(1:7,23)]
-inflor_re <- as.data.frame(VarCorr(inflor_mass_mod))$sdcor[c(1:7,23)]
-whole_re <- as.data.frame(VarCorr(whole_mass_mod))$sdcor[c(1:7,23)]
-
-# These seem pretty similar
-cbind(seed_re/sum(seed_re), inflor_re/sum(inflor_re), whole_re/sum(whole_re))
-
-# Get predicted means by treatment for each model
-seed_plot <- sjPlot::plot_model(seed_mod, type = "emm", terms = c("density", "albedo", "site")) + theme_bw()
-inflor_plot <- sjPlot::plot_model(inflor_mass_mod, type = "emm", terms = c("density", "albedo", "site")) + theme_bw()
-whole_plot <- sjPlot::plot_model(whole_mass_mod, type = "emm", terms = c("density", "albedo", "site")) + theme_bw()
-
-seed_plot/inflor_plot/whole_plot
-
-# Get predicted GxE interactions
-seed_plot_RE <- sjPlot::plot_model(seed_mod, type = "pred", pred.type = "re", terms = c("site", "genotype")) +
-  theme_bw() + theme(legend.position = "none") + scale_color_manual(values = rep("black", 95)) + geom_line()
-
-inflor_plot_RE <- sjPlot::plot_model(inflor_mass_mod, type = "pred", pred.type = "re", terms = c("site", "genotype")) +
-  theme_bw() + theme(legend.position = "none") + scale_color_manual(values = rep("black", 95)) + geom_line()
-
-whole_plot_RE <- sjPlot::plot_model(whole_mass_mod, type = "pred", pred.type = "re", terms = c("site", "genotype")) +
-  theme_bw() + theme(legend.position = "none") + scale_color_manual(values = rep("black", 95)) + geom_line()
-
-seed_plot_RE + inflor_plot_RE + whole_plot_RE
-
-# Plot predicted means
-plot(predict(seed_mod), predict(inflor_mass_mod), xlab = "seed model predictions", ylab = "inflor. mass model predictions")
-summary(lm(predict(seed_mod) ~ predict(inflor_mass_mod)))
-plot(predict(seed_mod), predict(whole_mass_mod), xlab = "seed model predictions", ylab = "inflor. mass model predictions")
-summary(lm(predict(seed_mod) ~ predict(whole_mass_mod)))
-
-# Plot raw data
-plot(log(data_all_sub_model$seed_count_total), log(data_all_sub_model$inflor_mass),
-     xlab = "log(seed count)", ylab = "log(inflor. mass)")
-plot(log(data_all_sub_model$seed_count_total), log(data_all_sub_model$whole_biomass),
-     xlab = "log(seed count)", ylab = "log(total mass)")
+mod <- lm(log(seed_count_total) ~ log(inflor_mass), data = data_all %>% filter(seed_count_total > 0 & inflor_mass > 0))
+summary(mod)
+plot(mod)

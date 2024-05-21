@@ -288,10 +288,8 @@ notes_phen_ch <- read_csv("gardens/deriveddata/CH2023_notes_actions.csv")
 
 # Merge together plantIDs and phenology
 merge(phen_ch, plantID_ch) %>% 
-  # Merge together with notes
-  merge(notes_phen_ch, all = T) %>% 
   # Select only columns that we need
-  select(plantID, site, year, block, plot, x, y, genotype, jday, live, v, herbivory, frost_heave, notes) %>% 
+  select(plantID, site, year, block, plot, x, y, genotype, jday, live, v, herbivory, frost_heave, note_standard) %>% 
   # Rearrange by location
   arrange(block, plot, x, y) -> ch_clean_phenology
 
