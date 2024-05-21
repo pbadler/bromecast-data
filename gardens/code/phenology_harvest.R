@@ -503,23 +503,23 @@ data_mostCH %>%
 ## Bring data sets together ####
 data_allSS %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                       source, live, v, biomass_whole, seed_count_total,
-                      inflor_mass, standard_note, all_seed_drop, herbivory,
+                      inflor_mass, tillers, standard_note, all_seed_drop, herbivory,
                       physical_damage, seed_drop, smut) -> data_allSS
 
 data_allBA %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                       source, live, v, biomass_whole, seed_count_total,
-                      inflor_mass, standard_note, all_seed_drop, herbivory,
+                      inflor_mass, tillers, standard_note, all_seed_drop, herbivory,
                       physical_damage, seed_drop, smut) -> data_allBA
 
 data_allWI %>% select(site, date, block, plot, density, albedo, x, y, genotype,
                       source, live, v, biomass_whole, seed_count_total,
-                      inflor_mass, standard_note, all_seed_drop, herbivory,
+                      inflor_mass, tillers, standard_note, all_seed_drop, herbivory,
                       physical_damage, seed_drop, smut) -> data_allWI
 
 data_mostCH %>% 
   select(site, date, block, plot, density, albedo, x, y, genotype,
          source, live, v, biomass_whole, seed_count_total,
-         inflor_mass, standard_note, all_seed_drop, herbivory,
+         inflor_mass, tillers, standard_note, all_seed_drop, herbivory,
          physical_damage, seed_drop, smut) -> data_mostCH
 
 harvest <- rbind(data_allSS, data_allBA, data_allWI, data_mostCH)
@@ -527,7 +527,7 @@ harvest <- rbind(data_allSS, data_allBA, data_allWI, data_mostCH)
 
 
 #### Bring together phenology and harvest data ####
-harvestSS
+
 phen_SS %>% 
   group_by(block, plot, gravel, density) %>% 
   summarize(n = n()) %>% 
@@ -537,7 +537,7 @@ phen_SS %>%
 
 data_allSS %>% 
   select(old_plot = plot, density, gravel = albedo,
-         x, y, seed_count_total, inflor_mass, biomass_whole, standard_note, all_seed_drop,
+         x, y, seed_count_total, inflor_mass, biomass_whole, tillers, standard_note, all_seed_drop,
          herbivory, physical_damage, seed_drop, smut) %>% 
   mutate(density = ifelse(density == "low", "lo", "hi")) -> ss_harvest_short
 
@@ -557,7 +557,7 @@ data_allWI %>%
   mutate(block = round(plot),
          plot = round(plot%%1 * 10)) %>% 
   select(block, plot, density, gravel = albedo,
-         x, y, seed_count_total, inflor_mass, biomass_whole, standard_note, all_seed_drop,
+         x, y, seed_count_total, inflor_mass, biomass_whole, tillers, standard_note, all_seed_drop,
          herbivory, physical_damage, seed_drop, smut) %>% 
   mutate(density = ifelse(density == "low", "lo", "hi")) %>% 
   mutate(block = as.factor(block))-> wi_harvest_short
@@ -580,7 +580,7 @@ data_allBA %>%
   mutate(block = round(plot),
          plot = round(plot%%1 * 10)) %>% 
   select(block, plot, density, gravel = albedo,
-         x, y, seed_count_total, inflor_mass, biomass_whole, standard_note, all_seed_drop,
+         x, y, seed_count_total, inflor_mass, biomass_whole, tillers, standard_note, all_seed_drop,
          herbivory, physical_damage, seed_drop, smut) %>% 
   mutate(density = ifelse(density == "low", "lo", "hi")) %>% 
   mutate(block = as.factor(block))-> BA_harvest_short
@@ -593,7 +593,7 @@ merge(BA_harvest_short, BA_phen_short) -> ba_phen_harvest
 
 data_mostCH %>% 
   select(block, density, gravel = albedo,
-         x, y, seed_count_total, inflor_mass, biomass_whole, standard_note, all_seed_drop,
+         x, y, seed_count_total, inflor_mass, biomass_whole, tillers, standard_note, all_seed_drop,
          herbivory, physical_damage, seed_drop, smut) %>% 
   mutate(density = ifelse(density == "low", "lo", "hi")) %>% 
   mutate(block = as.factor(block))-> CH_harvest_short
@@ -704,6 +704,26 @@ clean_ph <- rbind(ss_true_positives %>% select(names(ch_true_positives)),
                   ba_true_positives %>% select(names(ch_true_positives)),
                   ba_true_negatives %>% select(names(ch_true_positives)),
                   ch_true_positives, ch_true_negatives)
+
+# Save as derived datasets for Justin
+phen_harvest <- phen_harvest %>% select(plantID, site, block, gravel, density, x, y,
+                                        genotype, first_flower, live, v, seed_count_total, inflor_mass, biomass_whole, 
+                                        tillers, standard_note, all_seed_drop, herbivory, physical_damage,
+                                        seed_drop, smut)
+
+phen_harvest %>% 
+  arrange(site, block, gravel, density, x, y) -> phen_harvest
+
+clean_ph <- clean_ph %>% select(plantID, site, block, gravel, density, x, y,
+                                        genotype, first_flower, live, v, seed_count_total, inflor_mass, biomass_whole, 
+                                        tillers, standard_note, all_seed_drop, herbivory, physical_damage,
+                                        seed_drop, smut)
+
+clean_ph %>% 
+  arrange(site, block, gravel, density, x, y) -> clean_ph
+
+write_csv(phen_harvest, "gardens/deriveddata/2022_allsites_flower_harvest.csv")
+write_csv(clean_ph, "gardens/deriveddata/2022_allsites_flower_harvest_cleanest.csv")
 
 # Get average flowering time per genotype. These will fill in observations with
 # no observed flowering time to be the average for that genotype.
