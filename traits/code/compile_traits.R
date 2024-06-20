@@ -183,11 +183,13 @@ harvest %>%
 gamba_gen %>% 
   merge(cg_gen %>% select(genotype, first_flower), all = T) -> cg_gamba 
 
+png("traits/figs/cg_gamba_ft.png", height = 5, width = 6, res = 300, units = "in")
 cg_gamba %>% 
   ggplot(aes(x = first_flower, y = days_to_flower)) + 
   geom_point() +
   labs(x = "First flower DOY\n(Common garden 2022)",
        y = "Days to flower\n(Gamba study)") 
+dev.off()
 
 cor(cg_gamba$days_to_flower, cg_gamba$first_flower,
     use = "complete.obs", method = "pearson")
