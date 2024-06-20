@@ -179,6 +179,21 @@ harvest %>%
             seed_count = mean(seed_count_total, na.rm = T)) %>% 
   ungroup()-> harvest_extras
 
+# Calculate correlation for Gamba et al. paper
+gamba_gen %>% 
+  merge(cg_gen %>% select(genotype, first_flower), all = T) -> cg_gamba 
+
+cg_gamba %>% 
+  ggplot(aes(x = first_flower, y = days_to_flower)) + 
+  geom_point() +
+  labs(x = "First flower DOY\n(Common garden 2022)",
+       y = "Days to flower\n(Gamba study)") 
+
+cor(cg_gamba$days_to_flower, cg_gamba$first_flower,
+    use = "complete.obs", method = "pearson")
+cor(cg_gamba$days_to_flower, cg_gamba$first_flower,
+    use = "complete.obs", method = "spearman")
+
 # Merge together datasets
 merge(davidson_gen, gamba_gen, all = T) %>% 
   merge(walker_gen, all = T) %>% 

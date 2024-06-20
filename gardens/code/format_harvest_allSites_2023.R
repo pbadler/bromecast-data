@@ -133,6 +133,7 @@ phen_harvest_ss %>%
 phen_harvest_ss %>% 
   filter(live == "N" & harvest == "Y") # Just seems random
 
+# write_csv(phen_harvest_ss, "~/Desktop/ss_phen_harvest_2023.csv")
 
 ## SS Fitness and flowering time ####
 # Merge phenology and harvest data sets to figure out which plants flowered
@@ -156,9 +157,6 @@ merged_dat %>%
   group_by(plantID) %>% 
   slice_max(jday) -> plants_flowered_harvest
 
-plants_flowered_phenology %>% 
-  select(-v_harvest)
-
 # If first time flowered when harvested, adjust v stage and date
 plants_flowered_harvest %>% 
   mutate(jday = yday(harvest_date),
@@ -172,7 +170,7 @@ rbind(plants_flowered_phenology, plants_flowered_harvest) -> all_plants_flowered
 merged_dat %>% 
   filter(plantID %notin% all_plants_flowered$plantID) %>% 
   group_by(plantID) %>% 
-  slice_min(jday) -> all_plants_no_flower
+  slice_max(jday) -> all_plants_no_flower
 
 # Get average flowering time of genotypes
 all_plants_flowered %>% 
@@ -182,28 +180,37 @@ all_plants_flowered %>%
 
 # Assign plants that didn't flower the average flowering time for genotype
 all_plants_no_flower %>% 
-  merge(genotype_averages) %>% 
-  mutate(jday = mean_flower) %>% 
+  # merge(genotype_averages) %>% 
+  mutate(jday = 0) %>% 
   # And then assign fitness (inflor_mass) to be 0
-  mutate(inflor_mass = 0) -> all_plants_no_flower
+  mutate(inflor_mass = ifelse(is.na(inflor_mass), 0, inflor_mass)) -> all_plants_no_flower
 
 # Bring flowered and non-flowered plants back together
 rbind(all_plants_flowered, all_plants_no_flower) -> flower_fit
+
+flower_fit %>% 
+  group_by(live, live_harvest) %>% 
+  summarize(n = n())
+
+flower_fit %>% 
+  rename(first_flower = jday) -> flower_fit
+
+write_csv(flower_fit, "~/Desktop/ss_phen_harvest_2023.csv")
 
 # Write file to save in derived data sets
 write_csv(flower_fit, "gardens/deriveddata/SS2023_flower_fit.csv")
 
 # Group by genotype and get average fitness and flowering time
-flower_fit %>% 
-  group_by(genotype) %>% 
-  summarize(jday_avg = mean(jday),
-            fitness_avg = mean(inflor_mass)) %>% 
-  ggplot(aes(x = jday_avg, fitness_avg)) + 
-  geom_point() +
-  geom_smooth(method = "lm") +
-  theme_bw(base_size = 16) + 
-  labs(y = "Mean inflorescence mass (g)",
-       x = "Mean first day of flowering")
+# flower_fit %>% 
+#   group_by(genotype) %>% 
+#   summarize(jday_avg = mean(jday),
+#             fitness_avg = mean(inflor_mass)) %>% 
+#   ggplot(aes(x = jday_avg, fitness_avg)) + 
+#   geom_point() +
+#   geom_smooth(method = "lm") +
+#   theme_bw(base_size = 16) + 
+#   labs(y = "Mean inflorescence mass (g)",
+#        x = "Mean first day of flowering")
 # Same pattern as we see in 2022, which is good!
 
 ## Format Cheyenne harvest data ####
@@ -524,7 +531,7 @@ rbind(plants_flowered_phenology, plants_flowered_harvest) -> all_plants_flowered
 merged_dat %>% 
   filter(plantID %notin% all_plants_flowered$plantID) %>% 
   group_by(plantID) %>% 
-  slice_min(jday) -> all_plants_no_flower
+  slice_max(jday) -> all_plants_no_flower
 
 # Get average flowering time of genotypes
 all_plants_flowered %>% 
@@ -534,25 +541,40 @@ all_plants_flowered %>%
 
 # Assign plants that didn't flower the average flowering time for genotype
 all_plants_no_flower %>% 
-  merge(genotype_averages) %>% 
-  mutate(jday = mean_flower) %>% 
+  # merge(genotype_averages) %>% 
+  mutate(jday = 0) %>% 
   # And then assign fitness (inflor_mass) to be 0
   mutate(inflor_mass = 0) -> all_plants_no_flower
 
 # Bring flowered and non-flowered plants back together
 rbind(all_plants_flowered, all_plants_no_flower) -> flower_fit
 
-# Remove plants with bad notes
 flower_fit %>% 
-  filter(note_standard %notin% c("bad_position", "duplicate", "no_date",
-                                 "physical_damage", "smut", "seed_drop")) -> flower_fit_clean
+  group_by(live, live_harvest) %>% 
+  summarize(n = n())
+
+write_csv(flower_fit, "~/Desktop/wi_phen_harvest_2023.csv")
+
+# Remove plants with bad notes
+# flower_fit %>% 
+#   filter(note_standard %notin% c("bad_position", "duplicate", "no_date",
+#                                  "physical_damage", "smut", "seed_drop")) -> flower_fit_clean
 
 # Filter so we are only have plants with recorded harvest dates
-flower_fit_clean %>% 
-  filter(complete.cases(jday)) -> flower_fit_clean
+# flower_fit_clean %>% 
+#   filter(complete.cases(jday)) -> flower_fit_clean
 
 # Replace inflor_mass NA to be 0
-flower_fit_clean$inflor_mass <- ifelse(is.na(flower_fit_clean$inflor_mass), 0, flower_fit_clean$inflor_mass)
+flower_fit$inflor_mass <- ifelse(is.na(flower_fit$inflor_mass), 0, flower_fit$inflor_mass)
+
+flower_fit %>% 
+  group_by(live, live_harvest) %>% 
+  summarize(n = n())
+
+flower_fit %>% 
+  rename(first_flower = jday) -> flower_fit
+
+write_csv(flower_fit, "~/Desktop/wi_phen_harvest_2023.csv")
 
 # Write csv of flower fitness data
 write_csv(flower_fit_clean, "gardens/deriveddata/Boise2023_flower_fit.csv")
