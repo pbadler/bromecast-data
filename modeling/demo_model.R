@@ -1,121 +1,83 @@
-
-model{ 
-  # priors
-
-  # Regression coefficients that do *not* have random intercepts/slopes
+model{
+  # Prior for density effect on fecundity
   beta1 ~ dnorm(0, 0.001)
-  #beta2 ~ dnorm(0, 0.001)
-  #beta3 ~ dnorm(0, 0.001)
-  #beta4 ~ dnorm(0, 0.001)
-  #beta5 ~ dnorm(0, 0.001)
-  gamma1 ~ dnorm(0, 0.001)
-  #gamma2 ~ dnorm(0, 0.001)
-  #gamma3 ~ dnorm(0, 0.001)
-  #gamma4 ~ dnorm(0, 0.001)
-  #gamma5 ~ dnorm(0, 0.001)
-
-
-  #####
-  ## Hyperparameters for random intercepts for fecundity part of the model
-  #####
-  # Non-identifiable intercept (DON'T MONITOR)
-  beta0 ~ dnorm(0, 0.001)
-  # Identifiable intercept (MONITOR)
-  beta0.star <- beta0 + ave.kappa + ave.alpha 
-  # Prior for deviations for each GENOTYPE from global intercept (fecundity)
-  sigma.alpha ~ dunif(0, 100)
-  tau.alpha <- 1/(sigma.alpha^2)
-  # Prior for deviations for each PLOT from global intercept (fecundity)
-  sigma.kappa ~ dunif(0, 100) # SD hyperparameter for random intercepts
-  tau.kappa <- 1/(sigma.kappa^2)
-
-
-  #####
-  ## Hyperparameters for random intercepts for survival part of the model
-  #####
-  # Non-identifiable intercept (DON'T MONITOR)
-  gamma0 ~ dnorm(0, 0.001)
-  # Identifiable intercept (MONITOR)
-  gamma0.star <- gamma0 + ave.psi + ave.omega
-  # Prior for deviations for each GENOTYPE from global intercept (survival)
+  
+  # Priors for global intercept for fecundity part of the model
+  mu.fecund ~ dnorm(0, 0.001)
+  # Identifiable intercept (monitor this)
+  mu.fecund.star <- mu.fecund + ave.kappa + ave.alpha
+  
+  # Prior for global intercept for survival part of the model
+  mu.survive ~ dnorm(0, 0.001)
+  # Identifiable intercept (monitor this)
+  mu.survive.star <- mu.survive + ave.psi + ave.omega
+  
+  # Prior for deviations for each genotype from global intercept (survival)
   sigma.psi ~ dunif(0, 100)
   tau.psi <- 1/(sigma.psi^2)
-  # Prior for deviations for each PLOT from global intercept (survival)
+  
+  # Prior for deviations for each plot from global intercept (survival)
   sigma.omega ~ dunif(0, 100)
   tau.omega <- 1/(sigma.omega^2)
-
-
-  #####
-  # Random slopes for fecundity part of the model
-  #####
-
-  #####
-  # Random slopes for survival part of the model
-  #####
   
-  # Loop through random intercepts and slopes for each genotype
+  # Prior for deviations for each plot from global intercept (fecundity)
+  sigma.kappa ~ dunif(0, 100) 
+  tau.kappa <- 1/(sigma.kappa^2)
+  
+  # Prior for deviations for each genotype from global intercept (fecundity)
+  sigma.alpha ~ dunif(0, 100)
+  tau.alpha <- 1/(sigma.alpha^2)
+  
+  # Loop through random intercepts for each genotype
   for(j in 1:nalpha){
-
-    # Non-identifiable random intercepts (DON'T MONITOR)
+    # Not identifiable don't monitor! 
     psi[j] ~ dnorm(0, tau.psi)
-    alpha[j] ~ dnorm(0, tau.alpha)
-    # Identifiable random intercepts (MONITOR)
-    alpha.star[j] <- alpha[j] - ave.alpha
+    # Identifiable random effect (monitor this)
     psi.star[j] <- psi[j] - ave.psi
-  } # end genotype loop
-
-  # Loop through random intercepts and slopes for each PLOT
+    # Not identifiable don't monitor! 
+    alpha[j] ~ dnorm(0, tau.alpha)
+    # Identifiable random effect (monitor this)
+    alpha.star[j] <- alpha[j] - ave.alpha
+  }
+  # Mean genotype-level random effect:
+  ave.alpha <- mean(alpha[])
+  sigma.alpha.star <- sd(alpha.star[]) 
+  ave.psi <- mean(psi[])
+  sigma.psi.star <- sd(psi.star[])
+  
+  # Loop through random intercept deviations for each plot
   for(k in 1:nplot){
-    # Non-identifiable (DON'T MONITOR)
+    # Not identifiable don't monitor! 
     kappa[k] ~ dnorm(0, tau.kappa)
-    omega[k] ~ dnorm(0, tau.omega)  
-    # Identifiable random effect (MONITOR)
+    # Identifiable random effect (monitor this)
     kappa.star[k] <- kappa[k] - ave.kappa
+    # Not identifiable don't monitor! 
+    omega[k] ~ dnorm(0, tau.omega)
+    # Identifiable random effect (monitor this)
     omega.star[k] <- omega[k] - ave.omega
-  } # end plot loop
-
+  }
+  # Mean plot-level random effect:
+  ave.kappa <- mean(kappa[])
+  sigma.kappa.star <- sd(kappa.star[]) 
+  ave.omega <- mean(omega[])
+  sigma.omega.star <- sd(omega.star[]) 
+  
   # likelihood
   for (i in 1:N){ 
-
+    
     # data model
     d[i] ~ dpois(lambda[i]) 
-    lambda[i] <- w[i]*mu[i] + 0.00000001 # Hack for inconsistent nodes error
+    lambda[i] <- mu[i]*w[i]  + 0.00000001 # Hack for inconsistent nodes error
     w[i] ~ dbern(r[i]) 
-
-    # link functions
-
+    
+    # Link functions
+    
     # Fecundity model
-    #log(mu[i]) <- beta0 + alpha[genotype[i]] + kappa[plot[i]] +
-    #              beta1*x1[i] + beta2*x2[i] + beta3*x1[i]*x2[i] +
-    #              beta4*x3[i] + beta5*x4[i]
-
-    log(mu[i]) <- beta0 + beta1*x1[i] + alpha[genotype[i]] + kappa[plot[i]] 
+    log(mu[i]) <- alpha[genotype[i]] + beta1*x1[i] + kappa[plot[i]] + mu.fecund
     
     # Survival model
-    #logit(r[i]) <- gamma0 + psi[genotype[i]] + omega[plot[i]] +
-    #               gamma1*x1[i] + gamma2*x2[i] + gamma3*x1[i]*x2[i] +
-    #               gamma4*x3[i] + gamma5*x4[i]
-
-    logit(r[i]) <- gamma0 + gamma1*x1[i] + psi[genotype[i]] + omega[plot[i]]
-
-}# end likelihood 
-  #####
-  ## Derived quantities
-  #####
+    logit(r[i]) <- psi[genotype[i]] + omega[plot[i]] + mu.survive
+  } 
   
-  # Mean genotype-level random intercept (DON'T MONITOR)
-  ave.alpha <- mean(alpha[])
-  ave.psi <- mean(psi[])
-  # Identifiable sd of random intercept (MONITOR)
-  sigma.alpha.star <- sd(alpha.star[])
-  sigma.psi.star <- sd(psi.star[]) 
-
-  # Mean plot-level random effect (DON'T MONITOR)
-  ave.kappa <- mean(kappa[])
-  ave.omega<- mean(omega[])
-  # Identifiable sd of random intercept (MONITOR)
-  sigma.kappa.star <- sd(kappa.star[])
-  sigma.omega.star <- sd(omega.star[]) 
-
+  
 }
-

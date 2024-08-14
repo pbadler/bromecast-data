@@ -1,5 +1,7 @@
 # Fit demographic model to 2023 data
 
+## Preliminaries ####
+
 # Load libraries
 library(rjags);library(tidyverse)
 
@@ -43,8 +45,12 @@ for_model %>%
 # Fix any missing seed_count values
 for_model[is.na(for_model$seed_count), "seed_count"] <- 0
 
-# Create data object with just what we need for model
+# Subset data for faster convergence as we are trying different models
 for_model %>% 
+  sample_n(nrow(for_model)) -> for_model_sample
+
+# Create data object with just what we need for model
+for_model_sample %>% 
   mutate(w = ifelse(survived == "Y", 1, 0),
          d = as.integer(seed_count),
          plot_unique = paste(site, block, plot, sep = "_"),
@@ -57,167 +63,42 @@ for_model %>%
          plot_unique,
          genotype) -> data_jags
 
+# Set sum to zero contrasts
+options(contrasts = c("contr.sum", "contr.poly"))
+x1 <- as.numeric(model.matrix(d ~ x1 * x2 + x3, data = data_jags)[,2])
+x2 <- as.numeric(model.matrix(d ~ x1 * x2 + x3, data = data_jags)[,3])
+x3 <- as.numeric(model.matrix(d ~ x1 * x2 + x3, data = data_jags)[,4])
+x4 <- as.numeric(model.matrix(d ~ x1 * x2 + x3, data = data_jags)[,5])
+x5 <- as.numeric(model.matrix(d ~ x1 * x2 + x3, data = data_jags)[,6]) 
 
-# Create data object for JAGS
-# data <- list(d = data_jags$d,
-#              N = nrow(data_jags),
-#              x1 = as.numeric(droplevels(as.factor(data_jags$x1)))-1, # Density covariate (ref = high)
-#              x2 = as.numeric(droplevels(as.factor(data_jags$x2)))-1, # Gravel covariate (ref = black)
-#              x3 = ifelse(data_jags$x3 == "SS", 1, 0), # Site covariate (ref = CH)
-#              x4 = ifelse(data_jags$x3 == "WI", 1, 0), # Site covariate (ref = CH)
-#              genotype = as.numeric(droplevels(as.factor(for_model$genotype))),
-#              nalpha = length(unique(for_model$genotype)),
-#              plot = as.numeric(droplevels(as.factor(data_jags$plot_unique))),
-#              nplot = length(unique(data_jags$plot_unique)))
+## Fit JAGS model ####
 
 # Create data object for JAGS
 data <- list(d = data_jags$d,
              N = nrow(data_jags),
-             x1 = as.numeric(droplevels(as.factor(data_jags$x1)))-1, # Density covariate (ref = high)
+             w = data_jags$w,
              genotype = as.numeric(droplevels(as.factor(for_model$genotype))),
              nalpha = length(unique(for_model$genotype)),
              plot = as.numeric(droplevels(as.factor(data_jags$plot_unique))),
-             nplot = length(unique(data_jags$plot_unique)))
-
-sink("modeling/demo_model.R")
-cat("
-model{ 
-  # priors
-
-  # Regression coefficients that do *not* have random intercepts/slopes
-  beta1 ~ dnorm(0, 0.001)
-  #beta2 ~ dnorm(0, 0.001)
-  #beta3 ~ dnorm(0, 0.001)
-  #beta4 ~ dnorm(0, 0.001)
-  #beta5 ~ dnorm(0, 0.001)
-  gamma1 ~ dnorm(0, 0.001)
-  #gamma2 ~ dnorm(0, 0.001)
-  #gamma3 ~ dnorm(0, 0.001)
-  #gamma4 ~ dnorm(0, 0.001)
-  #gamma5 ~ dnorm(0, 0.001)
-
-
-  #####
-  ## Hyperparameters for random intercepts for fecundity part of the model
-  #####
-  # Non-identifiable intercept (DON'T MONITOR)
-  beta0 ~ dnorm(0, 0.001)
-  # Identifiable intercept (MONITOR)
-  beta0.star <- beta0 + ave.kappa + ave.alpha 
-  # Prior for deviations for each GENOTYPE from global intercept (fecundity)
-  sigma.alpha ~ dunif(0, 100)
-  tau.alpha <- 1/(sigma.alpha^2)
-  # Prior for deviations for each PLOT from global intercept (fecundity)
-  sigma.kappa ~ dunif(0, 100) # SD hyperparameter for random intercepts
-  tau.kappa <- 1/(sigma.kappa^2)
-
-
-  #####
-  ## Hyperparameters for random intercepts for survival part of the model
-  #####
-  # Non-identifiable intercept (DON'T MONITOR)
-  gamma0 ~ dnorm(0, 0.001)
-  # Identifiable intercept (MONITOR)
-  gamma0.star <- gamma0 + ave.psi + ave.omega
-  # Prior for deviations for each GENOTYPE from global intercept (survival)
-  sigma.psi ~ dunif(0, 100)
-  tau.psi <- 1/(sigma.psi^2)
-  # Prior for deviations for each PLOT from global intercept (survival)
-  sigma.omega ~ dunif(0, 100)
-  tau.omega <- 1/(sigma.omega^2)
-
-
-  #####
-  # Random slopes for fecundity part of the model
-  #####
-
-  #####
-  # Random slopes for survival part of the model
-  #####
-  
-  # Loop through random intercepts and slopes for each genotype
-  for(j in 1:nalpha){
-
-    # Non-identifiable random intercepts (DON'T MONITOR)
-    psi[j] ~ dnorm(0, tau.psi)
-    alpha[j] ~ dnorm(0, tau.alpha)
-    # Identifiable random intercepts (MONITOR)
-    alpha.star[j] <- alpha[j] - ave.alpha
-    psi.star[j] <- psi[j] - ave.psi
-  } # end genotype loop
-
-  # Loop through random intercepts and slopes for each PLOT
-  for(k in 1:nplot){
-    # Non-identifiable (DON'T MONITOR)
-    kappa[k] ~ dnorm(0, tau.kappa)
-    omega[k] ~ dnorm(0, tau.omega)  
-    # Identifiable random effect (MONITOR)
-    kappa.star[k] <- kappa[k] - ave.kappa
-    omega.star[k] <- omega[k] - ave.omega
-  } # end plot loop
-
-  # likelihood
-  for (i in 1:N){ 
-
-    # data model
-    d[i] ~ dpois(lambda[i]) 
-    lambda[i] <- w[i]*mu[i] + 0.00000001 # Hack for inconsistent nodes error
-    w[i] ~ dbern(r[i]) 
-
-    # link functions
-
-    # Fecundity model
-    #log(mu[i]) <- beta0 + alpha[genotype[i]] + kappa[plot[i]] +
-    #              beta1*x1[i] + beta2*x2[i] + beta3*x1[i]*x2[i] +
-    #              beta4*x3[i] + beta5*x4[i]
-
-    log(mu[i]) <- beta0 + beta1*x1[i] + alpha[genotype[i]] + kappa[plot[i]] 
-    
-    # Survival model
-    #logit(r[i]) <- gamma0 + psi[genotype[i]] + omega[plot[i]] +
-    #               gamma1*x1[i] + gamma2*x2[i] + gamma3*x1[i]*x2[i] +
-    #               gamma4*x3[i] + gamma5*x4[i]
-
-    logit(r[i]) <- gamma0 + gamma1*x1[i] + psi[genotype[i]] + omega[plot[i]]
-
-}# end likelihood 
-  #####
-  ## Derived quantities
-  #####
-  
-  # Mean genotype-level random intercept (DON'T MONITOR)
-  ave.alpha <- mean(alpha[])
-  ave.psi <- mean(psi[])
-  # Identifiable sd of random intercept (MONITOR)
-  sigma.alpha.star <- sd(alpha.star[])
-  sigma.psi.star <- sd(psi.star[]) 
-
-  # Mean plot-level random effect (DON'T MONITOR)
-  ave.kappa <- mean(kappa[])
-  ave.omega<- mean(omega[])
-  # Identifiable sd of random intercept (MONITOR)
-  sigma.kappa.star <- sd(kappa.star[])
-  sigma.omega.star <- sd(omega.star[]) 
-
-}
-", fill = TRUE)
-sink()
+             nplot = length(unique(data_jags$plot_unique)),
+             x1 = x1)
 
 # Set parameters for MCMC
-n.adapt = 2000
-n.update = 2000
-n.iter = 5000
+n.adapt = 500
+n.update = 500
+n.iter = 1000
 
 start <- Sys.time()
 
 # Fit model in JAGS
 jm = jags.model("modeling/demo_model.R", data = data, n.chains = 3, n.adapt = n.adapt)
-update(jm, n.iter = n.update)
-zm = coda.samples(jm, variable.names = c("beta0.star", "gamma0.star",
-                                         "sigma.kappa.star", "sigma.omega.star",
-                                         "sigma.alpha.star", "sigma.psi.star",
-                                         "beta1", "gamma1"), n.iter = n.iter, n.thin = 1)
-
+#update(jm, n.iter = n.update)
+zm = coda.samples(jm, 
+                   variable.names = c("mu.fecund.star", "mu.survive.star", 
+                                      "sigma.kappa.star", "sigma.alpha.star",
+                                      "sigma.psi.star", "sigma.omega.star", "beta1"), 
+                   n.iter = n.iter, 
+                   n.thin = 1)
 
 end <- Sys.time()
 
@@ -225,13 +106,92 @@ end-start
 # Plot trace and density plots
 plot(zm)
 
+## Post-processing ####
 
-
-
- # Calculate median and 95% quantiles for parameters
-samples <- as.data.frame(zm[[1]])
-apply(samples, 2, quantile, probs = c(0.025, 0.5, 0.975)) -> params_seed_model
-
-
-
-
+# # Calculate median and 95% quantiles for parameters
+# samples <- as.data.frame(zm[[1]])
+# apply(samples, 2, quantile, probs = c(0.025, 0.5, 0.975)) -> params_seed_model
+# 
+# data_jags %>% 
+#   group_by(genotype) %>% 
+#   summarize(prop = sum(w)/n()) %>% 
+#   ggplot(aes(x = prop)) + 
+#   geom_histogram() +
+#   xlim(0,1)
+# 
+# data_jags %>% 
+#   group_by(plot_unique) %>% 
+#   summarize(prop = sum(w)/n()) %>% 
+#   ggplot(aes(x = prop)) + 
+#   geom_histogram() +
+#   xlim(0,1)
+# 
+# surv_HB <- plogis(samples[,"gamma0.star"] + samples[,"gamma1"]*1 + samples[,"gamma2"]*1 + samples[,"gamma5"]*1)
+# surv_LB <- plogis(samples[,"gamma0.star"] + samples[,"gamma1"]*-1 + samples[,"gamma2"]*1 + samples[,"gamma5"]*-1)
+# surv_HW <- plogis(samples[,"gamma0.star"] + samples[,"gamma1"]*1 + samples[,"gamma2"]*-1 + samples[,"gamma5"]*-1)
+# surv_LW <- plogis(samples[,"gamma0.star"] + samples[,"gamma1"]*-1 + samples[,"gamma2"]*-1 + samples[,"gamma5"]*1)
+# 
+# pred_HB <- exp(samples[,"beta0.star"] + samples[,"beta1"]*1 + samples[,"beta2"]*1 + samples[,"beta5"]*1 + samples[,"beta6"]*0.39)
+# pred_LB <- exp(samples[,"beta0.star"] + samples[,"beta1"]*-1 + samples[,"beta2"]*1 + samples[,"beta5"]*-1 + samples[,"beta6"]*0.39)
+# pred_HW <- exp(samples[,"beta0.star"] + samples[,"beta1"]*1 + samples[,"beta2"]*-1 + samples[,"beta5"]*-1 + samples[,"beta6"]*0.39)
+# pred_LW <- exp(samples[,"beta0.star"] + samples[,"beta1"]*-1 + samples[,"beta2"]*-1 + samples[,"beta5"]*1 + samples[,"beta6"]*0.39)
+# 
+# tibble(treatment = rep(c("high-black", "low-black", "high-white", "low-white"), each = 5000),
+#        pred = c(pred_HB*surv_HB, pred_LB*surv_LB,
+#                 pred_HW*surv_HW, pred_LW*surv_LW)) %>% 
+#   ggplot(aes(x = treatment, y = log(pred), fill = treatment)) +
+#   geom_violin() +
+#   labs(y = "log(fitness)") +
+#   theme_bw(base_size = 16) +
+#   scale_fill_manual(values = c("black", "white", "black", "white")) +
+#   theme(legend.position = "none")
+# 
+# samples %>% 
+#   select(contains("alpha")) %>% 
+#   apply(2, mean) %>% 
+#   as.numeric() %>% 
+#   mean() -> alpha_mean
+# 
+# diff <- mean(samples[,"beta0.star"] - alpha_mean)
+# 
+# samples %>% 
+#   select(contains("alpha")) %>% 
+#   select(-"alpha[94]") %>% 
+#   gather(key = "genotype", value = "value") %>% 
+#   mutate("log(fecundity)" = value+diff) %>% 
+#   ggplot(aes(x = reorder(genotype, `log(fecundity)`), y = `log(fecundity)`)) +
+#   stat_summary(fun.y = mean,fun.min = min, fun.max = max) +
+#   geom_hline(aes(yintercept = mean(samples[,"beta0.star"]))) + 
+#   xlab("genotype")  +
+#   theme_bw(base_size = 16) +
+#   theme(axis.text.x = element_blank())
+# 
+# samples%>% 
+#   select(contains("beta")) %>% 
+#   gather(key = "param", value = "value") %>% 
+#   ggplot(aes(x = value)) +
+#   geom_density() +
+#   facet_wrap(~param, scales = "free")
+# 
+# samples%>% 
+#   select(contains("gamma")) %>% 
+#   gather(key = "param", value = "value") %>% 
+#   ggplot(aes(x = value)) +
+#   geom_density() +
+#   facet_wrap(~param, scales = "free")
+#   
+# surv_CH <- plogis(samples[,"gamma0.star"] + samples[,"gamma3"]*1 + samples[,"gamma4"]*0)
+# surv_WI <- plogis(samples[,"gamma0.star"] + samples[,"gamma3"]*-1 + samples[,"gamma4"]*-1)
+# surv_SS <- plogis(samples[,"gamma0.star"] + samples[,"gamma3"]*0 + samples[,"gamma4"]*1)
+# 
+# pred_CH <- exp(samples[,"beta0.star"] + samples[,"beta3"]*1 + samples[,"beta4"]*0)
+# pred_WI <- exp(samples[,"beta0.star"] + samples[,"beta3"]*-1 + samples[,"beta4"]*-1)
+# pred_SS <- exp(samples[,"beta0.star"] + samples[,"beta3"]*0 + samples[,"beta4"]*1)
+# 
+# tibble(site = rep(c("Cheyenne", "Wildcat", "Sheep Station"), each = 5000),
+#        pred = c(pred_CH*surv_CH, pred_WI*surv_WI, pred_SS*surv_SS)) %>% 
+#   ggplot(aes(x = site, y = log(pred))) +
+#   geom_violin() +
+#   labs(y = "log(fitness)") +
+#   theme_bw(base_size = 16) 
+# 
