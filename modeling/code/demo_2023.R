@@ -91,7 +91,7 @@ n.iter = 1000
 start <- Sys.time()
 
 # Fit model in JAGS
-jm = jags.model("modeling/demo_model.R", data = data, n.chains = 3, n.adapt = n.adapt)
+jm = jags.model("modeling/code/demo_model.R", data = data, n.chains = 3, n.adapt = n.adapt)
 #update(jm, n.iter = n.update)
 zm = coda.samples(jm, 
                    variable.names = c("mu.fecund.star", "mu.survive.star", 
