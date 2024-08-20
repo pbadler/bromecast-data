@@ -1,0 +1,19 @@
+Pirtel et al. seed bag germination data
+
+tag: metal tag number used for burying seed bags
+genotype: genotype seed source used in seed bag
+lat: latitude of genotype source location
+lon: longitude of genotype source location
+mat: mean annual precipitation for genotype source location (data source = CHELSA?)
+map: mean annual precipitation for genotype source location (data source = CHELSA?)
+grow_out: grow out year of bulked genotype (2020 = Reno, 2021 = Logan, 2022 = Logan)
+wt_seed: weight of individual seed at the genotype level... not sure
+bag_n: replicate bag number of each genotype (1-3)
+n_planted: number of seeds in each bag
+n_found: after return to the lab for processing, how many seeds were found left in the bag
+n_germ_initial: number to have determined to have germinated in initial bag burying
+not_germ_initial: number determined not to have germinated in initial bag burying
+viable_dye: number of ungerminated seeds that were determined as viable from tetrazolium dye (?)
+unviable_dye: number of ungerminated seeds that were determined as unviable from tetrazolium dye (?)
+germ_final: after attempting to germinate non germinated seeds in the lab, total number that germinated. Additions indicate seeds that germinated WITHIN the lab (i.e. not in the field)
+not_germ_final: after attempting to germinated non germinated seeds in the lab, total number that did not germinate
