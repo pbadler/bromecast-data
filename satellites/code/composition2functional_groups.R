@@ -244,9 +244,17 @@ comp_ftypes3 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance,
                  pivot_wider(names_from = ftypes3, values_from = cover, values_fill = 0)
 comp_ftypes2 <- as.data.frame(comp_ftypes2)
 
+### calculate mean BRTE cover by site, year, and treatment
+
+brte <- comp_all %>% filter(species=="Bromus tectorum") %>%
+  group_by(SiteCode,Year,Treatment) %>%
+  summarize(cover = mean(cover)) %>%
+  pivot_wider(names_from = Treatment, values_from = cover, values_fill = 0)
+write.csv(brte,"../deriveddata/brte_cover_siteyeartrt.csv",row.names=F)
+rm(brte)
+
 rm(comp_all)
 
-# Ensing Treatments don't match
-# EOARC removal distances don't match
+
 
 
