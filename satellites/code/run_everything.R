@@ -12,10 +12,10 @@ setwd(dirname(current_path )) # set working directory to location of this file
 
 # load packages
 library(dplyr)
-library(tidyr)
+#library(tidyr)
 library(maps)
 
-# load and clean 2021, 2022, and 2023 demography data
+# load and clean 2021, 2022, 2023, and 2024 demography data
 source("load_and_clean_demography_data.R")
 
 # pull Daymet data for each site, multiple years

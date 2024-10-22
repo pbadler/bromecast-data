@@ -200,6 +200,77 @@ D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Rep
 
 sapply(D2022, function(x) sum(is.na(x)))
 
+
+###
+### import 2024 data ---------------------------------------------------
+###
+
+D <- read.csv("../rawdata/Satellite_demography_2023-2024.csv",header=T)
+
+# print(unique(D$site_code))
+
+# rename some columns
+names(D)[which(names(D)=="site_code")] <- "SiteCode"
+names(D)[which(names(D)=="treatment")] <- "Treatment"
+names(D)[which(names(D)=="emerged")] <- "Emerged"
+names(D)[which(names(D)=="seeds")] <- "Reproduced"
+names(D)[which(names(D)=="seeds_produced")] <- "Fecundity"
+names(D)[which(names(D)=="transect")] <- "Transect"
+names(D)[which(names(D)=="distance_from_center")] <- "Distance"
+names(D)[which(names(D)=="notes")] <- "Notes"
+
+D$Year <- 2024
+
+# fix bad values in Treatment column
+D$Treatment[D$Treatment=="removal "] <- "removal"
+D$Treatment[D$Treatment=="Removal"] <- "removal"
+D$Treatment[D$Treatment=="Removal "] <- "removal"
+D$Treatment[D$Treatment=="Control"] <- "control"
+D$Treatment[D$Treatment=="Control "] <- "control"
+
+# fix bad values in Emerged column
+D$Emerged[D$Emerged=="MISSING"] <- "missing"
+D$Emerged[D$Emerged==""] <- "missing"
+D$Emerged[D$Emerged=="no"] <- "N"
+D$Emerged[D$Emerged=="No"] <- "N"
+D$Emerged[D$Emerged=="Yes"] <- "Y"
+D$Emerged[D$Emerged=="yes"] <- "Y"
+
+# assume NAs for Emerged are missing plants
+D$Emerged[is.na(D$Emerged)] <- "missing"
+
+# fix some bad values in Reproduced column
+D$Reproduced[D$Reproduced==""] <- NA
+D$Reproduced[D$Reproduced==" "] <- NA
+D$Reproduced[D$Reproduced=="no"] <- "N"
+D$Reproduced[D$Reproduced=="No"] <- "N"
+D$Reproduced[D$Reproduced=="not found"] <- "missing"
+D$Reproduced[D$Reproduced=="y"] <- "Y"
+D$Reproduced[D$Reproduced=="yes"] <- "Y"
+D$Reproduced[D$Reproduced=="Yes"] <- "Y"
+D$Reproduced[D$Reproduced=="Y?"] <- "Y"
+
+# fill NAs for "Reproduced" when we know fecundity > 0
+tmp <- which(is.na(D$Reproduced) & D$Fecundity > 0)
+# none of these exist for 2024
+
+# fix bad values in Fecundity column
+D$Fecundity[is.na(D$Fecundity) & D$Reproduced=="N"] <- 0
+
+# flag records where Reproduced = Y and Fecundity is NA
+D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
+
+# when Reproduced = missing, set Fecundity to NA (not zero)
+tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
+D$Fecundity[tmp] <- NA
+
+# remove and reorder columns
+D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
+
+sapply(D2022, function(x) sum(is.na(x)))
+
+
+
 ### COMBINE YEARS
 
 # # make sure siteCodes match
