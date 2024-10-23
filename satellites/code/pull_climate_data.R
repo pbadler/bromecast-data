@@ -24,6 +24,12 @@ names(tmp) <- c("SiteCode" ,"Lat","Lon")
 
 siteD <- rbind(siteD,tmp)
 
+tmp <- read.csv("../rawdata/SiteInfo_2023-2024.csv",header=T)
+tmp <- tmp[,1:3]
+names(tmp) <- c("SiteCode" ,"Lat","Lon")
+
+siteD <- rbind(siteD,tmp)
+
 # remove duplicates
 siteD <- unique(siteD, MARGIN=2)
 tmp <- which(siteD$SiteCode=="SymstadS1" & siteD$Lat==43.35620) # remove SymstadS1 w/ bad coords
@@ -39,7 +45,7 @@ for(i in 1:nrow(siteD)){
                           lat = siteD$Lat[i],
                           lon = siteD$Lon[i],
                           start = 1980,
-                          end = 2022,
+                          end = 2023,
                           internal = TRUE)
   tmp$data$SiteCode <- siteD$SiteCode[i]
   

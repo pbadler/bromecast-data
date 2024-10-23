@@ -30,6 +30,11 @@ siteD3 <- read.csv("../rawdata/SiteInfo_2022-2023.csv",header=T)
 names(siteD3)[1:3] <- c("SiteCode" ,"Lat","Lon")
 siteD3$Year = 2023
 
+# year 2024
+siteD4 <- read.csv("../rawdata/SiteInfo_2023-2024.csv",header=T)
+names(siteD4)[1:3] <- c("SiteCode" ,"Lat","Lon")
+siteD4$Year = 2024
+
 # combine years into one data frame
 siteD <- rbind(siteD1[,c("SiteCode","Lat","Lon","Year")],
                siteD2[,c("SiteCode","Lat","Lon","Year")],
@@ -39,7 +44,7 @@ siteD <- rbind(siteD1[,c("SiteCode","Lat","Lon","Year")],
 tmp <- grep("LEHN",siteD$SiteCode)
 siteD <- siteD[-tmp,]
 
-rm(siteD1,siteD2, siteD3, tmp)
+rm(siteD1,siteD2, siteD3, siteD4, tmp)
 
 
 ###

@@ -12,60 +12,74 @@ current_path <- getActiveDocumentContext()$path
 setwd(dirname(current_path )) # set working directory to location of this file
 
 # Load libraries
-library(tidyverse)
+#library(tidyverse)
 
 # Make %notin% operator
 `%notin%` <- Negate(`%in%`)
 
 # Read in 2020-2021 composition data
-comp20 <- read_csv("../rawdata/Satellite_composition_2020-2021.csv")
+comp21 <- read.csv("../rawdata/Satellite_composition_2020-2021.csv")
 # Read in 2021-2022 composition data
-comp21 <- read_csv("../rawdata/Satellite_composition_2021-2022.csv")
+comp22 <- read.csv("../rawdata/Satellite_composition_2021-2022.csv")
 # Read in 2022-2023 composition data
-comp22 <- read_csv("../rawdata/Satellite_composition_2022-2023.csv")
+comp23 <- read.csv("../rawdata/Satellite_composition_2022-2023.csv")
+# Read in 2022-2023 composition data
+comp24 <- read.csv("../rawdata/Satellite_composition_2023-2024.csv")
+
 
 # Rename columns for brevity
-comp20 %>% mutate(year=2021) %>%
+comp21 %>% mutate(year=2021) %>%
   select(sitecode = SiteCode,
          year=year,
-         transect = `Transect (N, E, S, or W)`,
-         treatment = `Treatment (control OR removal)`,
-         distance_m = `Distance from center (m)`,
+         transect = "Transect..N..E..S..or.W.",
+         treatment = "Treatment..control.OR.removal.",
+         distance_m = "Distance.from.center..m.",
          species = Species,
-         cover = Cover) -> comp20
+         cover = Cover) -> comp21
          #litter_depth_cm = `Litter depth (if >1cm)`,
          #notes = Notes) -> comp20
 #add missing columns
-comp20$litter_depth_cm <- NA
-comp20$notes <- NA
+comp21$litter_depth_cm <- NA
+comp21$notes <- NA
 
 
-comp21 %>% mutate(year=2022) %>%
+comp22 %>% mutate(year=2022) %>%
   select(sitecode = SiteCode,
          year=year,
-         transect = `Transect (N, E, S, or W)`,
-         treatment = `Treatment (control OR removal)`,
-         distance_m = `Distance from center (m)`,
+         transect = "Transect..N..E..S..or.W.",
+         treatment = "Treatment..control.OR.removal.",
+         distance_m = "Distance.from.center..m.",
          species = Species,
          cover = Cover,
-         litter_depth_cm = `Litter depth (cm)`,
-         notes = Notes) -> comp21
-
-comp22 %>% mutate(year=2023) %>%
-  select(sitecode = SiteCode,
-         year=year,
-         transect = `Transect (N, E, S, or W)`,
-         treatment = `Treatment (control OR removal)`,
-         distance_m = `Distance from center (m)`,
-         species = Species,
-         cover = Cover,
-         litter_depth_cm = `Litter depth (if >1cm)`,
+         litter_depth_cm = "Litter.depth..cm.",
          notes = Notes) -> comp22
 
+comp23 %>% mutate(year=2023) %>%
+  select(sitecode = SiteCode,
+         year=year,
+         transect = "Transect..N..E..S..or.W.",
+         treatment = "Treatment..control.OR.removal.",
+         distance_m = "Distance.from.center..m.",
+         species = Species,
+         cover = Cover,
+         litter_depth_cm = "Litter.depth..if..1cm." ,
+         notes = Notes) -> comp23
+
+comp24 %>% mutate(year=2024) %>%
+  select(sitecode = SiteCode,
+         year=year,
+         transect = "Transect..N..E..S..or.W.",
+         treatment = "Treatment..control.OR.removal.",
+         distance_m = "Distance.from.center..m.",
+         species = Species,
+         cover = Cover,
+         litter_depth_cm = "Litter.depth..if..1cm." ,
+         notes = Notes) -> comp24
+
 # Combine species observation lists
-comp_all <- rbind(comp20, comp21, comp22)
+comp_all <- rbind(comp21, comp22, comp23, comp24)
 comp_all <- comp_all[order(comp_all$sitecode,comp_all$year,comp_all$transect,comp_all$distance_m),]
-rm(comp20,comp21,comp22)
+rm(comp21,comp22,comp23,comp24)
 
 # PBA: I'm ignoring the problematic "notes" because I cleaned the demography
 # data very carefully. That catches the real problems. Leftover notes for composition
@@ -74,7 +88,7 @@ rm(comp20,comp21,comp22)
 
 # Write csv file to code species as functional groups manually and to fix any issues
 species_list <- sort(unique(comp_all$species))
-write_csv(tibble(species = species_list), "../deriveddata/species_list_raw.csv" )
+write.csv(species_list, "../deriveddata/species_list_raw.csv" )
 
 # did a previous species list exist?
 tmp <- file.exists("../deriveddata/species_list_updates.csv")
@@ -95,8 +109,8 @@ if(tmp==T){
 # DONE BY HAND: fill in "update" column in 
 # "../deriveddata/species_list_updates.csv" as needed
 
-# # look up sitecode for a species code
-# findspp <- "ERSP"
+# # # look up sitecode for a species code
+# findspp <- " Symphyotrichum porteri"
 # comp_all[comp_all$species==findspp,]
 
 # Read in species updates
@@ -178,6 +192,10 @@ tmp <- which(comp_all$cover == "missing")
 comp_all <- comp_all[-tmp,]
 tmp <- which(comp_all$cover == "M")
 comp_all <- comp_all[-tmp,]
+tmp <- which(comp_all$species == "cut_this_record")
+comp_all <- comp_all[-tmp,]
+tmp <- which(comp_all$species == "missing")
+comp_all <- comp_all[-tmp,]
 
 # other checks
 table(comp_all$ftypes1)
@@ -206,6 +224,7 @@ names(comp_all)[names(comp_all)=="distance_m"] <- "Distance"
 # clean up bad Treatment values
 comp_all$Treatment[comp_all$Treatment == "Control"] <- "control"
 comp_all$Treatment[comp_all$Treatment == "Removal"] <- "removal"
+comp_all$Treatment[comp_all$Treatment == "removal "] <- "removal"
 tmp <- which(comp_all$SiteCode=="EnsingS1" & comp_all$Year==2022 & comp_all$Transect=="W")
 comp_all$Treatment[tmp] <- "removal"
 tmp <- which(comp_all$SiteCode=="EnsingS1" & comp_all$Year==2022 & comp_all$Transect=="E")

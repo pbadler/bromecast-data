@@ -5,11 +5,13 @@
 "Agoseris glauca","perennial",NA,"forb","shrub",NA,NA
 "Agropyron cristatum","perennial",NA,"grass",NA,"c3",NA
 "Agropyron smithii","perennial",NA,"grass",NA,"c3",NA
+"Allium simillimum","perennial",NA,"forb",NA,NA,NA
 "Allium spp","perennial",NA,"forb",NA,NA,NA
 "Allium textile","perennial",NA,"forb",NA,NA,NA
 "Alyssum alyssoides","annual","biennial","forb",NA,NA,NA
 "Alyssum desertorum","annual",NA,"forb",NA,NA,NA
 "Alyssum simplex","annual",NA,"forb",NA,NA,NA
+"Alyssum spp.","annual",NA,"forb",NA,NA,NA
 "Amaranthus albus","annual",NA,"forb",NA,NA,NA
 "Ambrosia psilostachya","annual","perennial","forb",NA,NA,NA
 "Androsace occidentalis","annual",NA,"forb",NA,NA,NA
@@ -47,6 +49,7 @@
 "Balsamorhiza sagittata","perennial",NA,"forb",NA,NA,NA
 "Barbarea orthoceras","biennial","perennial","forb",NA,NA,NA
 "bare",NA,NA,"non-plant",NA,NA,NA
+"Berteroa incana","biennial",NA,"forb",NA,NA,NA
 "biocrust",NA,NA,"biocrust",NA,NA,NA
 "Boechera retrofracta","biennial","perennial","forb",NA,NA,NA
 "Bouteloua curtipendula","perennial",NA,"grass",NA,"c4",NA
@@ -77,6 +80,7 @@
 "Chamaesyce glyptosperma","annual",NA,"forb",NA,NA,NA
 "Chenopodium leptophyllum","annual",NA,"forb",NA,NA,NA
 "Chenopodium spp","annual",NA,"forb",NA,NA,NA
+"Chrysothamnus nauseosus","perennial",NA,"shrub",NA,NA,NA
 "Chrysothamnus viscidiflorus","perennial",NA,"shrub",NA,NA,NA
 "Cirsium arvense","perennial",NA,"forb",NA,NA,NA
 "Cirsium undulatum","biennial","perennial","forb",NA,NA,NA
@@ -143,6 +147,7 @@
 "Helianthus petiolaris","annual",NA,"forb",NA,NA,NA
 "Hesperostipa comata","perennial",NA,"grass",NA,"c3",NA
 "Heterotheca villosa","perennial",NA,"forb",NA,NA,NA
+"Hilaria jamesii","perennial",NA,"grass",NA,"c4",NA
 "Holosteum umbellatum","annual",NA,"forb",NA,NA,NA
 "Hordeum pusillum","annual",NA,"grass",NA,NA,NA
 "Koeleria macrantha","perennial",NA,"grass",NA,"c3",NA
@@ -210,9 +215,12 @@
 "Poa spp","perennial",NA,"grass",NA,"c3",NA
 "Polygonum aviculare","annual","perennial","forb",NA,NA,NA
 "Polygonum douglasii","annual",NA,"forb",NA,NA,NA
+"Polygonum spp.","annual","perennial","forb",NA,NA,NA
 "Portulaca oleracea","annual",NA,"forb",NA,NA,NA
+"Prunus andersonii","perennial",NA,"shrub",NA,NA,NA
 "Pseudoroegneria spicata","perennial",NA,"grass",NA,"c3",NA
 "Psoralidium tenuiflorum","perennial",NA,"forb",NA,NA,NA
+"Purshia tridentata","perennial",NA,"shrub",NA,NA,NA
 "Ratibida columnifera","perennial",NA,"forb",NA,NA,NA
 "Rhus trilobata","perennial",NA,"shrub",NA,NA,NA
 "Ribes cereum","perennial",NA,"shrub",NA,NA,NA
@@ -242,6 +250,7 @@
 "Taraxacum officinale","perennial",NA,"forb",NA,NA,NA
 "Tetradymia canescens","perennial",NA,"shrub","subshrub",NA,NA
 "Thinopyrum intermedium","perennial",NA,"grass",NA,"c3",NA
+"Thlaspi arvense","annual",NA,"forb",NA,NA,NA
 "Tradescantia bracteata","perennial",NA,"forb",NA,NA,NA
 "Tradescantia occidentalis","perennial",NA,"forb",NA,NA,NA
 "Tragopogon dubius","annual","biennial","forb",NA,NA,NA
@@ -253,6 +262,7 @@
 "unknown perennial forb","perennial",NA,"forb",NA,NA,NA
 "unknown shrub","perennial",NA,"shrub",NA,NA,"not sure of duration"
 "Verbascum thapsus","biennial",NA,"forb",NA,NA,NA
+"Verbena bracteata","annual",NA,"forb",NA,NA,NA
 "Veronica peregrina","annual",NA,"forb",NA,NA,NA
 "Veronica verna","annual",NA,"forb",NA,NA,NA
 "Vicia villosa","annual","biennial","forb","vine",NA,NA
