@@ -20,7 +20,7 @@ source("load_and_clean_demography_data.R")
 
 # pull Daymet data for each site, multiple years
 # this takes a few minutes, no need to run more than once
-# source("pull_climate_data.R")
+source("pull_climate_data.R")
 
 # load site info and site climate data
 source("load_site_climate_data.R")

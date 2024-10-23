@@ -17,7 +17,9 @@ names(D)[which(names(D)=="Seeds..Y.or.No.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+names(D)[which(names(D)=="Total.plant.dry.mass..g.")] <- "Biomass"
 names(D)[which(names(D)=="Notes..Herbivore.damage..Disease..")] <- "Notes"
+
 
 D$Year <- 2021
 
@@ -56,7 +58,7 @@ D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
 D <- subset(D,!is.na(D$Fecundity))
 
 # remove and reorder columns
-D2021 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
+D2021 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2021, function(x) sum(is.na(x)))
 
@@ -77,6 +79,7 @@ names(D)[which(names(D)=="Seeds..Yes.or.No.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+names(D)[which(names(D)=="Total.plant.dry.mass..g.")] <- "Biomass"
 names(D)[which(names(D)=="Notes..Herbivore.damage..Disease..")] <- "Notes"
 
 D$Year <- 2022
@@ -122,8 +125,15 @@ D$fecundityflag[tmp] <- 1
 tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
+# remove bad biomass values
+tmp <- which(D$Biomass=="-")
+D$Biomass[tmp] <- NA
+D$Biomass <- as.numeric(D$Biomass)
+tmp <- which(D$Biomass < 0)
+D$Biomass[tmp] <- NA
+
 # remove and reorder columns
-D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
+D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2022, function(x) sum(is.na(x)))
 
@@ -144,6 +154,7 @@ names(D)[which(names(D)=="Seeds..Y.N.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+names(D)[which(names(D)=="Total.plant.dry.mass..g.")] <- "Biomass"
 names(D)[which(names(D)=="Notes..Herbivore.damage..Disease..")] <- "Notes"
 
 D$Year <- 2023
@@ -196,7 +207,7 @@ tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
 # remove and reorder columns
-D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
+D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2022, function(x) sum(is.na(x)))
 
@@ -217,6 +228,7 @@ names(D)[which(names(D)=="seeds")] <- "Reproduced"
 names(D)[which(names(D)=="seeds_produced")] <- "Fecundity"
 names(D)[which(names(D)=="transect")] <- "Transect"
 names(D)[which(names(D)=="distance_from_center")] <- "Distance"
+names(D)[which(names(D)=="total_dry_mass")] <- "Biomass"
 names(D)[which(names(D)=="notes")] <- "Notes"
 
 D$Year <- 2024
@@ -265,8 +277,13 @@ D$fecundityflag[is.na(D$fecundityflag)] <- 0
 tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
+# fix bad biomass values
+tmp <- which(D$Biomass=="0..020")
+D$Biomass[tmp] <- 0.020
+D$Biomass <- as.numeric(D$Biomass)
+
 # remove and reorder columns
-D2024 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
+D2024 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2024, function(x) sum(is.na(x)))
 
