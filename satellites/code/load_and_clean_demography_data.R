@@ -259,15 +259,16 @@ D$Fecundity[is.na(D$Fecundity) & D$Reproduced=="N"] <- 0
 
 # flag records where Reproduced = Y and Fecundity is NA
 D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
+D$fecundityflag[is.na(D$fecundityflag)] <- 0
 
 # when Reproduced = missing, set Fecundity to NA (not zero)
 tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
 # remove and reorder columns
-D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
+D2024 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
 
-sapply(D2022, function(x) sum(is.na(x)))
+sapply(D2024, function(x) sum(is.na(x)))
 
 
 
@@ -281,13 +282,22 @@ sapply(D2022, function(x) sum(is.na(x)))
 # fix one SiteCode
 D2021$SiteCode[D2021$SiteCode=="SymstadS1"] <- "Symstad1"
 
-D <- rbind(D2021,D2022,D2023)
+D <- rbind(D2021,D2022,D2023,D2024)
 
-rm(D2021,D2022,D2023)
+rm(D2021,D2022,D2023,D2024)
 
 ### take action on issues in Notes column
 tmp <- data.frame("demography_notes" = sort(unique(D$Notes)))
 write.csv(tmp,"../deriveddata/demography_notes_raw.csv",row.names=F)
+
+# IF notes action files already exists, pull out new notes
+if(file.exists("../deriveddata/demography_notes_actions.csv")){
+  old  <- read.csv("../deriveddata/demography_notes_actions.csv")
+  tmp2 <- which(old$demography_notes%in%tmp$demography_notes==FALSE)
+  tmp2 <- data.frame("demography_notes" = tmp[tmp2,])
+  write.csv(tmp2,"../deriveddata/demography_notes_raw_new.csv",row.names=F)
+  rm(tmp,tmp2,old)
+}
 
 # # look up individual notes
 # tmp <- which(D$Notes=="TOOTHPICK UPROOTED")
