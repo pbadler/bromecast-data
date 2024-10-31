@@ -1047,3 +1047,158 @@ Plymouth,S,removal,6.3,9/21/2023,3/15/2024,Y,1,6/5/2024,N,,0.09,,,,,herbivore da
 Plymouth,S,removal,6.5,9/21/2023,3/15/2024,missing,,6/5/2024,N,,,,,,,
 Plymouth,S,removal,6.7,9/21/2023,3/15/2024,N,,6/5/2024,N,,,,,,,
 Plymouth,S,removal,6.9,9/21/2023,3/15/2024,N,,6/5/2024,N,,,,,,,
+Pearlwise,N,Control,0.2,12/10/2023,3/20/2024,N,20,6/19/2024,N,,,,,,,"date 3-20: Broken top of toothpick
+6-19: Toothpick missing"
+Pearlwise,N,Control,0.4,10/12/2023,3/20/2024,N,10,6/19/2024,N,,,,,,,date 6-19: Toothpick missing
+Pearlwise,N,Control,0.6,10/12/2023,3/20/2024,missing,0,6/19/2024,N,,,,,,,date 3-20: Toothpick completely missing
+Pearlwise,N,Control,0.8,10/12/2023,3/20/2024,Y,8,6/19/2024,N,,,,,,,date 6-19: Toothpick missing
+Pearlwise,N,Control,1,10/12/2023,3/20/2024,N,16,6/19/2024,N,,,,,,,date 6-19: Toothpick missing
+Pearlwise,N,Control,1.2,10/12/2023,3/20/2024,Y,10,6/19/2024,N,,,,,,,date 6-19: Toothpick missing
+Pearlwise,N,Control,1.4,10/12/2023,3/20/2024,Y,10,6/19/2024,missing,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,1.6,10/12/2023,3/20/2024,Y,10,6/19/2024,N,,,,,,,date 6-19: Toothpick missing
+Pearlwise,N,Control,1.8,10/12/2023,3/20/2024,Y,10,6/19/2024,Y,1,0.0025,0.0022,N,0,0,
+Pearlwise,N,Control,2,10/12/2023,3/20/2024,N,2,6/19/2024,Y,NA,0.0018,NA,Y,NA,NA,"date Plant dropped seeds, but no seeds present during final visit; 1 empty glume"
+Pearlwise,N,Control,2.2,10/12/2023,3/20/2024,Y,1,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,2.4,10/12/2023,3/20/2024,Y,4,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,2.6,10/12/2023,3/20/2024,N,6,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,2.8,10/12/2023,3/20/2024,missing,0,6/19/2024,NA,NA,NA,NA,NA,NA,NA,date 3-20: Toothpick completely missing
+Pearlwise,N,Control,3,10/12/2023,3/20/2024,Y,1,6/19/2024,Y,2,0.0033,0.0036,N,0,0,
+Pearlwise,N,Control,3.2,10/12/2023,3/20/2024,N,0,6/19/2024,N,,,,,,,date 3-20: In a bunch grass base
+Pearlwise,N,Control,3.4,10/12/2023,3/20/2024,N,0,6/19/2024,missing,NA,NA,NA,NA,NA,NA,"date 3-20: Area of bare dirt
+6-19: Toothpick missing"
+Pearlwise,N,Control,3.6,10/12/2023,3/20/2024,Y,1,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,3.8,10/12/2023,3/20/2024,Y,1,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,4,10/12/2023,3/20/2024,Y,2,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,4.2,10/12/2023,3/20/2024,missing,0,6/19/2024,missing,,,,,,,date 3-20: Toothpick completely missing
+Pearlwise,N,Control,4.4,10/12/2023,3/20/2024,N,1,6/19/2024,Y,4,0.0073,0.0024,N,2,0,date 6-19: Still green
+Pearlwise,N,Control,4.6,10/12/2023,3/20/2024,Y,1,6/19/2024,missing,NA,NA,NA,NA,NA,NA,date 6-19: Toothpick missing
+Pearlwise,N,Control,4.8,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,5,10/12/2023,3/20/2024,Y,2,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,5.2,10/12/2023,3/20/2024,Y,2,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,5.4,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,5.6,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,date 3-20: Toothpick completely out of the ground
+Pearlwise,N,Control,5.8,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,6,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,date 3-20: Toothpick completely out of the ground
+Pearlwise,N,Control,6.2,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,6.4,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,6.6,10/12/2023,3/20/2024,Y,1,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,6.8,10/12/2023,3/20/2024,N,10,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,7,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,date 3-20: Top of toothpick is broken off
+Pearlwise,N,Control,7.2,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,date 3-20: Toothpick completely out of the ground
+Pearlwise,N,Control,7.4,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,date 3-20: Toothpick completely out of the ground
+Pearlwise,N,Control,7.6,10/12/2023,3/20/2024,N,10,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,7.8,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,8,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,8.2,10/12/2023,3/20/2024,Y,8,6/19/2024,Y,2,0.0045,0.0005,N,1,0,date 3-20: Top of toothpick is broken off
+Pearlwise,N,Control,8.4,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,8.6,10/12/2023,3/20/2024,Y,2,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,8.8,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,date 3-20: Toothpick completely out of ground
+Pearlwise,N,Control,9,10/12/2023,3/20/2024,Y,2,6/19/2024,Y,2,0.0022,0.0017,N,1,0,
+Pearlwise,N,Control,9.2,10/12/2023,3/20/2024,N,1,6/19/2024,missing,NA,NA,NA,NA,NA,NA,date 6-19: Toothpick missing
+Pearlwise,N,Control,9.4,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,9.6,10/12/2023,3/20/2024,Y,2,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,N,Control,9.8,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,N,Control,10,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,0.2,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,0.4,10/12/2023,3/20/2024,N,2,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,S,Control,0.6,10/12/2023,3/20/2024,Y,2,6/19/2024,N,,,,,,,date 6-19: No seed head due to herbivory
+Pearlwise,S,Control,0.8,10/12/2023,3/20/2024,Y,2,6/19/2024,N,,,,,,,date 6-19: No seed head due to herbivory
+Pearlwise,S,Control,1,10/12/2023,3/20/2024,N,8,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,1.2,10/12/2023,3/20/2024,Y,2,6/19/2024,Y,NA,0.0036,NA,Y,NA,NA,"date Plant dropped seeds, but no seeds present during final site visit; 1 empty glume"
+Pearlwise,S,Control,1.4,10/12/2023,3/20/2024,Y,12,6/19/2024,Y,3,0.0025,0.0009,N,2,0,
+Pearlwise,S,Control,1.6,10/12/2023,3/20/2024,N,8,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,1.8,10/12/2023,3/20/2024,N,20,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,2,10/12/2023,3/20/2024,N,16,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,S,Control,2.2,10/12/2023,3/20/2024,missing,0,6/19/2024,missing,,,,,,,date 3-20: Toothpick missing
+Pearlwise,S,Control,2.4,10/12/2023,3/20/2024,N,8,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,2.6,10/12/2023,3/20/2024,Y,2,6/19/2024,Y,NA,0.0014,NA,Y,NA,NA,"date Plant dropped seeds, but no seeds present during final site visit; 1 empty glume"
+Pearlwise,S,Control,2.8,10/12/2023,3/20/2024,Y,4,6/19/2024,Y,NA,0.0020,NA,Y,NA,NA,"date Plant dropped seeds, but no seeds present during final site visit; 1 empty glume"
+Pearlwise,S,Control,3,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,date 3-20: Toothpick was out of the ground completely
+Pearlwise,S,Control,3.2,10/12/2023,3/20/2024,Y,1,6/19/2024,Y,2,0.0030,0.0011,N,0,0,
+Pearlwise,S,Control,3.4,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,date 3-20: Toothpick was out of the ground completely
+Pearlwise,S,Control,3.6,10/12/2023,3/20/2024,Y,1,6/19/2024,Y,1,0.0032,0.0004,N,1,0,
+Pearlwise,S,Control,3.8,10/12/2023,3/20/2024,Y,8,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,4,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,4.2,10/12/2023,3/20/2024,N,10,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,4.4,10/12/2023,3/20/2024,N,10,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,4.6,10/12/2023,3/20/2024,N,0,6/19/2024,missing,,,,,,,"date 3-20: Area of bare soil
+6-19: Toothpick missing"
+Pearlwise,S,Control,4.8,10/12/2023,3/20/2024,Y,4,6/19/2024,Y,2,0.0022,0.0018,N,1,0,
+Pearlwise,S,Control,5,10/12/2023,3/20/2024,Y,4,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,5.2,10/12/2023,3/20/2024,Y,2,6/19/2024,Y,3,0.0027,0.0031,N,1,0,
+Pearlwise,S,Control,5.4,10/12/2023,3/20/2024,N,12,6/19/2024,Y,NA,0.0026,NA,Y,NA,NA,"date Plant dropped seeds, but no seeds present during final site visit; 1 empty glume"
+Pearlwise,S,Control,5.6,10/12/2023,3/20/2024,Y,12,6/19/2024,Y,1,0.0028,0.0016,Y,0,0,
+Pearlwise,S,Control,5.8,10/12/2023,3/20/2024,N,8,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,6,10/12/2023,3/20/2024,Y,2,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,6.2,10/12/2023,3/20/2024,Y,12,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,6.4,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,6.6,10/12/2023,3/20/2024,Y,8,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,6.8,10/12/2023,3/20/2024,Y,1,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,7,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,7.2,10/12/2023,3/20/2024,Y,16,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,7.4,10/12/2023,3/20/2024,Y,8,6/19/2024,Y,NA,0.0025,NA,Y,NA,NA,"date Plant dropped seeds, but no seeds present during final site visit; 2 empty glumes"
+Pearlwise,S,Control,7.6,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,date 3-20: Toothpick completely out of the ground
+Pearlwise,S,Control,7.8,10/12/2023,3/20/2024,Y,4,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,8,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,8.2,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,date 3-20: Broken top of toothpick
+Pearlwise,S,Control,8.4,10/12/2023,3/20/2024,N,8,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,8.6,10/12/2023,3/20/2024,N,0,6/19/2024,missing,,,,,,,"date 3-20: In base of a bunchgrass
+6-19: Toothpick missing, no longer in bunchgrass base"
+Pearlwise,S,Control,8.8,10/12/2023,3/20/2024,Y,2,6/19/2024,N,,,,,,,date 6-19: Plant gone from toothpick
+Pearlwise,S,Control,9,10/12/2023,3/20/2024,Y,2,6/19/2024,Y,4,0.0050,0.0063,N,1,0,
+Pearlwise,S,Control,9.2,10/12/2023,3/20/2024,Y,0,6/19/2024,N,,,,,,,"date 3-20: Under sagebrush debris
+6-19: No seedhead, just shriveled leaf remains, shattered when touched, so not collected"
+Pearlwise,S,Control,9.4,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,9.6,10/12/2023,3/20/2024,N,2,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,S,Control,9.8,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,S,Control,10,10/12/2023,3/20/2024,Y,2,6/19/2024,Y,3,0.0029,0.0036,N,1,0,
+Pearlwise,E,Removal,2.2,10/12/2023,3/20/2024,Y,8,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,E,Removal,2.4,10/12/2023,3/20/2024,Y,8,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,E,Removal,2.6,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,date 3-20: Toothpick completely out of the ground
+Pearlwise,E,Removal,2.8,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,3,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,3.2,10/12/2023,3/20/2024,Y,10,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,E,Removal,3.4,10/12/2023,3/20/2024,Y,4,6/19/2024,Y,3,0.0049,0.0059,N,0,0,
+Pearlwise,E,Removal,3.6,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,3.8,10/12/2023,3/20/2024,N,8,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,4,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,date 3-20: Broken top of toothpick
+Pearlwise,E,Removal,4.2,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,4.4,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,date 3-20: Toothpick completely out of the ground
+Pearlwise,E,Removal,4.6,10/12/2023,3/20/2024,N,16,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,4.8,10/12/2023,3/20/2024,N,10,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,E,Removal,5,10/12/2023,3/20/2024,Y,12,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,E,Removal,5.2,10/12/2023,3/20/2024,Y,10,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,E,Removal,5.4,10/12/2023,3/20/2024,N,8,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,5.6,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,5.8,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,6,10/12/2023,3/20/2024,N,10,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,6.2,10/12/2023,3/20/2024,N,1,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,6.4,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,6.6,10/12/2023,3/20/2024,Y,8,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,E,Removal,6.8,10/12/2023,3/20/2024,N,8,6/19/2024,N,,,,,,,
+Pearlwise,E,Removal,7,10/12/2023,3/20/2024,Y,6,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,2.2,10/12/2023,3/20/2024,Y,12,6/19/2024,Y,3,0.0032,0.0014,N,0,0,
+Pearlwise,W,Removal,2.4,10/12/2023,3/20/2024,Y,4,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,2.6,10/12/2023,3/20/2024,Y,20,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,2.8,10/12/2023,3/20/2024,Y,8,6/19/2024,N,NA,0.0042,NA,Y,NA,NA,"date Plant dropped seeds, but no seeds present during final visit; 1 empty glume"
+Pearlwise,W,Removal,3,10/12/2023,3/20/2024,Y,12,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,3.2,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,date 3-20: I can see that there's no seed attached to the toothpick anymore
+Pearlwise,W,Removal,3.4,10/12/2023,3/20/2024,Y,10,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,3.6,10/12/2023,3/20/2024,N,10,6/19/2024,N,,,,,,,date 3-20: I can see that there's no seed attached to the toothpick anymore
+Pearlwise,W,Removal,3.8,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,date 3-20: I can see that there's no seed attached to the toothpick anymore
+Pearlwise,W,Removal,4,10/12/2023,3/20/2024,Y,10,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,4.2,10/12/2023,3/20/2024,Y,2,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,4.4,10/12/2023,3/20/2024,N,12,6/19/2024,N,,,,,,,
+Pearlwise,W,Removal,4.6,10/12/2023,3/20/2024,N,12,6/19/2024,N,,,,,,,
+Pearlwise,W,Removal,4.8,10/12/2023,3/20/2024,N,10,6/19/2024,N,,,,,,,
+Pearlwise,W,Removal,5,10/12/2023,3/20/2024,N,0,6/19/2024,N,,,,,,,"date 3-20: This toothpick was missing. Placement would have been in a (now dead) POSE base, but after thorough searching wasn't found."
+Pearlwise,W,Removal,5.2,10/12/2023,3/20/2024,Y,8,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,5.4,10/12/2023,3/20/2024,N,2,6/19/2024,N,,,,,,,
+Pearlwise,W,Removal,5.6,10/12/2023,3/20/2024,Y,2,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,5.8,10/12/2023,3/20/2024,N,8,6/19/2024,N,,,,,,,
+Pearlwise,W,Removal,6,10/12/2023,3/20/2024,N,10,6/19/2024,N,,,,,,,
+Pearlwise,W,Removal,6.2,10/12/2023,3/20/2024,Y,2,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,6.4,10/12/2023,3/20/2024,Y,4,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
+Pearlwise,W,Removal,6.6,10/12/2023,3/20/2024,Y,20,6/19/2024,Y,1,0.0023,0.0008,N,0,0,
+Pearlwise,W,Removal,6.8,10/12/2023,3/20/2024,N,4,6/19/2024,N,,,,,,,
+Pearlwise,W,Removal,7,10/12/2023,3/20/2024,Y,2,6/19/2024,missing,,,,,,,date 6-19: Toothpick missing
