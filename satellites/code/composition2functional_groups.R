@@ -254,6 +254,7 @@ comp_ftypes1 <- as.data.frame(comp_ftypes1)
 comp_ftypes1 <- reshape(comp_ftypes1, direction = "wide",
             idvar = c("SiteCode","Year","Transect","Treatment","Distance"),
             timevar = "ftypes1")
+names(comp_ftypes1) <- gsub("cover.","",names(comp_ftypes1))
 
 comp_ftypes2 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes2) %>%
   summarize(cover = sum(cover)) 
@@ -261,6 +262,7 @@ comp_ftypes2 <- as.data.frame(comp_ftypes2)
 comp_ftypes2 <- reshape(comp_ftypes2, direction = "wide",
                         idvar = c("SiteCode","Year","Transect","Treatment","Distance"),
                         timevar = "ftypes2")
+names(comp_ftypes2) <- gsub("cover.","",names(comp_ftypes2))
 
 comp_ftypes3 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes3) %>%
   summarize(cover = sum(cover)) 
@@ -268,14 +270,21 @@ comp_ftypes3 <- as.data.frame(comp_ftypes3)
 comp_ftypes3 <- reshape(comp_ftypes3, direction = "wide",
                         idvar = c("SiteCode","Year","Transect","Treatment","Distance"),
                         timevar = "ftypes3")
+names(comp_ftypes3) <- gsub("cover.","",names(comp_ftypes3))
+
 
 
 ### calculate mean BRTE cover by site, year, and treatment
 
 brte <- comp_all %>% filter(species=="Bromus tectorum") %>%
   group_by(SiteCode,Year,Treatment) %>%
-  summarize(cover = mean(cover)) %>%
-  pivot_wider(names_from = Treatment, values_from = cover, values_fill = 0)
+  summarize(cover = mean(cover)) 
+brte <- as.data.frame(brte)
+brte <- reshape(brte, direction = "wide",
+                        idvar = c("SiteCode","Year"),
+                        timevar = "Treatment")
+names(brte) <- gsub("cover.","",names(brte))
+
 write.csv(brte,"../deriveddata/brte_cover_siteyeartrt.csv",row.names=F)
 rm(brte)
 
