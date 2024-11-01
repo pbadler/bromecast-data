@@ -38,7 +38,8 @@ siteD4$Year = 2024
 # combine years into one data frame
 siteD <- rbind(siteD1[,c("SiteCode","Lat","Lon","Year")],
                siteD2[,c("SiteCode","Lat","Lon","Year")],
-               siteD3[,c("SiteCode","Lat","Lon","Year")])
+               siteD3[,c("SiteCode","Lat","Lon","Year")],
+               siteD4[,c("SiteCode","Lat","Lon","Year")])
 
 #remove Lehnoff sites
 tmp <- grep("LEHN",siteD$SiteCode)

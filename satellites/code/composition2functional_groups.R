@@ -249,19 +249,26 @@ comp_all$SiteCode[comp_all$SiteCode=="Hardware"] <- "HardwareRanch"
 ### aggregate neighborhood cover to functional group level for each individual
 
 comp_ftypes1 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes1) %>%
-                  summarize(cover = sum(cover)) %>%
-                  pivot_wider(names_from = ftypes1, values_from = cover, values_fill = 0)
+                  summarize(cover = sum(cover)) 
 comp_ftypes1 <- as.data.frame(comp_ftypes1)
+comp_ftypes1 <- reshape(comp_ftypes1, direction = "wide",
+            idvar = c("SiteCode","Year","Transect","Treatment","Distance"),
+            timevar = "ftypes1")
 
 comp_ftypes2 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes2) %>%
-                  summarize(cover = sum(cover)) %>%
-                  pivot_wider(names_from = ftypes2, values_from = cover, values_fill = 0)
+  summarize(cover = sum(cover)) 
 comp_ftypes2 <- as.data.frame(comp_ftypes2)
+comp_ftypes2 <- reshape(comp_ftypes2, direction = "wide",
+                        idvar = c("SiteCode","Year","Transect","Treatment","Distance"),
+                        timevar = "ftypes2")
 
 comp_ftypes3 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes3) %>%
-                 summarize(cover = sum(cover)) %>%
-                 pivot_wider(names_from = ftypes3, values_from = cover, values_fill = 0)
-comp_ftypes2 <- as.data.frame(comp_ftypes2)
+  summarize(cover = sum(cover)) 
+comp_ftypes3 <- as.data.frame(comp_ftypes3)
+comp_ftypes3 <- reshape(comp_ftypes3, direction = "wide",
+                        idvar = c("SiteCode","Year","Transect","Treatment","Distance"),
+                        timevar = "ftypes3")
+
 
 ### calculate mean BRTE cover by site, year, and treatment
 

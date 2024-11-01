@@ -89,6 +89,10 @@ annD <- Fa2SprD %>% group_by(SiteCode,climYr) %>%
                       swe_mean=mean(swe),
                       swe_days=sum(swe>0))
 
+# since climYr 2024 data is incomplete (only fall 2023 observations available)
+# set climYr 2024 values to NA
+annD[annD$climYr==2024,3:6] <- NA
+
 # save annual data to file
 write.csv(annD,"../deriveddata/Satellites_daymet_Fall2Spr_means.csv",row.names=F)
 
