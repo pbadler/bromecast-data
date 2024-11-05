@@ -255,6 +255,8 @@ comp_ftypes1 <- reshape(comp_ftypes1, direction = "wide",
             idvar = c("SiteCode","Year","Transect","Treatment","Distance"),
             timevar = "ftypes1")
 names(comp_ftypes1) <- gsub("cover.","",names(comp_ftypes1))
+# replace NA cover values with zeros
+comp_ftypes1[is.na(comp_ftypes1)] <- 0
 
 comp_ftypes2 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes2) %>%
   summarize(cover = sum(cover)) 
@@ -263,6 +265,7 @@ comp_ftypes2 <- reshape(comp_ftypes2, direction = "wide",
                         idvar = c("SiteCode","Year","Transect","Treatment","Distance"),
                         timevar = "ftypes2")
 names(comp_ftypes2) <- gsub("cover.","",names(comp_ftypes2))
+comp_ftypes2[is.na(comp_ftypes2)] <- 0
 
 comp_ftypes3 <- comp_all %>% group_by(SiteCode,Year,Transect,Treatment,Distance, ftypes3) %>%
   summarize(cover = sum(cover)) 
@@ -271,7 +274,7 @@ comp_ftypes3 <- reshape(comp_ftypes3, direction = "wide",
                         idvar = c("SiteCode","Year","Transect","Treatment","Distance"),
                         timevar = "ftypes3")
 names(comp_ftypes3) <- gsub("cover.","",names(comp_ftypes3))
-
+comp_ftypes3[is.na(comp_ftypes3)] <- 0
 
 
 ### calculate mean BRTE cover by site, year, and treatment
