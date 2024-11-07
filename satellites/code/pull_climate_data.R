@@ -77,17 +77,31 @@ write.csv(climD,"../deriveddata/Satellites_daymet_daily.csv",row.names=F)
 ### aggregate to climate year
 ###
 
+# in case daymet daily data already acquired, load here
+climD <- read.csv("../deriveddata/Satellites_daymet_daily.csv",header=T)
+
 # only consider fall - spring
 Fa2SprD <- subset(climD,climD$climDay < 270)
+
+# set up climate seasons
+Fa2SprD$season <- "Win"
+Fa2SprD$season[Fa2SprD$climDay < 92] <- "Fall"
+Fa2SprD$season[Fa2SprD$climDay > 184] <- "Spr"
+
 
 # calculate daily mean temperature
 Fa2SprD$tavg <- (Fa2SprD$tmax + Fa2SprD$tmin)/2
 
-annD <- Fa2SprD %>% group_by(SiteCode,climYr) %>%
+annD <- Fa2SprD %>% group_by(SiteCode,climYr,season) %>%
             summarise(prcp=sum(prcp),
                       tmean=mean(tavg),
-                      swe_mean=mean(swe),
-                      swe_days=sum(swe>0))
+                      swe_mean=mean(swe)) #,
+                      #swe_days=sum(swe>0))
+annD <- as.data.frame(annD)
+annD <- reshape(annD, direction="wide",
+                idvar=c("SiteCode","climYr"),
+                timevar="season" )
+            
 
 # since climYr 2024 data is incomplete (only fall 2023 observations available)
 # set climYr 2024 values to NA
