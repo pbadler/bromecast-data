@@ -102,10 +102,12 @@ annD <- reshape(annD, direction="wide",
                 idvar=c("SiteCode","climYr"),
                 timevar="season" )
             
-
 # since climYr 2024 data is incomplete (only fall 2023 observations available)
-# set climYr 2024 values to NA
-annD[annD$climYr==2024,3:6] <- NA
+# set climYr 2024 Win and Spr values to NA
+tmp <- grep(".Win",names(annD))
+annD[annD$climYr==2024,tmp] <- NA
+tmp <- grep(".Spr",names(annD))
+annD[annD$climYr==2024,tmp] <- NA
 
 # save annual data to file
 write.csv(annD,"../deriveddata/Satellites_daymet_Fall2Spr_means.csv",row.names=F)
