@@ -109,8 +109,8 @@ if(tmp==T){
 # DONE BY HAND: fill in "update" column in 
 # "../deriveddata/species_list_updates.csv" as needed
 
-# # # look up sitecode for a species code
-# findspp <- " Symphyotrichum porteri"
+# # look up sitecode for a species code
+# findspp <- "forb 9"
 # comp_all[comp_all$species==findspp,]
 
 # Read in species updates
@@ -277,8 +277,14 @@ names(comp_ftypes3) <- gsub("cover.","",names(comp_ftypes3))
 comp_ftypes3[is.na(comp_ftypes3)] <- 0
 
 
-### calculate mean BRTE cover by site, year, and treatment
+### save same BRTE data to file
 
+# brte cover by toothpick
+brte <- comp_all %>% filter(species=="Bromus tectorum") %>%
+        dplyr::select(SiteCode,Year,Transect,Treatment,Distance,species, cover)
+write.csv(brte,"../deriveddata/brte_cover_byplant.csv",row.names=F)
+
+# calculate mean BRTE cover by site, year, and treatment
 brte <- comp_all %>% filter(species=="Bromus tectorum") %>%
   group_by(SiteCode,Year,Treatment) %>%
   summarize(cover = mean(cover)) 

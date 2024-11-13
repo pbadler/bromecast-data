@@ -53,7 +53,7 @@ rm(siteD1,siteD2, siteD3, siteD4, tmp)
 ###
 
 # Daymet means for fall through spring
-climD <- read.csv("../deriveddata/Satellites_daymet_Fall2Spr_means.csv",header=T)
+climD <- read.csv("../deriveddata/Satellites_daymet_season_means.csv",header=T)
 
 # make site SiteCodes match those in the demography file
 climD$SiteCode[climD$SiteCode=="EnsingS1_SuRDC"] <- "EnsingS1 SuRDC"
