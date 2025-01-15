@@ -148,6 +148,41 @@ MonthlySummary_location$color <- colors[cut(MonthlySummary_location$Growing_degr
 
 par(mar=c(4,4,4,4))
 map("state",xlim=c(-128,-95),ylim=c(30,52))
-title("Growing Degree Days")
+title("Growing Degree Days 2 cm")
 points(MonthlySummary_location$longitude, MonthlySummary_location$latitude, col = MonthlySummary_location$color, pch = 19, cex = 1.5)
 image.plot(legend.only = TRUE, zlim = range(MonthlySummary$Growing_degree_days2cm), col = colors, legend.lab = "Growing_degree_days2cm")
+
+par(mar=c(4,4,4,4))
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+title("Growing Degree Days 5 cm")
+points(MonthlySummary_location$longitude, MonthlySummary_location$latitude, col = MonthlySummary_location$color, pch = 19, cex = 1.5)
+image.plot(legend.only = TRUE, zlim = range(MonthlySummary$Growing_degree_days5cm), col = colors, legend.lab = "Growing_degree_days5cm")
+
+par(mar=c(4,4,4,4))
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+title("Growing Degree Days 10 cm")
+points(MonthlySummary_location$longitude, MonthlySummary_location$latitude, col = MonthlySummary_location$color, pch = 19, cex = 1.5)
+image.plot(legend.only = TRUE, zlim = range(MonthlySummary$Growing_degree_days10cm), col = colors, legend.lab = "Growing_degree_days10cm")
+
+
+par(mar=c(4,4,4,4))
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+title("Wet Days 2 cm")
+points(MonthlySummary_location$longitude, MonthlySummary_location$latitude, col = MonthlySummary_location$color, pch = 19, cex = 1.5)
+image.plot(legend.only = TRUE, zlim = range(MonthlySummary$Wet_days2cm), col = colors, legend.lab = "Wet_days2cm")
+
+
+par(mar=c(4,4,4,4))
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+title("Wet Days 5 cm")
+points(MonthlySummary_location$longitude, MonthlySummary_location$latitude, col = MonthlySummary_location$color, pch = 19, cex = 1.5)
+image.plot(legend.only = TRUE, zlim = range(MonthlySummary$Wet_days5cm), col = colors, legend.lab = "Wet_days5cm")
+
+par(mar=c(4,4,4,4))
+map("state",xlim=c(-128,-95),ylim=c(30,52))
+title("Wet Days 10 cm")
+points(MonthlySummary_location$longitude, MonthlySummary_location$latitude, col = MonthlySummary_location$color, pch = 19, cex = 1.5)
+image.plot(legend.only = TRUE, zlim = range(MonthlySummary$Wet_days10cm), col = colors, legend.lab = "Wet_days10cm")
+
+
+
