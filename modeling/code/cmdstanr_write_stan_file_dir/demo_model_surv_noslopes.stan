@@ -1,4 +1,4 @@
-stan_model <- "
+
 data {
   int<lower=1> K_site;        // Number of sites
   int<lower=1> K_plot;        // Number of plots
@@ -71,8 +71,4 @@ generated quantities {
     log_likelihood_values[n] = bernoulli_logit_lpmf(survival[n] | logit_p);
   }
 }
-"
 
-f <- write_stan_file(stan_model,
-                     basename = "demo_model_surv_noslopes",
-                     dir = "modeling/code/cmdstanr_write_stan_file_dir")

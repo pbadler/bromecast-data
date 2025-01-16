@@ -1,4 +1,4 @@
-stan_program_mv <- "
+
 data {
   int<lower=1> K_site;        // Number of sites
   int<lower=1> K_plot;        // Number of plots
@@ -114,8 +114,4 @@ generated quantities {
     log_likelihood_values[n] = neg_binomial_2_lpmf(seed_count[n] | exp(log_mu), phi);
   }
 }
-"
 
-f <- write_stan_file(stan_program_mv,
-                     basename = "demo_model_fecun",
-                     dir = "modeling/code/cmdstanr_write_stan_file_dir")

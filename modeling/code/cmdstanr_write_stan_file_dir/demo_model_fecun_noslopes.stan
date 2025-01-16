@@ -1,4 +1,4 @@
-stan_model <- "data {
+data {
   int<lower=1> K_site;  // Number of sites
   int<lower=1> K_plot;  // Number of plots
   int<lower=1> K_genotype;  // Number of genotypes
@@ -77,8 +77,4 @@ generated quantities {
     log_likelihood_values[n] = neg_binomial_2_lpmf(seed_count[n] | exp(log_mu), phi);
   }
 }
-"
 
-f <- write_stan_file(stan_model,
-                     basename = "demo_model_fecun_noslopes",
-                     dir = "modeling/code/cmdstanr_write_stan_file_dir")
