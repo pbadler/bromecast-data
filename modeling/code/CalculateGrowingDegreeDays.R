@@ -1,7 +1,7 @@
 library(tidyverse)
 library(data.table)
 
-alldata = read_csv("C:/repos/bromecast-data/modeling/data/AllSitesWPandTemp3.csv")
+alldata = read_csv("modeling/data/AllSitesWPandTemp3.csv")
 data = subset(alldata, Year >2020) # First 1-2 years of data may not be as accurate. 
 #The model does not know starting conditions very well, so it takes a season or maybe 
 #two for the model to produce accurate estimates
