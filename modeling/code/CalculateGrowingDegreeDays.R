@@ -1,15 +1,12 @@
 library(tidyverse)
 library(data.table)
 
-<<<<<<< HEAD
 alldata = read_csv("modeling/data/AllSitesWPandTemp3.csv")
-=======
 alldata = read_csv("C:/repos/bromecast-data/modeling/data/AllSitesWPandTemp3.csv")
 
 # for becca's computer
 alldata = read_csv("/Users/Becca/Desktop/Adler Lab/bromecast-data/modeling/data/AllSitesWPandTemp3.csv")
 
->>>>>>> 363f0c28c7e4271a489b516c3804feab22e38c2a
 data = subset(alldata, Year >2020) # First 1-2 years of data may not be as accurate. 
 #The model does not know starting conditions very well, so it takes a season or maybe 
 #two for the model to produce accurate estimates
