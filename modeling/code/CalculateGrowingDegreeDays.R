@@ -4,7 +4,7 @@ library(data.table)
 alldata = read_csv("modeling/data/AllSitesWPandTemp3.csv")
 alldata = read_csv("C:/repos/bromecast-data/modeling/data/AllSitesWPandTemp3.csv")
 
-# for becca's computer
+# for becca's computer -- MLV: Sorry, should be using AllSitesWPandTemp4.csv -- this is just a scaling issue
 alldata = read_csv("/Users/Becca/Desktop/Adler Lab/bromecast-data/modeling/data/AllSitesWPandTemp3.csv")
 
 data = subset(alldata, Year >2020) # First 1-2 years of data may not be as accurate. 
