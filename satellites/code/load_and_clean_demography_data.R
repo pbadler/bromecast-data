@@ -17,7 +17,9 @@ names(D)[which(names(D)=="Seeds..Y.or.No.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+names(D)[which(names(D)=="Total.plant.dry.mass..g.")] <- "Biomass"
 names(D)[which(names(D)=="Notes..Herbivore.damage..Disease..")] <- "Notes"
+
 
 D$Year <- 2021
 
@@ -56,7 +58,7 @@ D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
 D <- subset(D,!is.na(D$Fecundity))
 
 # remove and reorder columns
-D2021 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
+D2021 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2021, function(x) sum(is.na(x)))
 
@@ -77,6 +79,7 @@ names(D)[which(names(D)=="Seeds..Yes.or.No.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+names(D)[which(names(D)=="Total.plant.dry.mass..g.")] <- "Biomass"
 names(D)[which(names(D)=="Notes..Herbivore.damage..Disease..")] <- "Notes"
 
 D$Year <- 2022
@@ -122,8 +125,15 @@ D$fecundityflag[tmp] <- 1
 tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
+# remove bad biomass values
+tmp <- which(D$Biomass=="-")
+D$Biomass[tmp] <- NA
+D$Biomass <- as.numeric(D$Biomass)
+tmp <- which(D$Biomass < 0)
+D$Biomass[tmp] <- NA
+
 # remove and reorder columns
-D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
+D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2022, function(x) sum(is.na(x)))
 
@@ -144,6 +154,7 @@ names(D)[which(names(D)=="Seeds..Y.N.")] <- "Reproduced"
 names(D)[which(names(D)=="Seeds.produced")] <- "Fecundity"
 names(D)[which(names(D)=="Transect..N..E..S..or.W.")] <- "Transect"
 names(D)[which(names(D)=="Distance.from.center..m.")] <- "Distance"
+names(D)[which(names(D)=="Total.plant.dry.mass..g.")] <- "Biomass"
 names(D)[which(names(D)=="Notes..Herbivore.damage..Disease..")] <- "Notes"
 
 D$Year <- 2023
@@ -196,9 +207,87 @@ tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
 # remove and reorder columns
-D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","fecundityflag","Notes")]
+D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2022, function(x) sum(is.na(x)))
+
+
+###
+### import 2024 data ---------------------------------------------------
+###
+
+D <- read.csv("../rawdata/Satellite_demography_2023-2024.csv",header=T)
+
+# print(unique(D$site_code))
+
+# rename some columns
+names(D)[which(names(D)=="site_code")] <- "SiteCode"
+names(D)[which(names(D)=="treatment")] <- "Treatment"
+names(D)[which(names(D)=="emerged")] <- "Emerged"
+names(D)[which(names(D)=="seeds")] <- "Reproduced"
+names(D)[which(names(D)=="seeds_produced")] <- "Fecundity"
+names(D)[which(names(D)=="transect")] <- "Transect"
+names(D)[which(names(D)=="distance_from_center")] <- "Distance"
+names(D)[which(names(D)=="total_dry_mass")] <- "Biomass"
+names(D)[which(names(D)=="notes")] <- "Notes"
+
+D$Year <- 2024
+
+# fix bad values in Treatment column
+D$Treatment[D$Treatment=="removal "] <- "removal"
+D$Treatment[D$Treatment=="Removal"] <- "removal"
+D$Treatment[D$Treatment=="Removal "] <- "removal"
+D$Treatment[D$Treatment=="Control"] <- "control"
+D$Treatment[D$Treatment=="Control "] <- "control"
+
+# fix bad values in Emerged column
+D$Emerged[D$Emerged=="MISSING"] <- "missing"
+D$Emerged[D$Emerged==""] <- "missing"
+D$Emerged[D$Emerged=="no"] <- "N"
+D$Emerged[D$Emerged=="No"] <- "N"
+D$Emerged[D$Emerged=="Yes"] <- "Y"
+D$Emerged[D$Emerged=="yes"] <- "Y"
+
+# assume NAs for Emerged are missing plants
+D$Emerged[is.na(D$Emerged)] <- "missing"
+
+# fix some bad values in Reproduced column
+D$Reproduced[D$Reproduced==""] <- NA
+D$Reproduced[D$Reproduced==" "] <- NA
+D$Reproduced[D$Reproduced=="no"] <- "N"
+D$Reproduced[D$Reproduced=="No"] <- "N"
+D$Reproduced[D$Reproduced=="not found"] <- "missing"
+D$Reproduced[D$Reproduced=="y"] <- "Y"
+D$Reproduced[D$Reproduced=="yes"] <- "Y"
+D$Reproduced[D$Reproduced=="Yes"] <- "Y"
+D$Reproduced[D$Reproduced=="Y?"] <- "Y"
+
+# fill NAs for "Reproduced" when we know fecundity > 0
+tmp <- which(is.na(D$Reproduced) & D$Fecundity > 0)
+# none of these exist for 2024
+
+# fix bad values in Fecundity column
+D$Fecundity[is.na(D$Fecundity) & D$Reproduced=="N"] <- 0
+
+# flag records where Reproduced = Y and Fecundity is NA
+D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
+D$fecundityflag[is.na(D$fecundityflag)] <- 0
+
+# when Reproduced = missing, set Fecundity to NA (not zero)
+tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
+D$Fecundity[tmp] <- NA
+
+# fix bad biomass values
+tmp <- which(D$Biomass=="0..020")
+D$Biomass[tmp] <- 0.020
+D$Biomass <- as.numeric(D$Biomass)
+
+# remove and reorder columns
+D2024 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
+
+sapply(D2024, function(x) sum(is.na(x)))
+
+
 
 ### COMBINE YEARS
 
@@ -210,13 +299,22 @@ sapply(D2022, function(x) sum(is.na(x)))
 # fix one SiteCode
 D2021$SiteCode[D2021$SiteCode=="SymstadS1"] <- "Symstad1"
 
-D <- rbind(D2021,D2022,D2023)
+D <- rbind(D2021,D2022,D2023,D2024)
 
-rm(D2021,D2022,D2023)
+rm(D2021,D2022,D2023,D2024)
 
 ### take action on issues in Notes column
 tmp <- data.frame("demography_notes" = sort(unique(D$Notes)))
 write.csv(tmp,"../deriveddata/demography_notes_raw.csv",row.names=F)
+
+# IF notes action files already exists, pull out new notes
+if(file.exists("../deriveddata/demography_notes_actions.csv")){
+  old  <- read.csv("../deriveddata/demography_notes_actions.csv")
+  tmp2 <- which(old$demography_notes%in%tmp$demography_notes==FALSE)
+  tmp2 <- data.frame("demography_notes" = tmp[tmp2,])
+  write.csv(tmp2,"../deriveddata/demography_notes_raw_new.csv",row.names=F)
+  rm(tmp,tmp2,old)
+}
 
 # # look up individual notes
 # tmp <- which(D$Notes=="TOOTHPICK UPROOTED")

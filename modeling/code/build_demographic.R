@@ -9,6 +9,9 @@ library(tidyverse); library(rjags)
 # Read in harvest data 
 harvest <- read_csv("gardens/rawdata/CG_harvest2022 - 10-2-2023")
 
+## updated for becca's computer with new date
+harvest <- read_csv("/Users/Becca/Desktop/Adler Lab/bromecast-data/gardens/rawdata/CG_harvest2022 - 11-29-2023.csv")
+
 # Make column names all lower case
 names(harvest) <- tolower(names(harvest))
 

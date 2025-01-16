@@ -1,6 +1,7 @@
 model{
   # Prior for density effect on fecundity
-  beta1 ~ dnorm(0, 0.001)
+  beta1[1] <- 0
+  beta1[2] ~ dnorm(0, 0.001)
   
   # Priors for global intercept for fecundity part of the model
   mu.fecund ~ dnorm(0, 0.001)
@@ -73,7 +74,7 @@ model{
     # Link functions
     
     # Fecundity model
-    log(mu[i]) <- alpha[genotype[i]] + beta1*x1[i] + kappa[plot[i]] + mu.fecund
+    log(mu[i]) <- alpha[genotype[i]] + beta1[x1[i]] + kappa[plot[i]] + mu.fecund
     
     # Survival model
     logit(r[i]) <- psi[genotype[i]] + omega[plot[i]] + mu.survive

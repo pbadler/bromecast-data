@@ -1,0 +1,37 @@
+
+model {
+   #Likelihood
+   for (i in 1:n) {
+      y[i]~dnorm(mu[i],tau)
+      mu[i] <- alpha0 + alpha[A[i]] + beta.site[site[i]] + beta.quad[quad[i]]
+   }
+   
+   #Priors
+   alpha0 ~ dnorm(0, 1.0E-6)
+   alpha[1] <- 0
+   for (i in 2:nA) {
+     alpha[i] ~ dnorm(0, 1.0E-6) #prior
+   }
+   for (i in 1:nSite) {
+     beta.site[i] ~ dnorm(0, tau.Bs) #prior
+   }
+   for (i in 1:nQuad) {
+     beta.quad[i] ~ dnorm(0, tau.Bq) #prior
+   }
+   tau <- pow(sigma,-2)
+   sigma <-z/sqrt(chSq)
+   z ~ dnorm(0, .0016)I(0,)
+   chSq ~ dgamma(0.5, 0.5)
+
+   tau.Bs <- pow(sigma.Bs,-2)
+   sigma.Bs <-z/sqrt(chSq.Bs)
+   z.Bs ~ dnorm(0, .0016)I(0,)
+   chSq.Bs ~ dgamma(0.5, 0.5)
+
+   tau.Bq <- pow(sigma.Bq,-2)
+   sigma.Bq <-z/sqrt(chSq.Bq)
+   z.Bq ~ dnorm(0, .0016)I(0,)
+   chSq.Bq ~ dgamma(0.5, 0.5)
+
+ }
+

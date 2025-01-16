@@ -24,6 +24,12 @@ names(tmp) <- c("SiteCode" ,"Lat","Lon")
 
 siteD <- rbind(siteD,tmp)
 
+tmp <- read.csv("../rawdata/SiteInfo_2023-2024.csv",header=T)
+tmp <- tmp[,1:3]
+names(tmp) <- c("SiteCode" ,"Lat","Lon")
+
+siteD <- rbind(siteD,tmp)
+
 # remove duplicates
 siteD <- unique(siteD, MARGIN=2)
 tmp <- which(siteD$SiteCode=="SymstadS1" & siteD$Lat==43.35620) # remove SymstadS1 w/ bad coords
@@ -39,7 +45,7 @@ for(i in 1:nrow(siteD)){
                           lat = siteD$Lat[i],
                           lon = siteD$Lon[i],
                           start = 1980,
-                          end = 2022,
+                          end = 2023,
                           internal = TRUE)
   tmp$data$SiteCode <- siteD$SiteCode[i]
   
@@ -71,19 +77,38 @@ write.csv(climD,"../deriveddata/Satellites_daymet_daily.csv",row.names=F)
 ### aggregate to climate year
 ###
 
-# only consider fall - spring
-Fa2SprD <- subset(climD,climD$climDay < 270)
+# in case daymet daily data already acquired, load here
+climD <- read.csv("../deriveddata/Satellites_daymet_daily.csv",header=T)
+
+# set up climate seasons
+climD$season <- "Win"
+climD$season[climD$climDay < 92] <- "Fall"
+climD$season[climD$climDay > 184 & climD$climDay < 276] <- "Spr"
+climD$season[climD$climDay >= 276] <- "Sum"
 
 # calculate daily mean temperature
-Fa2SprD$tavg <- (Fa2SprD$tmax + Fa2SprD$tmin)/2
+climD$tavg <- (climD$tmax + climD$tmin)/2
 
-annD <- Fa2SprD %>% group_by(SiteCode,climYr) %>%
+annD <- climD %>% group_by(SiteCode,climYr,season) %>%
             summarise(prcp=sum(prcp),
                       tmean=mean(tavg),
-                      swe_mean=mean(swe),
-                      swe_days=sum(swe>0))
+                      swe_mean=mean(swe)) #,
+                      #swe_days=sum(swe>0))
+annD <- as.data.frame(annD)
+annD <- reshape(annD, direction="wide",
+                idvar=c("SiteCode","climYr"),
+                timevar="season" )
+            
+# since climYr 2024 data is incomplete (only fall 2023 observations available)
+# set climYr 2024 Win  Spr and Sum values to NA
+tmp <- grep(".Win",names(annD))
+annD[annD$climYr==2024,tmp] <- NA
+tmp <- grep(".Spr",names(annD))
+annD[annD$climYr==2024,tmp] <- NA
+tmp <- grep("Sum",names(annD))
+annD[annD$climYr==2024,tmp] <- NA
 
 # save annual data to file
-write.csv(annD,"../deriveddata/Satellites_daymet_Fall2Spr_means.csv",row.names=F)
+write.csv(annD,"../deriveddata/Satellites_daymet_season_means.csv",row.names=F)
 
 rm(climD,Fa2SprD,annD,siteD,tmp)

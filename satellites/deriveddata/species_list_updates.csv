@@ -1,8 +1,15 @@
 species,update
+ bare,bare
+ Fallopia convolvulus,Fallopia convolvulus
+ litter,litter
+ moss,biocrust
+ Symphyotrichum porteri,Symphyotrichum porteri
 Achillea millefolium,
+Achillea millefolium ,Achillea millefolium
 Achillea.millefolia,Achillea millefolium
 Achnatherum thurberianum,
 ACMI,Achillea millefolium
+ACMI ,Achillea millefolium
 Aegilops cylindrica,
 AGCR,Agropyron cristatum
 AGGL,Agoseris glauca
@@ -14,8 +21,11 @@ ALDE,Alyssum desertorum
 alfalfa,Medicago sativa
 Allium spp,
 Allium textile,
+ALSI,Allium simillimum
 Alyssum alyssoides,
 Alyssum desertorum,
+Alyssum desertorum ,Alyssum desertorum
+Alyssum spp.,Alyssum spp.
 Alyssum.simplex,Alyssum simplex
 Amaranthus albus,
 Ambrosia psilostachya,
@@ -28,14 +38,21 @@ Animal scat,scat
 Animal Scat,scat
 ANMI,Antennaria microphylla
 annual Brassicacae,Brassica annual spp
+annual cryptantha Spp.,annual forb
+annual Cryptantha Spp.,annual forb
+annual eriogonum Spp. ,annual forb
+annual Eriogonum Spp. ,annual forb
 Annual forb,annual forb
 Annual grass,annual grass
 annual Linanthus,annual forb
+annual mentzelia Spp.,annual forb
+annual Mentzelia Spp.,annual forb
 annual mustard,annual forb
 Antenarria spp,Antennaria spp
 Antennaria dimorpha,
 Antennaria rosea,
 Antennaria species,Antennaria spp
+Antennaria spp,Antennaria spp
 Antennaria.monocephala,Antennaria monocephala
 anthill,bare
 Apera interrupta,
@@ -64,7 +81,9 @@ ASSC,Astragalus sclerocarpus
 ASSP (Astragalus sp),Astragalus spp
 Astragalus americanus,
 Astragalus convallarius,
+Astragalus convularius,Astragalus convallarius
 Astragalus filipes,
+Astragalus filipes/miser,Astragalus filipes
 Astragalus inflexus,
 Astragalus lentiginosus,
 Astragalus missouriensis,
@@ -73,17 +92,24 @@ Astragulus inflexus,Astragalus inflexus
 Astralagus drummondii,
 Atriplex canescens,
 Atriplex confertifolia,
+Balsamorhiza,Balsamorhiza sagittata
 Balsamorhiza sagitata,Balsamorhiza sagittata
 Balsamorhiza sagittata,
 Balsmahoriza sagittata,Balsamorhiza sagittata
 Barbarea orthoceras,
 bare,bare
 Bare,bare
+BARE,bare
+bare ,bare
+Bare ,bare
 bare (dog disturbance),bare
 bare soil,bare
 Bare soil,bare
+BARE0,bare
 BASA,Balsamorhiza sagittata
+Berteroa incana,
 BIND,Convolvulus arvensis
+biocrust,biocrust
 Biocrust,biocrust
 Biocrust - Early,biocrust
 Biocrust - Late,biocrust
@@ -95,6 +121,7 @@ Boechera retrofracta,
 Bouteloua curtipendula,
 Bouteloua dactyloides,
 Bouteloua gracilis,
+Bouteloua gracilis ,Bouteloua gracilis
 Brassicaceae,Brassicaceae spp
 bristly linear forb,unknown forb
 bristly linear leaved unknown forb,unknown forb
@@ -112,12 +139,14 @@ Cacti,Cacti spp
 calacortus,Calochortus spp
 calicortus,Calochortus spp
 Calochortus,Calochortus spp
+CAM12,Camelina microcarpa
 CAMA,Calochortus macrocarpus
 Camelina microcarpa,
 Camisonia,Camissonia spp
 Carex,Carex spp
 Carex duriuscula,
 Carex filifolia,
+Carex filifolia ,Carex filifolia
 Carex sp,Carex spp
 Carex sp.,Carex spp
 Carex spp,
@@ -132,13 +161,16 @@ Chenopodium leptoph.,Chenopodium leptophyllum
 Chenopodium leptophyllum,
 Chenopodium sp.,Chenopodium spp
 CHLE,Chenopodium leptophyllum
+CHNA,Chrysothamnus nauseosus
 Chrysothamnus viscidiflorus,
 CHVI,Chrysothamnus viscidiflorus
+CHVY,Chrysothamnus viscidiflorus
 Cirsium arvense,
 Cirsium undulatum,
 Collinsia parviflora,
 Collomia linearis,
 Comandra umbellata,
+Commandra umbellata,Comandra umbellata
 Convolvulus arvensis,
 Convolvulus spp,
 Conyza canadensis,
@@ -152,6 +184,7 @@ Coryphantha vivipara,
 COSP,Cordylanthus spp
 COUM,Comandra umbellata
 CRAC,Crepis acuminata
+Crepis,Crepis acuminata
 Crepis accumenata,Crepis acuminata
 Crepis acuminata,
 CRIN,Crepis intermedia
@@ -159,11 +192,13 @@ CRIN4,Crepis intermedia
 crust,biocrust
 Cryptantha minima,
 Crypthantha sp.,Cryptantha spp
+Crypthantha sp. ,Cryptantha spp
 CYMOP?,Cymopterus spp
 Dactylis glomerata,
 Dark cyanobacteria,biocrust
 dead Bouteloua gracilis crown,litter
 dead Opuntia polyacantha,litter
+DEPI,Descurainia pinnata
 Descurainia pinnata,
 Descurainia sophia,
 Descurania.sophia,Descurainia sophia
@@ -177,6 +212,7 @@ dung,scat
 Dung,scat
 early crust,biocrust
 Early successional biocrust,biocrust
+Early successional biocrust ,biocrust
 eb,biocrust
 EB,biocrust
 Echinacea angustifolia,
@@ -186,6 +222,7 @@ ELEL,Elymus elymoides
 Elymus elymoides,
 EPBR,Epilobium brachycarpum
 Ephedra viridis,
+EPVI,Ephedra viridis
 ERAP,Erigeron aphanactis
 ERAR,Erigeron aphanactis
 ERCI,Erodium cicutarium
@@ -207,6 +244,7 @@ Eriogonum spp,Eriogonum spp
 Erodium cicutarium,
 ERPU,Erigeron pumilis
 ERSP,Eriogonum spp
+ES biocrust,biocrust
 Escobaria vivipara,
 Euphorbia,Euphorbia spp
 Euphorbia esula,
@@ -221,19 +259,19 @@ Festuca.idahoensis,Festuca idahoensis
 forb,unknown forb
 Forb,unknown forb
 FORB,unknown forb
-forb 1,unknown forb
-forb 2,unknown forb
-forb 3,unknown forb
-forb 4,unknown forb
-forb 5,unknown forb
-forb 6,unknown forb
-forb 7,unknown forb
-forb 8,unknown forb
-forb 9,unknown forb
-forb1,unknown forb
-forb2,unknown forb
-forb3,unknown forb
-forb4,unknown forb
+forb 1,unknown perennial forb
+forb 2,unknown perennial forb
+forb 3,unknown perennial forb
+forb 4,unknown perennial forb
+forb 5,unknown perennial forb
+forb 6,unknown perennial forb
+forb 7,unknown perennial forb
+forb 8,unknown perennial forb
+forb 9,unknown perennial forb
+forb1,unknown perennial forb
+forb2,unknown perennial forb
+forb3,unknown perennial forb
+forb4,unknown perennial forb
 GADE,Gayophytum decipiens
 Gaillardia aristata,
 Gaillardia pinnatifida,
@@ -241,12 +279,13 @@ Galium spurium,
 Geranium,Geranium spp
 Geranium spp,
 Gnaphalium sp.,Gnaphalium spp
+Gnaphalium sp. ,Gnaphalium spp
 Grass,unknown grass
-grass 1,unknown grass
-Grass 1,unknown grass
-grass 2,unknown grass
-grass 3,unknown grass
-grass1,unknown grass
+grass 1,unknown perennial grass
+Grass 1,unknown perennial grass
+grass 2,unknown perennial grass
+grass 3,unknown perennial grass
+grass1,unknown perennial grass
 gravel,bare
 Gravel,bare
 Gutierrezia sarothrae,
@@ -256,13 +295,17 @@ Helianthus annuus,
 Helianthus petiolaris,
 Hesperostipa comata,
 Heterotheca villosa,
+Hilaria jamesii,
 Holosteum umbellatum,
 Hordeum pusillum,
 HOUM,Holosteum umbellatum
 KOCR,Koeleria macrantha
+Koeleria,Koeleria macrantha
 Koeleria macrantha,
 Koeleria micrantha,Koeleria macrantha
 Lactuca serriola,
+Lappula,Lappula occidentalis
+Lappula ,Lappula occidentalis
 Lappula occidentalis,
 Lappula occidentalis var occidentalis,Lappula occidentalis
 Lappula redowskii,
@@ -273,6 +316,9 @@ LARE - Lappula red.,Lappula redowskii
 LASE,Lactuca serriola
 LASP,Lappula spp
 late biocr,biocrust
+late succ biocrust,biocrust
+late succ. crust,biocrust
+late succ. crust (?),biocrust
 late successional biocrust,biocrust
 Late successional biocrust,biocrust
 lb,biocrust
@@ -286,11 +332,14 @@ Lewisia rediviva,
 Liatrus punctata,Liatris punctata
 lichen,biocrust
 Lichen,biocrust
+lichen ,biocrust
 Light cyanobacteria,biocrust
 LILE,Linum lewisii
 Linanthus pungens,
 Linanthus septentrionalis,
 Linaria dalmatica,
+Linum,Linum lewisii
+Linum ,Linum lewisii
 Linum lewisii,
 Linum perenne,
 LISE,Linanthus septentrionalis
@@ -299,6 +348,8 @@ Lithospemum incisum,Lithospermum incisum
 Lithospermum ruderale,
 litter,
 Litter,litter
+LITTER,litter
+Litter ,litter
 Logfia arvense,Logfia arvensis
 Logfia arvensis,
 Lomatium foeniculaceum,
@@ -307,19 +358,23 @@ Lonicera arizonica,
 LOTR2,Lomatium triternatum
 LSB,biocrust
 LUAR,Lupinus arboreus
+Lupinus,Lupinus spp
 Lupinus argenteus,
 Lupinus sericeus,
 Lupinus sp,Lupinus spp
 Lupinus sp.,Lupinus spp
 Lupinus spp,
 Lygodesmia juncea,
+manure,scat
 Medicago lupulina,
 Medicago sativa,
 Melilotus officinalis,
 Mertensia lanceolata,
 Microsteris gracilis,
+MIGR,Microsteris gracilis
 Mirabilis linearis,
 missing,
+Missing,missing
 moss,biocrust
 Moss,biocrust
 MOSS,biocrust
@@ -334,6 +389,7 @@ Nassella viridula,
 neighbor Bromus tectorum,Bromus tectorum
 NOSP,Nothocalais spp
 not found,missing
+Nothocalais,Nothocalais spp
 Nothocalais trox.,Nothocalais troximoides
 Nothocalis,Nothocalais spp
 ob,biocrust
@@ -360,9 +416,11 @@ Pink,unknown forb
 Pinus ponderosa,
 Pinus ponderosa stump,litter
 Plantago patagonica,
+Plantago patagonica ,Plantago patagonica
 planted Bromus tectorum,cut_this_record
 Pleiacanthus spinosus,
 Pleuraphis jamesii,
+PLSP,Pleiacanthus spinosus
 Poa bulbosa,
 Poa pratensis,
 Poa sandbergii,
@@ -371,18 +429,22 @@ Poa secunda (dead),litter
 Poa sp.,Poa spp
 POAV,Polygonum aviculare
 POBU,Poa bulbosa
+PODO,Polygonum douglasii
 Polygonum aviculare,
 Polygonum douglasii,
+Polygonum spp.,Polygonum spp.
 POPR,Poa pratensis
 Portulaca oleracea,
 pose,Poa secunda
 POSE,Poa secunda
+PRAN,Prunus andersonii
 Pseudoroegnaria spicata,Pseudoroegneria spicata
 Pseudoroegneria spicata,
 Pseudoroegneria.spicata,Pseudoroegneria spicata
 Psoralidium tenuiflorum,
 PSSP,Pseudoroegneria spicata
 PSSP6,Pseudoroegneria spicata
+Purshia tridentata,
 rabbit feces,scat
 Rabbit feces,scat
 RATE,Ceratocephala testiculata
@@ -391,6 +453,9 @@ Rhus trilobata,
 Ribes cereum,
 rock,rock
 Rock,rock
+ROCK,rock
+rock ,rock
+Rock ,rock
 Rocks,rock
 Rosa sp.,Rose spp
 Rubus idaeus,
@@ -399,6 +464,7 @@ SATR,Salsola tragus
 Schedonnardus paniculatus,
 SEIN,Senecio integerrimus
 Shrub,unknown shrub
+SIAL,Sisymbrium altissimum
 Sisymbrium altissimum,
 Sisymbrium.altimissimum,Sisymbrium altissimum
 soil,bare
@@ -420,6 +486,7 @@ Standing dead,litter
 standing dead Opuntia polyacantha,litter
 Stipa comata,Hesperostipa comata
 Stipa sp,Stipa spp
+Stipa sp ,Stipa spp
 stipa.comata,Hesperostipa comata
 stump,litter
 Symphoricarpos albus,
@@ -427,14 +494,17 @@ Symphyotrichum ericoides,
 Symphyotrichum laeve,
 Symphyotrichum oblongifolium,
 Symphyotrichum porteri,
+ Symphyotrichum porteri,Symphyotrichum porteri
 Taeniatherum caput-medusae,
 TAOF,Taraxacum officinale
 Taraxacum officinale,
 Taraxacum.officinalis,Taraxacum officinale
 TECA,Tetradymia canescens
 TECA (Tetrademia canescens),Tetradymia canescens
+Tetradymia,Tetradymia canescens
 Tetradymia canescens,
 Thinopyrum intermedium,
+Thlaspi arvense,
 Tradescantia bracteata,
 Tradescantia occidentalis,
 Tragapogon.dubius,Tragopogon dubius
@@ -455,21 +525,28 @@ unknown annual forb,
 unknown annual forb (colomia?),unknown annual forb
 unknown annual grass,
 unknown aster,unknown perennial forb
+unknown Asteraceae,unknown forb
 unknown forb,
+Unknown forb,unknown forb
 unknown forb 3,unknown forb
 "unknown forb, hairy, linear leaves, no flowers",unknown forb
+Unknown forb2,unknown forb
 unknown grass 1,unknown grass
 unknown grass 4,unknown grass
 unknown peren. forb,unknown perennial forb
+unknown perennial Boraginaceae,unknown perennial forb
+unknown perennial forb,unknown perennial forb
 Unknown pink,unknown
 unknown seedling forb,unknown forb
 UNPF,unknown perennial forb
 Verbascum thapsis,Verbascum thapsus
 Verbascum thapsus,
+Verbena bracteata,
 Veronica peregrina,
 Veronica verna,
 Vicia villosa,
 VINE,Viola nuttallii
+VINU,Viola nuttallii
 VINU - Viola nuttalii,Viola nuttallii
 Viola,Viola spp
 Viola nuttallii,
@@ -478,3 +555,4 @@ Vulpia octoflora,
 Vulpia spp,
 Wood,litter
 ZIPA,Zigadenus paniculatus 
+,missing
