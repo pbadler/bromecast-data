@@ -118,4 +118,4 @@ generated quantities {
 
 f <- write_stan_file(stan_program_mv,
                      basename = "demo_model_fecun",
-                     dir = "modeling/code/cmdstanr_write_stan_file_dir")
+                     dir = "modeling/code/cg_manuscript/cmdstanr_write_stan_file_dir")
