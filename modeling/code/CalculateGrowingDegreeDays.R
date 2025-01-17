@@ -5,7 +5,7 @@ alldata = read_csv("modeling/data/AllSitesWPandTemp3.csv")
 alldata = read_csv("C:/repos/bromecast-data/modeling/data/AllSitesWPandTemp3.csv")
 
 # for becca's computer -- MLV: Sorry, should be using AllSitesWPandTemp4.csv -- this is just a scaling issue
-alldata = read_csv("/Users/Becca/Desktop/Adler Lab/bromecast-data/modeling/data/AllSitesWPandTemp3.csv")
+alldata = read_csv("/Users/Becca/Desktop/Adler Lab/bromecast-data/modeling/data/AllSitesWPandTemp4.csv")
 
 data = subset(alldata, Year >2020) # First 1-2 years of data may not be as accurate. 
 #The model does not know starting conditions very well, so it takes a season or maybe 
@@ -13,6 +13,7 @@ data = subset(alldata, Year >2020) # First 1-2 years of data may not be as accur
 
 
 #calculate Growing Degrees ------ wet growing degrees = soil temperature when soil is wet (>-1.25 MPa)
+## could make WP2 a variable so that we can manipulate it in value better
 data$GrowingDegrees2cm = ifelse(data$WP2cm>-1.5 & data$Temp2cm > 0, data$Temp2cm,0)
 data$GrowingDegrees5cm = ifelse(data$WP5cm>-1.5 & data$Temp5cm > 0, data$Temp5cm,0)
 data$GrowingDegrees10cm = ifelse(data$WP10cm>-1.5 & data$Temp10cm > 0, data$Temp10cm,0)
@@ -41,6 +42,17 @@ data %>%
   facet_wrap(~Site) +
   theme_bw(base_size = 16) +
   theme(legend.position = "none")
+
+data %>% 
+  filter(Year == 2023) %>% 
+  ggplot(aes(x = Jday, y = log(-1*WP2cm), color = Site)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Site) +
+  theme_bw(base_size = 16) +
+  theme(legend.position = "none")
+
+case <- data %>% filter(Site == "CaseAoyamaS1")
 
 
 ###### Aggregation of wet degree days
