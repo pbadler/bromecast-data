@@ -1,13 +1,21 @@
+# Common garden data cleaning -- This code cleans and brings together phenology
+# and harvest datasets
+
+## Preliminaries ####
 # Load libraries
 library(tidyverse); library(lubridate)
+# Source QA/QC functions
+source("gardens/code/QAQC_functions.R")
 
-# Read in harvest data 
+## Bring in harvest data ####
+
+# Read in 2023 harvest data 
 harvest <- read_csv("gardens/rawdata/CG_harvest2023.csv")
 
 # Set all columns to be lowercase
 names(harvest) <- tolower(names(harvest))
 
-## Format SS harvest data ####
+## Format 2023 Sheep Station harvest and phenology data ####
 # Subset to just Sheep Station
 harvest %>%
   filter(site == "SheepStation") %>% 
@@ -35,16 +43,16 @@ harvest_ss %>%
   mutate(date = ifelse(date == "ND", NA, date),
          date = mdy(date)) -> harvest_ss
 
-# Create action list for notes
+# Create action list for notes -- this has already been completed
 # compile notes
-tmp <- harvest_ss$notes
-tmp[tmp==""] <- NA
-tmp <- tmp[!is.na(tmp)]
-tmp <- unique(tmp,MARGIN=2)
-tmp <- data.frame(notes=tmp,action=NA)
+# tmp <- harvest_ss$notes
+# tmp[tmp==""] <- NA
+# tmp <- tmp[!is.na(tmp)]
+# tmp <- unique(tmp,MARGIN=2)
+# tmp <- data.frame(notes=tmp,action=NA)
 #write.csv(tmp,file=paste0(here("gardens/deriveddata/"),"SS","2023","_harvest_notes.csv"),row.names=F)
 # Edited by MLV on 24 April 2024
-rm(tmp)
+# rm(tmp)
 
 # Bring notes back in and include standardized notes only
 notes_ss <- read_csv("gardens/deriveddata/SS2023_harvest_notes.csv")
@@ -87,7 +95,7 @@ harvest_ss %>%
   pull(v) %>% table()
 # This might show up when we try and match harvest and phenology data
 
-## Matching harvest and phenology data for SS ####
+# Matching harvest and phenology data for SS 
 
 # Read in plant IDs
 plantID_ss <- read_csv("gardens/deriveddata/SS2023_plantID.csv")
@@ -105,116 +113,102 @@ merge(phen_ss, plantID_ss) %>%
   # Rearrange by location
   arrange(block, plot, x, y) -> ss_clean_phenology
 
-# Get last phenology check for each plant
-ss_clean_phenology %>% 
-  group_by(block, plot, x, y) %>% 
-  slice_max(jday) -> ss_last_phen
-
-# Merge phenology data with harvest data
-harvest_ss %>% 
-  select(harvest_date = date, block, plot, density, albedo, x, y, genotype,
-         growout, live_harvest = live, v_harvest =  v, harvest, tillers, biomass_whole, inflor_mass,
-         note_standard_harvest = note_standard) %>% 
-  merge(ss_last_phen) -> phen_harvest_ss
-
-# See how well phenology and harvest match up
-phen_harvest_ss %>% 
-  # If we recorded a weight, then it was definitely harvested
-  mutate(harvest = ifelse(is.na(biomass_whole), "N", "Y")) -> phen_harvest_ss
-
-# Check accuracy  
-phen_harvest_ss %>% 
-  group_by(live, harvest) %>% 
-  summarize(n = n())
-
-phen_harvest_ss %>% 
-  filter(live == "Y" & harvest == "N") # Most of these are wrong species or early stages
-
-phen_harvest_ss %>% 
-  filter(live == "N" & harvest == "Y") # Just seems random
-
-# write_csv(phen_harvest_ss, "~/Desktop/ss_phen_harvest_2023.csv")
-
-## SS Fitness and flowering time ####
 # Merge phenology and harvest data sets to figure out which plants flowered
 harvest_ss %>% 
   select(harvest_date = date, block, plot, density, albedo, x, y, genotype,
          growout, live_harvest = live, v_harvest =  v, harvest, tillers, biomass_whole, inflor_mass,
          note_standard_harvest = note_standard) %>% 
-  merge(ss_clean_phenology) -> merged_dat 
-  
-merged_dat %>% 
+  merge(ss_clean_phenology) -> merged_dat_ss 
+
+# For plants that flowered, get first observed flowering date
+merged_dat_ss %>% 
   filter(v %in% c("FG", "FP", "FB")) %>% 
   group_by(plantID) %>% 
-  slice_min(jday) -> plants_flowered_phenology
+  slice_min(jday) -> plants_flowered_phenology_ss
 
-# Figure out which ones flowered *after* last phenology check
+# Create "not in" operator
 `%notin%` <- Negate(`%in%`)
 
-merged_dat %>% 
-  filter(plantID %notin% plants_flowered_phenology$plantID) %>% 
+# Figure out which ones flowered *after* last phenology check
+merged_dat_ss %>% 
+  filter(plantID %notin% plants_flowered_phenology_ss$plantID) %>% 
   filter(v_harvest %in% c("FG", "FP", "FB")) %>% 
   group_by(plantID) %>% 
-  slice_max(jday) -> plants_flowered_harvest
+  slice_max(jday) -> plants_flowered_harvest_ss
 
 # If first time flowered when harvested, adjust v stage and date
-plants_flowered_harvest %>% 
+plants_flowered_harvest_ss %>% 
   mutate(jday = yday(harvest_date),
          jday = ifelse(jday < 270, jday, jday-365),
-         v = v_harvest) -> plants_flowered_harvest
-  
+         v = v_harvest) -> plants_flowered_harvest_ss
+
 # Bring datasets back together
-rbind(plants_flowered_phenology, plants_flowered_harvest) -> all_plants_flowered
+rbind(plants_flowered_phenology_ss, plants_flowered_harvest_ss) -> all_plants_flowered_ss
 
 # Get plants that did not flower
-merged_dat %>% 
-  filter(plantID %notin% all_plants_flowered$plantID) %>% 
+merged_dat_ss %>% 
+  filter(plantID %notin% all_plants_flowered_ss$plantID) %>% 
   group_by(plantID) %>% 
-  slice_max(jday) -> all_plants_no_flower
+  slice_max(jday) -> all_plants_no_flower_ss
 
-# Get average flowering time of genotypes
-all_plants_flowered %>% 
-  group_by(genotype) %>% 
-  summarize(mean_flower = mean(jday)) %>% 
-  ungroup() -> genotype_averages
+# Assign plants that didn't flower NA for flowering day
+all_plants_no_flower_ss %>% 
+  mutate(jday = NA) %>% 
+  # And then assign fitness (inflor_mass) to be 0 is it is currently NA
+  mutate(inflor_mass = ifelse(is.na(inflor_mass), 0, inflor_mass)) -> all_plants_no_flower_ss
 
-# Assign plants that didn't flower the average flowering time for genotype
-all_plants_no_flower %>% 
-  # merge(genotype_averages) %>% 
-  mutate(jday = 0) %>% 
-  # And then assign fitness (inflor_mass) to be 0
-  mutate(inflor_mass = ifelse(is.na(inflor_mass), 0, inflor_mass)) -> all_plants_no_flower
+# Bring together flowering and no flowering subsets to single dataset
+rbind(all_plants_flowered_ss, all_plants_no_flower_ss) %>% 
+  arrange(block, plot, x, y) -> phen_harvest_ss
 
-# Bring flowered and non-flowered plants back together
-rbind(all_plants_flowered, all_plants_no_flower) -> flower_fit
+# Collect all notes from phenology dataset to make sure they are included
+ss_clean_phenology %>% 
+  select(plantID, note_standard) %>% 
+  filter(complete.cases(note_standard)) %>% 
+  merge(phen_harvest_ss %>% select(-note_standard), all.y = T) -> phen_harvest_ss
 
-flower_fit %>% 
-  group_by(live, live_harvest) %>% 
-  summarize(n = n())
+# Note any plants that resurrected (were dead at one observation, then alive)
+plant_ids <- sort(unique(ss_clean_phenology$plantID))
 
-flower_fit %>% 
-  rename(first_flower = jday) -> flower_fit
+ss_clean_phenology %>% 
+  arrange(plantID, jday) -> ss_clean_phenology
 
-write_csv(flower_fit, "~/Desktop/ss_phen_harvest_2023.csv")
+phen_harvest_ss %>% 
+  arrange(plantID) -> phen_harvest_ss
 
-# Write file to save in derived data sets
-write_csv(flower_fit, "gardens/deriveddata/SS2023_flower_fit.csv")
+phen_harvest_ss$resurrection_date <- NA
 
-# Group by genotype and get average fitness and flowering time
-# flower_fit %>% 
-#   group_by(genotype) %>% 
-#   summarize(jday_avg = mean(jday),
-#             fitness_avg = mean(inflor_mass)) %>% 
-#   ggplot(aes(x = jday_avg, fitness_avg)) + 
-#   geom_point() +
-#   geom_smooth(method = "lm") +
-#   theme_bw(base_size = 16) + 
-#   labs(y = "Mean inflorescence mass (g)",
-#        x = "Mean first day of flowering")
-# Same pattern as we see in 2022, which is good!
+for(i in 1:length(plant_ids)){
+  plant_data <- ss_clean_phenology %>% filter(plantID == plant_ids[i]) 
+  phen_harvest_ss$resurrection_date[i] <- flag_resurrection(plant_data)
+}
 
-## Format Cheyenne harvest data ####
-# Subset to just Wildcat
+# Add any herbivory, frost_heave, and resurrection notes to phenology level notes
+phen_harvest_ss %>% 
+  mutate(note_standard_phen = case_when(herbivory == "Y" ~ "herbivory",
+                                   frost_heave == "Y" ~ "frost_heave",
+                                   complete.cases(resurrection_date) ~ "resurrection",
+                                   T ~ note_standard)) %>% 
+  # Remove herbivory and frost_heave columns
+  select(-herbivory, -frost_heave) %>% 
+  # Organize all columns
+        # Basics
+  select(plantID, site, year, density, albedo, block, plot, x, y, genotype, growout, 
+         # Phenology
+         first_flower = jday, v_phen = v, note_standard_phen,
+         # Harvest
+         live_harvest, v_harvest, tillers, biomass_whole, inflor_mass, note_standard_harvest) -> to_merge_ss
+
+# Make biomass_whole and tillers 0 if currently NA
+to_merge_ss %>% 
+  mutate(tillers = ifelse(is.na(tillers), 0, tillers),
+         biomass_whole = ifelse(is.na(biomass_whole), 0, biomass_whole)) -> to_merge_ss
+
+# Remove all intermediary datasets before moving on
+rm(list=setdiff(ls(), c("harvest","to_merge_ss", "flag_resurrection")))
+
+## Format 2023 Cheyenne harvest and phenology data ####
+# Subset to just Cheyenne
 harvest %>%
   filter(site == "Cheyenne") %>% 
   mutate(site = "CH") -> harvest_ch
@@ -241,16 +235,16 @@ harvest_ch %>%
   mutate(date = ifelse(date == "UNKNOWN", NA, date),
          date = mdy(date)) -> harvest_ch
 
-# Create action list for notes
+# Create action list for notes -- this is already complete
 # compile notes
-tmp <- harvest_ch$notes
-tmp[tmp==""] <- NA
-tmp <- tmp[!is.na(tmp)]
-tmp <- unique(tmp,MARGIN=2)
-tmp <- data.frame(notes=tmp,action=NA)
+# tmp <- harvest_ch$notes
+# tmp[tmp==""] <- NA
+# tmp <- tmp[!is.na(tmp)]
+# tmp <- unique(tmp,MARGIN=2)
+# tmp <- data.frame(notes=tmp,action=NA)
 # write.csv(tmp,file=paste0(here("gardens/deriveddata/"),"CH","2023","_harvest_notes.csv"),row.names=F)
 # Edited by MLV on 29 April 2024
-rm(tmp)
+# rm(tmp)
 
 # Bring notes back in and include standardized notes only
 notes_ch <- read_csv("gardens/deriveddata/CH2023_harvest_notes.csv")
@@ -300,115 +294,105 @@ merge(phen_ch, plantID_ch) %>%
   # Rearrange by location
   arrange(block, plot, x, y) -> ch_clean_phenology
 
-# Get last phenology check for each plant
-ch_clean_phenology %>% 
-  filter(live %in% c("N", "Y")) %>% 
-  group_by(block, plot, x, y) %>% 
-  slice_max(jday) -> ch_last_phen
-
-# Merge phenology data with harvest data
-harvest_ch %>% 
-  select(harvest_date = date, block, plot, density, albedo, x, y, live_harvest = live,
-         v_harvest =  v, harvest, tillers, biomass_whole, inflor_mass,
-         note_standard_harvest = note_standard) %>%  
-  merge(ch_last_phen) -> phen_harvest_ch
-
-# See how well phenology and harvest match up
-phen_harvest_ch %>% 
-  # If we recorded a weight, then it was definitely harvested
-  mutate(harvest = ifelse(is.na(biomass_whole), "N", "Y")) -> phen_harvest_ch
-
-# Check accuracy  
-phen_harvest_ch %>% 
-  group_by(live, harvest) %>% 
-  summarize(n = n())
-
-## Cheyenne fitness and flowering time ####
 # Merge phenology and harvest data sets to figure out which plants flowered
 harvest_ch %>% 
   select(harvest_date = date, block, plot, density, albedo, x, y, live_harvest = live, v_harvest =  v, harvest, tillers, biomass_whole, inflor_mass,
          note_standard_harvest = note_standard) %>% 
-  merge(ch_clean_phenology) -> merged_dat 
+  merge(ch_clean_phenology) -> merged_dat_ch 
 
-merged_dat %>% 
+# Get first flowering date for plants that flowered
+merged_dat_ch %>% 
   filter(v %in% c("FG", "FP", "FB")) %>% 
   group_by(plantID) %>% 
-  slice_min(jday) -> plants_flowered_phenology
+  slice_min(jday) -> plants_flowered_phenology_ch
 
 # Figure out which ones flowered *after* last phenology check
 `%notin%` <- Negate(`%in%`)
 
-merged_dat %>% 
-  filter(plantID %notin% plants_flowered_phenology$plantID) %>% 
+merged_dat_ch %>% 
+  filter(plantID %notin% plants_flowered_phenology_ch$plantID) %>% 
   filter(v_harvest %in% c("FG", "FP", "FB")) %>% 
   group_by(plantID) %>% 
-  slice_max(jday) -> plants_flowered_harvest
+  slice_max(jday) -> plants_flowered_harvest_ch
 
 # If first time flowered when harvested, adjust v stage and date
-plants_flowered_harvest %>% 
+plants_flowered_harvest_ch %>% 
   mutate(jday = yday(harvest_date),
          jday = ifelse(jday < 270, jday, jday-365),
-         v = v_harvest) -> plants_flowered_harvest
+         v = v_harvest) -> plants_flowered_harvest_ch
 
 # Bring datasets back together
-rbind(plants_flowered_phenology, plants_flowered_harvest) -> all_plants_flowered
+rbind(plants_flowered_phenology_ch, plants_flowered_harvest_ch) -> all_plants_flowered_ch
 
 # Get plants that did not flower
-merged_dat %>% 
-  filter(plantID %notin% all_plants_flowered$plantID) %>% 
+merged_dat_ch %>% 
+  filter(plantID %notin% all_plants_flowered_ch$plantID) %>% 
   group_by(plantID) %>% 
-  slice_min(jday) -> all_plants_no_flower
+  slice_max(jday) -> all_plants_no_flower_ch
 
-# Get average flowering time of genotypes
-all_plants_flowered %>% 
-  group_by(genotype) %>% 
-  summarize(mean_flower = mean(jday)) %>% 
-  ungroup() -> genotype_averages
-
-# Assign plants that didn't flower the average flowering time for genotype
-all_plants_no_flower %>% 
-  merge(genotype_averages) %>% 
-  mutate(jday = mean_flower) %>% 
+# Assign plants that didn't flower NA for flowering time
+all_plants_no_flower_ch %>% 
+  mutate(jday = NA) %>% 
   # And then assign fitness (inflor_mass) to be 0
-  mutate(inflor_mass = 0) -> all_plants_no_flower
+  mutate(inflor_mass = ifelse(is.na(inflor_mass), 0, inflor_mass)) -> all_plants_no_flower_ch
 
-# Bring flowered and non-flowered plants back together
-rbind(all_plants_flowered, all_plants_no_flower) -> flower_fit
+# Bring together flowering and no flowering subsets to single dataset
+rbind(all_plants_flowered_ch, all_plants_no_flower_ch) %>% 
+  arrange(block, plot, x, y) -> phen_harvest_ch
 
+# Collect all notes from phenology dataset to make sure they are included
+ch_clean_phenology %>% 
+  select(plantID, note_standard) %>% 
+  filter(complete.cases(note_standard)) %>% 
+  distinct() %>% 
+  group_by(plantID) %>% 
+  mutate(note_standard = paste0(note_standard, collapse = "_")) %>% 
+  ungroup() %>% 
+  distinct() %>% 
+  merge(phen_harvest_ch %>% select(-note_standard), all.y = T) -> phen_harvest_ch
 
-# Remove plants with bad notes
-# flower_fit %>% 
-#   filter(note_standard %notin% c("bad_position", "duplicate", "no_date",
-#                                  "physical_damage", "smut", "seed_drop")) -> flower_fit_clean
+# Note any plants that resurrected (were dead at one observation, then alive)
+plant_ids_ch <- sort(unique(ch_clean_phenology$plantID))
 
-# Filter so we are only have plants with recorded harvest dates
-flower_fit %>% 
-  filter(complete.cases(jday)) -> flower_fit
+ch_clean_phenology %>% 
+  arrange(plantID, jday) -> ch_clean_phenology
 
-# Replace inflor_mass NA to be 0
-flower_fit$inflor_mass <- ifelse(is.na(flower_fit$inflor_mass), 0, flower_fit$inflor_mass)
+phen_harvest_ch %>% 
+  arrange(plantID) -> phen_harvest_ch
 
-# Fix outlier point
-flower_fit[flower_fit$inflor_mass > 100,"inflor_mass"] <- 4.72
+phen_harvest_ch$resurrection_date <- NA
 
-# Write file to save in derived data sets
-write_csv(flower_fit, "gardens/deriveddata/CH2023_flower_fit.csv")
+for(i in 1:length(plant_ids_ch)){
+  plant_data <- ch_clean_phenology %>% filter(plantID == plant_ids_ch[i]) 
+  phen_harvest_ch$resurrection_date[i] <- flag_resurrection(plant_data)
+}
 
-# Group by genotype and get average fitness and flowering time
-flower_fit %>% 
-  group_by(genotype) %>% 
-  summarize(jday_avg = mean(jday),
-            fitness_avg = mean(inflor_mass)) %>% 
-  ggplot(aes(x = jday_avg, fitness_avg)) + 
-  geom_point() +
-  # Maybe a quadratic fit here?
-  geom_smooth(method = "lm", formula = y ~ x + I(x^2)) +
-  geom_smooth(method = "lm", color = "red") + 
-  theme_bw(base_size = 16) + 
-  labs(y = "Mean inflorescence mass (g)",
-       x = "Mean first day of flowering")
+# Add any herbivory, frost_heave, and resurrection notes to phenology level notes
+phen_harvest_ch %>% 
+  mutate(note_standard_phen = case_when(herbivory == "Y" ~ "herbivory",
+                                        frost_heave == "Y" ~ "frost_heave",
+                                        complete.cases(resurrection_date) ~ "resurrection",
+                                        T ~ note_standard)) %>% 
+  # Remove herbivory and frost_heave columns
+  select(-herbivory, -frost_heave) %>% 
+  # Organize all columns
+  # Basics
+  mutate(growout = NA) %>% 
+  select(plantID, site, year, density, albedo, block, plot, x, y, genotype, growout, 
+         # Phenology
+         first_flower = jday, v_phen = v, note_standard_phen,
+         # Harvest
+         live_harvest, v_harvest, tillers, biomass_whole, inflor_mass, note_standard_harvest) -> to_merge_ch
 
-## Format WI harvest data ####
+# Make biomass_whole and tillers 0 if currently NA
+to_merge_ch %>% 
+  mutate(tillers = ifelse(is.na(tillers), 0, tillers),
+         biomass_whole = ifelse(is.na(biomass_whole), 0, biomass_whole)) -> to_merge_ch
+
+# Remove all intermediary datasets before moving on
+rm(list=setdiff(ls(), c("harvest","to_merge_ss", "to_merge_ch", "flag_resurrection")))
+
+## Format 2023 WI data ####
 # Subset to just Wildcat
 harvest %>%
   filter(site == "BoiseLow") %>% 
@@ -439,16 +423,16 @@ harvest_wi %>%
                           is.na(date) & block == 4 & plot == 3 & biomass_whole > 0 ~ as.Date("2023-05-31"),
                           T ~ date)) -> harvest_wi
 
-# Create action list for notes
+# Create action list for notes -- already complete
 # compile notes
-tmp <- harvest_wi$notes
-tmp[tmp==""] <- NA
-tmp <- tmp[!is.na(tmp)]
-tmp <- unique(tmp,MARGIN=2)
-tmp <- data.frame(notes=tmp,action=NA)
-# write.csv(tmp,file=paste0(here("gardens/deriveddata/"),"Boise","2023","_harvest_notes.csv"),row.names=F)
-# Edited by MLV on 25 April 2024
-rm(tmp)
+# tmp <- harvest_wi$notes
+# tmp[tmp==""] <- NA
+# tmp <- tmp[!is.na(tmp)]
+# tmp <- unique(tmp,MARGIN=2)
+# tmp <- data.frame(notes=tmp,action=NA)
+# # write.csv(tmp,file=paste0(here("gardens/deriveddata/"),"Boise","2023","_harvest_notes.csv"),row.names=F)
+# # Edited by MLV on 25 April 2024
+# rm(tmp)
 
 # Bring notes back in and include standardized notes only
 notes_wi <- read_csv("gardens/deriveddata/Boise2023_harvest_notes.csv")
@@ -480,7 +464,7 @@ table(harvest_wi$live)
 # Set live plants to be live if a v stage was recorded
 harvest_wi$live <- ifelse(harvest_wi$v %in% c("BS", "FG", "FP", "FB"), "Y", "N")
 
-## Bring in phenology WI ####
+## Bring in phenology WI ##
 # Read in plant IDs
 plantID_wi <- read_csv("gardens/deriveddata/Boise2023_plantID.csv")
 # Read in phenology data
@@ -497,98 +481,113 @@ merge(phen_wi, plantID_wi) %>%
   # Rearrange by location
   arrange(block, plot, x, y) -> wi_clean_phenology
 
-## WI Fitness and flowering time ####
 # Merge phenology and harvest data sets to figure out which plants flowered
 harvest_wi %>% 
   select(harvest_date = date, block, plot, density, albedo, x, y, live_harvest = live, v_harvest =  v, harvest, tillers, biomass_whole, inflor_mass,
          note_standard_harvest = note_standard) %>% 
-  merge(wi_clean_phenology) -> merged_dat 
+  merge(wi_clean_phenology) -> merged_dat_wi 
 
-merged_dat %>% 
+# Get first flowering date for plants that flowered
+merged_dat_wi %>% 
   filter(v %in% c("FG", "FP", "FB")) %>% 
   group_by(plantID) %>% 
-  slice_min(jday) -> plants_flowered_phenology
+  slice_max(jday) -> plants_flowered_phenology_wi
 
 # Figure out which ones flowered *after* last phenology check
 `%notin%` <- Negate(`%in%`)
 
-merged_dat %>% 
-  filter(plantID %notin% plants_flowered_phenology$plantID) %>% 
+merged_dat_wi %>% 
+  filter(plantID %notin% plants_flowered_phenology_wi$plantID) %>% 
   filter(v_harvest %in% c("FG", "FP", "FB")) %>% 
   group_by(plantID) %>% 
-  slice_max(jday) -> plants_flowered_harvest
+  slice_min(jday) -> plants_flowered_harvest_wi
 
 # If first time flowered when harvested, adjust v stage and date
-plants_flowered_harvest %>% 
+plants_flowered_harvest_wi %>% 
   mutate(jday = yday(harvest_date),
          jday = ifelse(jday < 270, jday, jday-365),
-         v = v_harvest) -> plants_flowered_harvest
+         v = v_harvest) -> plants_flowered_harvest_wi
 
 # Bring datasets back together
-rbind(plants_flowered_phenology, plants_flowered_harvest) -> all_plants_flowered
+rbind(plants_flowered_phenology_wi, plants_flowered_harvest_wi) -> all_plants_flowered_wi
 
 # Get plants that did not flower
-merged_dat %>% 
-  filter(plantID %notin% all_plants_flowered$plantID) %>% 
+merged_dat_wi %>% 
+  filter(plantID %notin% all_plants_flowered_wi$plantID) %>% 
   group_by(plantID) %>% 
-  slice_max(jday) -> all_plants_no_flower
+  slice_max(jday) -> all_plants_no_flower_wi
 
-# Get average flowering time of genotypes
-all_plants_flowered %>% 
-  group_by(genotype) %>% 
-  summarize(mean_flower = mean(jday)) %>% 
-  ungroup() -> genotype_averages
-
-# Assign plants that didn't flower the average flowering time for genotype
-all_plants_no_flower %>% 
-  # merge(genotype_averages) %>% 
-  mutate(jday = 0) %>% 
+# Assign plants that didn't flower NA for flowering time
+all_plants_no_flower_wi %>%
+  mutate(jday = NA) %>% 
   # And then assign fitness (inflor_mass) to be 0
-  mutate(inflor_mass = 0) -> all_plants_no_flower
+  mutate(inflor_mass = ifelse(is.na(inflor_mass), 0, inflor_mass)) -> all_plants_no_flower_wi
 
 # Bring flowered and non-flowered plants back together
-rbind(all_plants_flowered, all_plants_no_flower) -> flower_fit
+rbind(all_plants_flowered_wi, all_plants_no_flower_wi) -> phen_harvest_wi
 
-flower_fit %>% 
-  group_by(live, live_harvest) %>% 
-  summarize(n = n())
+# Collect all notes from phenology dataset to make sure they are included
+wi_clean_phenology %>% 
+  select(plantID, note_standard) %>% 
+  filter(complete.cases(note_standard)) %>% 
+  distinct() %>% 
+  group_by(plantID) %>% 
+  mutate(note_standard = paste0(note_standard, collapse = "_")) %>% 
+  ungroup() %>% 
+  distinct() %>% 
+  merge(phen_harvest_wi %>% select(-note_standard), all.y = T) -> phen_harvest_wi
 
-write_csv(flower_fit, "~/Desktop/wi_phen_harvest_2023.csv")
+# Note any plants that resurrected (were dead at one observation, then alive)
+plant_ids_wi <- sort(unique(wi_clean_phenology$plantID))
 
-# Remove plants with bad notes
-# flower_fit %>% 
-#   filter(note_standard %notin% c("bad_position", "duplicate", "no_date",
-#                                  "physical_damage", "smut", "seed_drop")) -> flower_fit_clean
+wi_clean_phenology %>% 
+  arrange(plantID, jday) -> wi_clean_phenology
 
-# Filter so we are only have plants with recorded harvest dates
-# flower_fit_clean %>% 
-#   filter(complete.cases(jday)) -> flower_fit_clean
+phen_harvest_wi %>% 
+  arrange(plantID) -> phen_harvest_wi
 
-# Replace inflor_mass NA to be 0
-flower_fit$inflor_mass <- ifelse(is.na(flower_fit$inflor_mass), 0, flower_fit$inflor_mass)
+phen_harvest_wi$resurrection_date <- NA
 
-flower_fit %>% 
-  group_by(live, live_harvest) %>% 
-  summarize(n = n())
+for(i in 1:length(plant_ids_wi)){
+  plant_data <- wi_clean_phenology %>% filter(plantID == plant_ids_wi[i]) 
+  phen_harvest_wi$resurrection_date[i] <- flag_resurrection(plant_data)
+}
 
-flower_fit %>% 
-  rename(first_flower = jday) -> flower_fit
+# Add any herbivory, frost_heave, and resurrection notes to phenology level notes
+phen_harvest_wi %>% 
+  mutate(note_standard_phen = case_when(herbivory == "Y" ~ "herbivory",
+                                        frost_heave == "Y" ~ "frost_heave",
+                                        complete.cases(resurrection_date) ~ "resurrection",
+                                        T ~ note_standard)) %>% 
+  # Remove herbivory and frost_heave columns
+  select(-herbivory, -frost_heave) %>% 
+  # Organize all columns
+  # Basics
+  mutate(growout = NA) %>% 
+  select(plantID, site, year, density, albedo, block, plot, x, y, genotype, growout, 
+         # Phenology
+         first_flower = jday, v_phen = v, note_standard_phen,
+         # Harvest
+         live_harvest, v_harvest, tillers, biomass_whole, inflor_mass, note_standard_harvest) -> to_merge_wi
 
-write_csv(flower_fit, "~/Desktop/wi_phen_harvest_2023.csv")
+# Make biomass_whole and tillers 0 if currently NA
+to_merge_wi %>% 
+  mutate(tillers = ifelse(is.na(tillers), 0, tillers),
+         biomass_whole = ifelse(is.na(biomass_whole), 0, biomass_whole),
+         inflor_mass = ifelse(is.na(inflor_mass), 0, inflor_mass)) -> to_merge_wi
 
-# Write csv of flower fitness data
-write_csv(flower_fit_clean, "gardens/deriveddata/Boise2023_flower_fit.csv")
+# Remove duplicates and bad position for WI (these were issues that we could not
+# resolve)
+to_merge_wi %>% 
+  filter(!grepl("bad_position", note_standard_harvest)) %>% 
+  filter(!grepl("duplicate", note_standard_harvest)) -> to_merge_wi
 
-# Group by genotype and get average fitness and flowering time
-flower_fit_clean %>% 
-  group_by(genotype) %>% 
-  summarize(jday_avg = mean(jday),
-            fitness_avg = mean(inflor_mass)) %>% 
-  ggplot(aes(x = jday_avg, fitness_avg)) + 
-  geom_point() +
-  geom_smooth(method = "lm") +
-  theme_bw(base_size = 16) + 
-  labs(y = "Mean inflorescence mass (g)",
-       x = "Mean first day of flowering")
-# Same pattern as we see in 2022, which is good!
+# Remove all intermediary datasets before moving on
+rm(list=setdiff(ls(), c("to_merge_ss", "to_merge_ch", "to_merge_wi")))
 
+## Bring all data sets together ####
+# Bring all data sets together
+rbind(to_merge_ss, to_merge_ch, to_merge_wi) -> cg_2023
+
+# Remove intermediary datasets
+rm(list=setdiff(ls(), "cg_2023"))
