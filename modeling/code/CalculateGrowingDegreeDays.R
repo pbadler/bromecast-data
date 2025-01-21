@@ -61,6 +61,15 @@ data %>%
   theme_bw(base_size = 16) +
   theme(legend.position = "none")
 
+data %>% 
+  filter(Year == 2023) %>% 
+  ggplot(aes(x = Jday, y = Temp5cm, color = Site)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Site) +
+  theme_bw(base_size = 16) +
+  theme(legend.position = "none")
+
 case <- data %>% filter(Site == "CaseAoyamaS1")
 
 
