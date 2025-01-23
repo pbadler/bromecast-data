@@ -161,6 +161,17 @@ all_plants_no_flower_ss %>%
 rbind(all_plants_flowered_ss, all_plants_no_flower_ss) %>% 
   arrange(block, plot, x, y) -> phen_harvest_ss
 
+# Figure out the status of the plant at the last phenology check
+ss_clean_phenology %>%
+  group_by(plantID) %>% 
+  slice_max(jday) %>% 
+  ungroup() %>% 
+  select(plantID, last_phen_status = live) -> ss_last_phen
+
+# Add last phenology status to data sheet
+phen_harvest_ss %>% 
+  merge(ss_last_phen) -> phen_harvest_ss
+
 # Collect all notes from phenology dataset to make sure they are included
 ss_clean_phenology %>% 
   select(plantID, note_standard) %>% 
@@ -195,7 +206,7 @@ phen_harvest_ss %>%
         # Basics
   select(plantID, site, year, density, albedo, block, plot, x, y, genotype, growout, 
          # Phenology
-         first_flower = jday, v_phen = v, note_standard_phen,
+         first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
          # Harvest
          live_harvest, v_harvest, tillers, biomass_whole, inflor_mass, note_standard_harvest) -> to_merge_ss
 
@@ -205,7 +216,7 @@ to_merge_ss %>%
          biomass_whole = ifelse(is.na(biomass_whole), 0, biomass_whole)) -> to_merge_ss
 
 # Remove all intermediary datasets before moving on
-rm(list=setdiff(ls(), c("harvest","to_merge_ss", "flag_resurrection")))
+rm(list=setdiff(ls(), c("harvest","to_merge_ss", "flag_resurrection", "cg_2022")))
 
 ## Format 2023 Cheyenne harvest and phenology data ####
 # Subset to just Cheyenne
@@ -340,6 +351,18 @@ all_plants_no_flower_ch %>%
 rbind(all_plants_flowered_ch, all_plants_no_flower_ch) %>% 
   arrange(block, plot, x, y) -> phen_harvest_ch
 
+# Figure out the status of the plant at the last phenology check
+ch_clean_phenology %>%
+  filter(complete.cases(live)) %>% 
+  group_by(plantID) %>% 
+  slice_max(jday) %>% 
+  ungroup() %>% 
+  select(plantID, last_phen_status = live)-> ch_last_phen
+
+# Add last phenology status to data sheet
+phen_harvest_ch %>% 
+  merge(ch_last_phen) -> phen_harvest_ch
+
 # Collect all notes from phenology dataset to make sure they are included
 ch_clean_phenology %>% 
   select(plantID, note_standard) %>% 
@@ -380,7 +403,7 @@ phen_harvest_ch %>%
   mutate(growout = NA) %>% 
   select(plantID, site, year, density, albedo, block, plot, x, y, genotype, growout, 
          # Phenology
-         first_flower = jday, v_phen = v, note_standard_phen,
+         first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
          # Harvest
          live_harvest, v_harvest, tillers, biomass_whole, inflor_mass, note_standard_harvest) -> to_merge_ch
 
@@ -390,7 +413,7 @@ to_merge_ch %>%
          biomass_whole = ifelse(is.na(biomass_whole), 0, biomass_whole)) -> to_merge_ch
 
 # Remove all intermediary datasets before moving on
-rm(list=setdiff(ls(), c("harvest","to_merge_ss", "to_merge_ch", "flag_resurrection")))
+rm(list=setdiff(ls(), c("harvest","to_merge_ss", "to_merge_ch", "flag_resurrection", "cg_2022")))
 
 ## Format 2023 WI data ####
 # Subset to just Wildcat
@@ -526,6 +549,18 @@ all_plants_no_flower_wi %>%
 # Bring flowered and non-flowered plants back together
 rbind(all_plants_flowered_wi, all_plants_no_flower_wi) -> phen_harvest_wi
 
+# Figure out the status of the plant at the last phenology check
+wi_clean_phenology %>%
+  filter(complete.cases(live)) %>% 
+  group_by(plantID) %>% 
+  slice_max(jday) %>% 
+  ungroup() %>% 
+  select(plantID, last_phen_status = live)-> wi_last_phen
+
+# Add last phenology status to data sheet
+phen_harvest_wi %>% 
+  merge(wi_last_phen) -> phen_harvest_wi
+
 # Collect all notes from phenology dataset to make sure they are included
 wi_clean_phenology %>% 
   select(plantID, note_standard) %>% 
@@ -566,7 +601,7 @@ phen_harvest_wi %>%
   mutate(growout = NA) %>% 
   select(plantID, site, year, density, albedo, block, plot, x, y, genotype, growout, 
          # Phenology
-         first_flower = jday, v_phen = v, note_standard_phen,
+         first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
          # Harvest
          live_harvest, v_harvest, tillers, biomass_whole, inflor_mass, note_standard_harvest) -> to_merge_wi
 
@@ -583,11 +618,11 @@ to_merge_wi %>%
   filter(!grepl("duplicate", note_standard_harvest)) -> to_merge_wi
 
 # Remove all intermediary datasets before moving on
-rm(list=setdiff(ls(), c("to_merge_ss", "to_merge_ch", "to_merge_wi")))
+rm(list=setdiff(ls(), c("to_merge_ss", "to_merge_ch", "to_merge_wi", "cg_2022")))
 
 ## Bring all data sets together ####
 # Bring all data sets together
 rbind(to_merge_ss, to_merge_ch, to_merge_wi) -> cg_2023
 
 # Remove intermediary datasets
-rm(list=setdiff(ls(), "cg_2023"))
+rm(list=setdiff(ls(), c("cg_2023", "cg_2022")))

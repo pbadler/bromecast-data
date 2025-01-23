@@ -188,8 +188,21 @@ phen %>%
 flower_phen <- rbind(flowered, not_flowered) %>% 
   arrange(site, block, plot, x, y)
 
+# Also figure out plant status at last phenology check
+# Figure out the status of the plant at the last phenology check
+phen %>%
+  filter(complete.cases(live)) %>% 
+  group_by(plantID) %>% 
+  slice_max(jday) %>% 
+  ungroup() %>% 
+  select(plantID, last_phen_status = live)-> last_phen
+
+# Add last phenology status to data sheet
+flower_phen %>% 
+  merge(last_phen, all.x = T) -> flower_phen
+
 # Remove intermediate datasets for phenology
-rm(list=setdiff(ls(), "flower_phen"))
+rm(list=setdiff(ls(), c("flower_phen", "cg_2023")))
 
 
 ## Format Sheep Station harvest data ####
@@ -586,7 +599,7 @@ data_mostCH %>%
 harvest <- rbind(data_allSS, data_allBA, data_allWI, data_mostCH)
 
 # Remove all data sets but phenology summarize and harvest
-rm(list=setdiff(ls(), c("flower_phen", "harvest")))
+rm(list=setdiff(ls(), c("flower_phen", "harvest", "cg_2023")))
 
 ## Bring together phenology and harvest data ####
 
@@ -682,7 +695,7 @@ full_data %>%
 full_data %>% 
   mutate(year = 2022, growout = NA) %>% 
   select(plantID, site, year, density, albedo = gravel, block, plot, x, y,
-         genotype, growout, first_flower, v_phen, note_standard_phen = note_standard,
+         genotype, growout, first_flower, v_phen, last_phen_status, note_standard_phen = note_standard,
          live_harvest = live, v_harvest = v, tillers, biomass_whole, inflor_mass,
          seed_count_total, note_standard_harvest) %>% 
   mutate(tillers = ifelse(is.na(tillers), 0, tillers),
@@ -691,4 +704,4 @@ full_data %>%
          biomass_whole = ifelse(is.na(biomass_whole), 0, biomass_whole)) -> cg_2022
 
 # Remove intermediary datasets
-rm(list=setdiff(ls(), "cg_2022"))
+rm(list=setdiff(ls(), c("cg_2022", "cg_2023")))
