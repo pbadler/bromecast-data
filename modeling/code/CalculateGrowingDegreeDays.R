@@ -54,6 +54,15 @@ data %>%
 
 data %>% 
   filter(Year == 2023) %>% 
+  ggplot(aes(x = Jday, y = WP10cm, color = Site)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Site) +
+  theme_bw(base_size = 16) +
+  theme(legend.position = "none")
+
+data %>% 
+  filter(Year == 2023) %>% 
   ggplot(aes(x = Jday, y = Temp2cm, color = Site)) +
   geom_point() +
   geom_line() +
