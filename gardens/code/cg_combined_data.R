@@ -29,19 +29,21 @@ rbind(cg_2022, cg_2023) -> cg_full
 # (4) seed drop
 # (5) wrong spp
 
-cg_full %>% 
-  filter(!grepl("smut", note_standard_phen) &
-           !grepl("smut", note_standard_harvest) &
-           !grepl("resurrection", note_standard_phen) &
-           !grepl("herbivory", note_standard_phen) &
-           !grepl("herbivory", note_standard_harvest) &
-           !grepl("physical_damage", note_standard_phen) &
-           !grepl("physical_damage", note_standard_harvest) &
-           !grepl("seed_drop", note_standard_phen) &
-           !grepl("seed_drop", note_standard_harvest) &
-           !grepl("wrong_spp", note_standard_phen) & 
-           !grepl("wrong_spp", note_standard_harvest) & 
-           !grepl("missing", note_standard_harvest)) -> cg_clean
+# cg_full %>% 
+#   filter(!grepl("smut", note_standard_phen) &
+#            !grepl("smut", note_standard_harvest) &
+#            !grepl("resurrection", note_standard_phen) &
+#            !grepl("herbivory", note_standard_phen) &
+#            !grepl("herbivory", note_standard_harvest) &
+#            !grepl("physical_damage", note_standard_phen) &
+#            !grepl("physical_damage", note_standard_harvest) &
+#            !grepl("seed_drop", note_standard_phen) &
+#            !grepl("seed_drop", note_standard_harvest) &
+#            !grepl("wrong_spp", note_standard_phen) & 
+#            !grepl("wrong_spp", note_standard_harvest) & 
+#            !grepl("missing", note_standard_harvest)) -> cg_clean
+
+cg_full %>% pull(note_standard_phen) %>% table()
 
 # How many plants were alive at last check and were successfully harvested 
 cg_clean %>% 
@@ -65,6 +67,9 @@ cg_clean %>%
 
 # Where are these all from?
 cg_clean %>% 
-  filter(complete.cases(first_flower) & (biomass_whole + inflor_mass) == 0) %>% 
+  filter(last_phen_status == "Y" & (biomass_whole + inflor_mass) == 0) %>% 
   group_by(site, year) %>% 
   summarize(n = n())
+
+cg_full %>% 
+  filter(note_standard_phen == "herbivory" & seed_count_total > 0)

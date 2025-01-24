@@ -624,5 +624,9 @@ rm(list=setdiff(ls(), c("to_merge_ss", "to_merge_ch", "to_merge_wi", "cg_2022"))
 # Bring all data sets together
 rbind(to_merge_ss, to_merge_ch, to_merge_wi) -> cg_2023
 
+# Remove any duplicates
+cg_2023 %>% 
+  distinct() -> cg_2023
+
 # Remove intermediary datasets
 rm(list=setdiff(ls(), c("cg_2023", "cg_2022")))

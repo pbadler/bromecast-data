@@ -28,10 +28,6 @@ dosite <- "Boise" # code for focal site
 # import raw growth and phenology data
 rawD <- read.csv(here("gardens/rawdata/BromeCast_2021-2022_All_Idaho_Sites_MLVedits.csv"),header=T)
 
-# import additional phenology data that has April dates the previous
-# sheet doesn't have
-
-
 # remove capital letters from column headers 
 # (this will make it easier to harmonize data across sites)
 names(rawD) <- tolower(names(rawD))
@@ -45,9 +41,9 @@ rawD$growout<-rawD$bulkyear
 rawD$live<-rawD$seedling.present.
 rawD$v<-rawD$phenology
 rawD$length_mm<-rawD$max.leaf.length..mm.
-rawD$herbivory<- ifelse(rawD$herbivory.present. == TRUE, "Y", "N") 
-rawD$frost_heave<-ifelse(rawD$frost.heaved. == TRUE, "Y", "N")
-rawD$harvested<- ifelse(rawD$plant.harvested. == TRUE, "Y", "N")
+rawD$herbivory<- ifelse(rawD$herbivory.present. == "Yes", "Y", "N") 
+rawD$frost_heave<-ifelse(rawD$frost.heaved. == "Yes", "Y", "N")
+rawD$harvested<- ifelse(rawD$plant.harvested. == "Yes", "Y", "N")
 rawD %>% 
   mutate(gravel = case_when(gravel.color %in% c("Black", "BlacK", "Back", "Black ") ~ "Black",
                             gravel.color %in% c("White", "Whtie", "white") ~ "White"),

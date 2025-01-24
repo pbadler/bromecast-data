@@ -137,28 +137,39 @@ phen %>%
                                                         "frost_heave_herbivory_herbivory",
                                                         "herbivory_frost_heave_herbivory",
                                                         "frost_heave_frost_heave_herbivory_herbivory",
-                                                        "herbivory_frost_heave_herbivory_frost_heave") ~ "frost_heave_herbivory",
+                                                        "herbivory_frost_heave_herbivory_frost_heave",
+                                                        "herbivory_frost_heave") ~ "frost_heave_herbivory",
                                    note_standard %in% c("resurrection_herbivory_resurrection",
                                                         "resurrection_resurrection_herbivory") ~ "resurrection_herbivory",
                                    note_standard %in% c("resurrection_resurrection_frost_heave",
                                                         "resurrection_frost_heave_resurrection") ~ "resurrection_frost_heave",
                                    note_standard %in% c("resurrection_resurrection_frost_heave_herbivory",
                                                         "resurrection_frost_heave_herbivory_resurrection_resurrection_frost_heave",
+                                                        "resurrection_frost_heave_resurrection_herbivory_resurrection",
+                                                        "resurrection_herbivory_resurrection_frost_heave_resurrection",
                                                         "resurrection_frost_heave_herbivory_resurrection",
+                                                        "resurrection_resurrection_frost_heave_resurrection_herbivory",
+                                                        "resurrection_resurrection_herbivory_resurrection_frost_heave",
+                                                        "resurrection_frost_heave_resurrection_resurrection_herbivory",
                                                         "resurrection_resurrection_frost_heave_herbivory_resurrection_frost_heave",
                                                         "resurrection_frost_heave_resurrection_resurrection_frost_heave_herbivory",
                                                         "resurrection_frost_heave_herbivory_resurrection_frost_heave_resurrection",
                                                         "resurrection_resurrection_frost_heave_resurrection_frost_heave_herbivory",
-                                                        "resurrection_herbivory_resurrection_frost_heave_herbivory_resurrection_resurrection_frost_heave") ~ "resurrection_frost_heave_herbivory",
+                                                        "resurrection_herbivory_resurrection_frost_heave_herbivory_resurrection_resurrection_frost_heave",
+                                                        "resurrection_herbivory_resurrection_resurrection_frost_heave") ~ "resurrection_frost_heave_herbivory",
                                    note_standard %in% c("physical_damage_physical_damage_herbivory",
                                                         "physical_damage_herbivory_physical_damage") ~ "physical_damage_herbivory",
+                                   note_standard %in% c("seed_drop_herbivory_seed_drop", "seed_drop_seed_drop_herbivory") ~ "seed_drop_herbivory",
+                                   note_standard == "resurrection_seed_drop_resurrection_seed_drop_herbivory" ~ "resurrection_seed_drop_herbivory",
+                                   note_standard == "resurrection_frost_heave_seed_drop_resurrection_seed_drop_herbivory_resurrection_seed_drop" ~ "resurrection_frost_heave_seed_drop_herbivory",
                                    note_standard == "resurrection" ~ "resurrection",
                                    note_standard == "herbivory" ~ "herbivory",
                                    note_standard == "frost_heave" ~ "frost_heave",
                                    note_standard == "smut" ~ "smut",
+                                   note_standard == "smut_smut_herbivory" ~ "smut_herbivory",
                                    note_standard == "seed_drop" ~ "seed_drop",
                                    note_standard == "resurrection_seed_drop" ~ "resurrection_seed_drop",
-                                   T ~ "FIX_ME")) -> phen_notes_summary
+                                   T ~ "FIX ME")) -> phen_notes_summary
 
 # Join notes summary with phenology data at plant level
 merge(phen, phen_notes_summary, all.x = T) -> phen
@@ -702,6 +713,10 @@ full_data %>%
          seed_count_total = ifelse(is.na(seed_count_total), 0, seed_count_total),
          inflor_mass = ifelse(is.na(inflor_mass), 0, inflor_mass),
          biomass_whole = ifelse(is.na(biomass_whole), 0, biomass_whole)) -> cg_2022
+
+# Remove any duplicates
+cg_2022 %>% 
+  distinct() -> cg_2022
 
 # Remove intermediary datasets
 rm(list=setdiff(ls(), c("cg_2022", "cg_2023")))
