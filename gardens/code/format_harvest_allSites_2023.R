@@ -630,5 +630,9 @@ cg_2023 %>%
 cg_2023 %>% 
   rename(veg_mass = biomass_whole) -> cg_2023
 
+# Rename density levels
+cg_2023 %>% 
+  mutate(density = ifelse(density == "high", "hi", "lo")) -> cg_2023
+
 # Remove intermediary datasets
 rm(list=setdiff(ls(), c("cg_2023", "cg_2022")))
