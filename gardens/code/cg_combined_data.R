@@ -32,7 +32,7 @@ write_csv(cg_full,"gardens/deriveddata/cg_fullData_withFlags.csv")
 # (4) seed drop
 # (5) wrong spp
 
-# cg_full %>% 
+# cg_full %>%
 #   filter(!grepl("smut", note_standard_phen) &
 #            !grepl("smut", note_standard_harvest) &
 #            !grepl("resurrection", note_standard_phen) &
@@ -42,39 +42,35 @@ write_csv(cg_full,"gardens/deriveddata/cg_fullData_withFlags.csv")
 #            !grepl("physical_damage", note_standard_harvest) &
 #            !grepl("seed_drop", note_standard_phen) &
 #            !grepl("seed_drop", note_standard_harvest) &
-#            !grepl("wrong_spp", note_standard_phen) & 
-#            !grepl("wrong_spp", note_standard_harvest) & 
+#            !grepl("wrong_spp", note_standard_phen) &
+#            !grepl("wrong_spp", note_standard_harvest) &
 #            !grepl("missing", note_standard_harvest)) -> cg_clean
-
-cg_full %>% pull(live_harvest) %>% unique()
-
-
-
-# How many plants were alive at last check and were successfully harvested 
-cg_clean %>% 
-  filter(last_phen_status == "Y" & (biomass_whole + inflor_mass) > 0) %>% 
-  nrow() -> alive_harvest
-
-# How many plants were not alive at last check, but were harvested
-cg_clean %>% 
-  filter(last_phen_status == "N" & (biomass_whole + inflor_mass) > 0) %>% 
-  nrow() -> not_alive_harvest
-
-# How many plants were not alive at last check and were not harvested (true zeros)
-cg_clean %>% 
-  filter(last_phen_status == "N" & (biomass_whole + inflor_mass) == 0) %>% 
-  nrow() -> not_alive_not_harvest
-
-# How many plants were alive but were not harvested
-cg_clean %>% 
-  filter(last_phen_status == "Y" & (biomass_whole + inflor_mass) == 0) %>% 
-  nrow() -> alive_not_harvest
-
-# Where are these all from?
-cg_clean %>% 
-  filter(last_phen_status == "Y" & (biomass_whole + inflor_mass) == 0) %>% 
-  group_by(site, year) %>% 
-  summarize(n = n())
-
-cg_full %>% 
-  filter(note_standard_phen == "herbivory" & seed_count_total > 0)
+# 
+# # How many plants were alive at last check and were successfully harvested 
+# cg_clean %>% 
+#   filter(last_phen_status == "Y" & (biomass_whole + inflor_mass) > 0) %>% 
+#   nrow() -> alive_harvest
+# 
+# # How many plants were not alive at last check, but were harvested
+# cg_clean %>% 
+#   filter(last_phen_status == "N" & (biomass_whole + inflor_mass) > 0) %>% 
+#   nrow() -> not_alive_harvest
+# 
+# # How many plants were not alive at last check and were not harvested (true zeros)
+# cg_clean %>% 
+#   filter(last_phen_status == "N" & (biomass_whole + inflor_mass) == 0) %>% 
+#   nrow() -> not_alive_not_harvest
+# 
+# # How many plants were alive but were not harvested
+# cg_clean %>% 
+#   filter(last_phen_status == "Y" & (biomass_whole + inflor_mass) == 0) %>% 
+#   nrow() -> alive_not_harvest
+# 
+# # Where are these all from?
+# cg_clean %>% 
+#   filter(last_phen_status == "Y" & (biomass_whole + inflor_mass) == 0) %>% 
+#   group_by(site, year) %>% 
+#   summarize(n = n())
+# 
+# cg_full %>% 
+#   filter(note_standard_phen == "herbivory" & seed_count_total > 0)

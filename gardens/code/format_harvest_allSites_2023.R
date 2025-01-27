@@ -513,7 +513,7 @@ harvest_wi %>%
 merged_dat_wi %>% 
   filter(v %in% c("FG", "FP", "FB")) %>% 
   group_by(plantID) %>% 
-  slice_max(jday) -> plants_flowered_phenology_wi
+  slice_min(jday) -> plants_flowered_phenology_wi
 
 # Figure out which ones flowered *after* last phenology check
 `%notin%` <- Negate(`%in%`)
