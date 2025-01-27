@@ -60,7 +60,7 @@ notes_ss %>%
   filter(action == action) %>% 
   merge(harvest_ss, all = T) %>% 
   # Select only the columns that we want
-  select(site, date, block, plot, density, albedo, x, y, genotype, growout,
+  select(site, date, block, plot, density, albedo, x, y, genotype,
          live, v, harvest, tillers, biomass_whole, inflor_mass, note_standard) %>% 
   # Arrange by position
   arrange(block, plot, density, albedo, x, y) %>% 
@@ -109,14 +109,14 @@ merge(phen_ss, plantID_ss) %>%
   # Merge together with notes
   merge(notes_phen_ss, all = T) %>% 
   # Select only columns that we need
-  select(plantID, site, year, block, plot, x, y, genotype, growout, jday, live, v, herbivory, frost_heave, note_standard) %>% 
+  select(plantID, site, year, block, plot, x, y, genotype, jday, live, v, herbivory, frost_heave, note_standard) %>% 
   # Rearrange by location
   arrange(block, plot, x, y) -> ss_clean_phenology
 
 # Merge phenology and harvest data sets to figure out which plants flowered
 harvest_ss %>% 
   select(harvest_date = date, block, plot, density, albedo, x, y, genotype,
-         growout, live_harvest = live, v_harvest =  v, harvest, tillers, biomass_whole, inflor_mass,
+          live_harvest = live, v_harvest =  v, harvest, tillers, biomass_whole, inflor_mass,
          note_standard_harvest = note_standard) %>% 
   merge(ss_clean_phenology) -> merged_dat_ss 
 
@@ -204,7 +204,7 @@ phen_harvest_ss %>%
   select(-herbivory, -frost_heave) %>% 
   # Organize all columns
         # Basics
-  select(plantID, site, year, density, albedo, block, plot, x, y, genotype, growout, 
+  select(plantID, site, year, density, albedo, block, plot, x, y, genotype, 
          # Phenology
          first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
          # Harvest
@@ -263,7 +263,7 @@ notes_ch %>%
   filter(action == "action") %>% 
   merge(harvest_ch, all = T) %>% 
   # Select only the columns that we want
-  select(site, date, block, plot, density, albedo, x, y, genotype, growout,
+  select(site, date, block, plot, density, albedo, x, y, genotype,
          live, v, harvest, tillers, biomass_whole, inflor_mass, note_standard) %>% 
   # Arrange by position
   arrange(block, plot, density, albedo, x, y) %>% 
@@ -400,8 +400,7 @@ phen_harvest_ch %>%
   select(-herbivory, -frost_heave) %>% 
   # Organize all columns
   # Basics
-  mutate(growout = NA) %>% 
-  select(plantID, site, year, density, albedo, block, plot, x, y, genotype, growout, 
+  select(plantID, site, year, density, albedo, block, plot, x, y, genotype,
          # Phenology
          first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
          # Harvest
@@ -463,7 +462,7 @@ notes_wi %>%
   filter(action == "action") %>% 
   merge(harvest_wi, all = T) %>% 
   # Select only the columns that we want
-  select(site, date, block, plot, density, albedo, x, y, genotype, growout,
+  select(site, date, block, plot, density, albedo, x, y, genotype, 
          live, v, harvest, tillers, biomass_whole, inflor_mass, note_standard) %>% 
   # Arrange by position
   arrange(block, plot, density, albedo, x, y) %>% 
@@ -598,8 +597,7 @@ phen_harvest_wi %>%
   select(-herbivory, -frost_heave) %>% 
   # Organize all columns
   # Basics
-  mutate(growout = NA) %>% 
-  select(plantID, site, year, density, albedo, block, plot, x, y, genotype, growout, 
+  select(plantID, site, year, density, albedo, block, plot, x, y, genotype,
          # Phenology
          first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
          # Harvest
@@ -627,6 +625,10 @@ rbind(to_merge_ss, to_merge_ch, to_merge_wi) -> cg_2023
 # Remove any duplicates
 cg_2023 %>% 
   distinct() -> cg_2023
+
+# Rename biomass_whole to veg_biomass to make it more sensible
+cg_2023 %>% 
+  rename(veg_mass = biomass_whole) -> cg_2023
 
 # Remove intermediary datasets
 rm(list=setdiff(ls(), c("cg_2023", "cg_2022")))

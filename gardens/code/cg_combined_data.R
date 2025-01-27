@@ -22,6 +22,9 @@ cg_2023 %>%
 # Bring together all data
 rbind(cg_2022, cg_2023) -> cg_full
 
+# Write csv of all data (do not drop any observations for flags)
+write_csv(cg_full,"gardens/deriveddata/cg_fullData_withFlags.csv")
+
 # Filter out data that had at least one of the following conditions:
 # (1) smut
 # (2) resurrection [marked as dead then alive]
@@ -43,7 +46,9 @@ rbind(cg_2022, cg_2023) -> cg_full
 #            !grepl("wrong_spp", note_standard_harvest) & 
 #            !grepl("missing", note_standard_harvest)) -> cg_clean
 
-cg_full %>% pull(note_standard_phen) %>% table()
+cg_full %>% pull(live_harvest) %>% unique()
+
+
 
 # How many plants were alive at last check and were successfully harvested 
 cg_clean %>% 

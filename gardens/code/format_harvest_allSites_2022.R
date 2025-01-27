@@ -684,6 +684,7 @@ harvest %>%
          x, y, seed_count_total, live, v, inflor_mass, biomass_whole, tillers, standard_note, all_seed_drop,
          herbivory, physical_damage, seed_drop, smut) %>% 
   mutate(density = ifelse(density == "low", "lo", "hi")) %>% 
+  mutate(live = ifelse(live == "y", "Y", live)) %>% 
   mutate(block = as.factor(block))-> CH_harvest_short
 
 flower_phen %>% 
@@ -701,12 +702,19 @@ full_data %>%
                                            herbivory == 1 ~ "herbivory",
                                            physical_damage == 1 ~ "physical_damage",
                                            seed_drop == 1 ~ "seed_drop",
-                                           smut == 1 ~ "smut")) -> full_data
+                                           smut == 1 ~ "smut",
+                                           live == "missing" ~ "missing")) -> full_data
+
+# If plant is missing, set live to N and v to NA
+full_data %>% 
+  mutate(live = ifelse(live %in% c("missing", NA), "N", live),
+         v = ifelse(v == "missing", NA, v)) -> full_data
+
 
 full_data %>% 
   mutate(year = 2022, growout = NA) %>% 
   select(plantID, site, year, density, albedo = gravel, block, plot, x, y,
-         genotype, growout, first_flower, v_phen, last_phen_status, note_standard_phen = note_standard,
+         genotype, first_flower, v_phen, last_phen_status, note_standard_phen = note_standard,
          live_harvest = live, v_harvest = v, tillers, biomass_whole, inflor_mass,
          seed_count_total, note_standard_harvest) %>% 
   mutate(tillers = ifelse(is.na(tillers), 0, tillers),
@@ -717,6 +725,10 @@ full_data %>%
 # Remove any duplicates
 cg_2022 %>% 
   distinct() -> cg_2022
+
+# Rename biomass_whole to veg_biomass to make it more sensible
+cg_2022 %>% 
+  rename(veg_mass = biomass_whole) -> cg_2022
 
 # Remove intermediary datasets
 rm(list=setdiff(ls(), c("cg_2022", "cg_2023")))

@@ -1,0 +1,21 @@
+plantID = unique ID for individual plant in common garden study
+site = common garden site Sheep Station, ID (“SS”; 44.2456, -112.2144); Baltzor, ID (“BA”; 43.2085, -116.9952); Wildcat, ID (“WI”; 43.4744, -116.9018); and Cheyenne, WY (“CH”; 41.2121, -104.8525)
+year = year of common garden experiment (2022 = initiated fall 2021 and harvested in summer 2022; 2023 = initiated fall 2022 and harvested in summer 2023)
+density = density treatment ("hi" = high density [100 seeds / 0.04m2]; "lo" = low density [100 seeds / 1m2])
+albedo = albedo / gravel treatment ("black" = black gravel / low albedo; "white" = white gravel / high albedo)
+block = spatial block (1-10 categorical; each density x albedo treatment was represented exactly once in each block)
+plot = spatial block nested within block (1-4 categorical; density x albedo treatments were assigned at the plot level)
+x = x-coordinate of spatial location of plant within a plot (high density treatment [1:10]; low density treatment [1:20])
+y = y-coordinate of spatial location of plant within a plot (high density treatment [1:10]; low density treatment [1:5])
+genotype = numeric code for genotype
+first_flower = date of first observation of plant flowering
+v_phen = phenological status at date of first flowering (FG = florets green, FP = florets purple, FB = florets brown, FX = flowered but color not observed prior to harvesting)
+last_phen_status = phenological status of the plant for the last phenology check prior to harvest (V0 = emerged, V1 = one fully developed leaf, V2 = two fully developed leaves, V3 = three fully developed leaves, V3+ = more than three fully developed leaves, BS = florets visible in sheath but not fully developed, FG = florets have emerged and are green, FP = florets emerged and are purple, FB = florets have emerged and are brown, FX = florets have emerged but color was not noted prior to harvest)
+note_standard_phen = standardized notes collected across phenology surveys; notes are pasted together into one string (herbivory, resurrection [plant observed dead at one check, then alive at the next], frost_heave, physical_damage, smut, bad_position [plant seems to be in wrong position], seed_drop [appears seeds have dropped before/during measurement], mortality, wrong_spp [not Bromus tectorum])
+live_harvest = plant was alive or not at harvest (Y = yes, N = no)
+v_harvest = phenology status at harvest (variety of different combinations of phenology statuses listed above)
+tillers = number of tillers at harvest
+veg_mass = total vegetative/non-inflorescence biomass at harvest (grams)
+inflor_mass = total inflorescence biomass at harvest (grams)
+seed_count_total = total number of seeds counted / estimated (2022 has seed counts, but 2023 data only has inflorescence mass)
+note_standard_harvest = standardized notes from harvest (seed_drop = [appears seeds have dropped before/during harvest], smut, physical_damage, herbivory, missing, wrong_spp [not Bromus tectorum], mortality, bad_position [plant seems to be in wrong position], no_date [harvest date not recorded])
