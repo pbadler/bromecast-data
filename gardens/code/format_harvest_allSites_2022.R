@@ -730,5 +730,13 @@ cg_2022 %>%
 cg_2022 %>% 
   rename(veg_mass = biomass_whole) -> cg_2022
 
+# Remove one observation that's represented twice
+cg_2022 %>% 
+  filter(plantID != "CH_2022_1085" | last_phen_status == "Y") -> cg_2022
+
+# Fix one observation with fractional tillers
+cg_2022 %>% 
+  mutate(tillers = ifelse(tillers == 0.1, 1, tillers)) -> cg_2022
+
 # Remove intermediary datasets
 rm(list=setdiff(ls(), c("cg_2022", "cg_2023")))

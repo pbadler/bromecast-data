@@ -634,5 +634,15 @@ cg_2023 %>%
 cg_2023 %>% 
   mutate(density = ifelse(density == "high", "hi", "lo")) -> cg_2023
 
+# Fix inflor_mass for one observation that is an obvious typo MLV 1/29/2025
+cg_2023 %>% 
+  mutate(inflor_mass = ifelse(inflor_mass == 472, 4.72, inflor_mass)) -> cg_2023
+
+# Remove three observations that are duplicated 1/29/2025
+cg_2023 %>% 
+  filter(plantID != "Boise2023_1633" | complete.cases(note_standard_phen)) %>% 
+  filter(plantID != "Boise2023_1768" | v_phen == "FG") %>% 
+  filter(plantID != "Boise2023_2538" | complete.cases(note_standard_phen)) -> cg_2023
+  
 # Remove intermediary datasets
 rm(list=setdiff(ls(), c("cg_2023", "cg_2022")))
