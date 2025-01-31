@@ -51,6 +51,12 @@ D$Reproduced[tmp] <- "Y"
 tmp <- which(is.na(D$Fecundity) & D$Reproduced == "N")
 D$Fecundity[tmp] <- 0
 
+# Porensky entered -1 for BRTE neighbors when toothpick missing,
+# change these to NAs for clarity
+D$BRTE.neighbors[D$BRTE.neighbors==-1] <- NA
+D$BRTE.neighbors[D$BRTE.neighbors==""] <- NA
+D$BRTE.neighbors <- as.numeric(D$BRTE.neighbors)
+
 # flag records where Reproduced = Y and Fecundity is NA
 D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
 
@@ -58,7 +64,7 @@ D$fecundityflag <- ifelse(D$Reproduced=="Y" & is.na(D$Fecundity),1,0)
 D <- subset(D,!is.na(D$Fecundity))
 
 # remove and reorder columns
-D2021 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
+D2021 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","BRTE.neighbors","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2021, function(x) sum(is.na(x)))
 
@@ -107,6 +113,16 @@ D$Reproduced[is.na(D$Reproduced) & D$Emerged=="N"] <- "N"
 # assume remaining NAs are missing plants
 D$Reproduced[is.na(D$Reproduced)] <- "missing"
 
+# clean up BRTE neighbors
+# Porensky entered -1 for BRTE neighbors when toothpick missing,
+# change these to NAs for clarity
+D$BRTE.neighbors[D$BRTE.neighbors==-1] <- NA
+D$BRTE.neighbors[D$BRTE.neighbors=="-"] <- NA  # same for Ensing sites
+D$BRTE.neighbors[D$BRTE.neighbors=="missing"] <- NA  # same for Ensing sites
+D$BRTE.neighbors[D$BRTE.neighbors==""] <- NA
+D$BRTE.neighbors[D$BRTE.neighbors=="NA "] <- NA
+D$BRTE.neighbors <- as.numeric(D$BRTE.neighbors)
+
 # fix bad values in Fecundity column
 D$Fecundity[D$Fecundity=="unk"] <- NA
 tmp <- which(D$Fecundity=="*seed head broke")
@@ -133,7 +149,7 @@ tmp <- which(D$Biomass < 0)
 D$Biomass[tmp] <- NA
 
 # remove and reorder columns
-D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
+D2022 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","BRTE.neighbors","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2022, function(x) sum(is.na(x)))
 
@@ -191,6 +207,13 @@ D$Reproduced[is.na(D$Reproduced) & D$Emerged=="N"] <- "N"
 # assume remaining NAs are missing plants
 D$Reproduced[is.na(D$Reproduced)] <- "missing"
 
+# clean up BRTE neighbors
+# Porensky entered -1 for BRTE neighbors when toothpick missing,
+# change these to NAs for clarity
+D$BRTE.neighbors[D$BRTE.neighbors==-1] <- NA
+D$BRTE.neighbors[D$BRTE.neighbors=="N/a"] <- NA  
+D$BRTE.neighbors <- as.numeric(D$BRTE.neighbors)
+
 # fix bad values in Fecundity column
 #D$Fecundity <- as.numeric(D$Fecundity)
 D$Fecundity <- round(D$Fecundity)  # a couple monster plants were subsampled, have non-integer fecundity
@@ -207,7 +230,7 @@ tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
 # remove and reorder columns
-D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
+D2023 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","BRTE.neighbors","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2022, function(x) sum(is.na(x)))
 
@@ -230,6 +253,7 @@ names(D)[which(names(D)=="transect")] <- "Transect"
 names(D)[which(names(D)=="distance_from_center")] <- "Distance"
 names(D)[which(names(D)=="total_dry_mass")] <- "Biomass"
 names(D)[which(names(D)=="notes")] <- "Notes"
+names(D)[which(names(D)=="BRTE_neighbors")] <- "BRTE.neighbors"
 
 D$Year <- 2024
 
@@ -277,13 +301,15 @@ D$fecundityflag[is.na(D$fecundityflag)] <- 0
 tmp <- which(D$Reproduced=="missing" & D$Fecundity==0)
 D$Fecundity[tmp] <- NA
 
+D$BRTE.neighbors <- as.numeric(D$BRTE.neighbors)
+
 # fix bad biomass values
 tmp <- which(D$Biomass=="0..020")
 D$Biomass[tmp] <- 0.020
 D$Biomass <- as.numeric(D$Biomass)
 
 # remove and reorder columns
-D2024 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","Fecundity","Biomass","fecundityflag","Notes")]
+D2024 <- D[,c("SiteCode","Year","Treatment","Transect","Distance","Emerged","Reproduced","BRTE.neighbors","Fecundity","Biomass","fecundityflag","Notes")]
 
 sapply(D2024, function(x) sum(is.na(x)))
 

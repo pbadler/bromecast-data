@@ -40,13 +40,13 @@ D$Distance[D$SiteCode=="Symstad2" & D$Distance==5.17] <- 5.2
 
 
 ### This next block of code is to troubleshoot the demography-composition merge
-# test <- merge(D,comp_ftypes1,all=T)
-# colSums(is.na(test))
-# table(test$SiteCode[is.na(test$annual)])
-# # figure out why demography and composition data don't match
-# missingC <- test[is.na(test$annual),]
-# missingC <- missingC[,c("SiteCode", "Year","Treatment","Transect","Distance")]
-# missingC <- subset(missingC, Year==2024)
+test <- merge(D,comp_ftypes1,all=T)
+colSums(is.na(test))
+table(test$SiteCode[is.na(test$annual)])
+# figure out why demography and composition data don't match
+missingC <- test[is.na(test$annual),]
+missingC <- missingC[,c("SiteCode", "Year","Treatment","Transect","Distance")]
+missingC <- subset(missingC, Year==2024)
 
 # fixable problems solved, now do the merge
 allD_ft1 <- merge(D,comp_ftypes1,all.x=T)

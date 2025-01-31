@@ -1,8 +1,10 @@
 species,update
+,missing
  bare,bare
  Fallopia convolvulus,Fallopia convolvulus
  litter,litter
  moss,biocrust
+ Symphyotrichum porteri,Symphyotrichum porteri
  Symphyotrichum porteri,Symphyotrichum porteri
 Achillea millefolium,
 Achillea millefolium ,Achillea millefolium
@@ -358,6 +360,7 @@ Lonicera arizonica,
 LOTR2,Lomatium triternatum
 LSB,biocrust
 LUAR,Lupinus arboreus
+Lupine sp.,Lupinus spp
 Lupinus,Lupinus spp
 Lupinus argenteus,
 Lupinus sericeus,
@@ -420,6 +423,7 @@ Plantago patagonica ,Plantago patagonica
 planted Bromus tectorum,cut_this_record
 Pleiacanthus spinosus,
 Pleuraphis jamesii,
+Pleuraphis jamesii ,Pleuraphis jamesii
 PLSP,Pleiacanthus spinosus
 Poa bulbosa,
 Poa pratensis,
@@ -477,6 +481,7 @@ SPCR,Sporobolus cryptandrus
 Sphaeralcea coccinea,
 Sphaeralcea spp,
 Sphaercia.coccinea,Sphaeralcea coccinea
+Spider hole,bare
 Sporobolus,Sporobolus spp
 Sporobolus cryptandrus,
 Sporobulus cryptandrus,Sporobolus cryptandrus
@@ -494,7 +499,6 @@ Symphyotrichum ericoides,
 Symphyotrichum laeve,
 Symphyotrichum oblongifolium,
 Symphyotrichum porteri,
- Symphyotrichum porteri,Symphyotrichum porteri
 Taeniatherum caput-medusae,
 TAOF,Taraxacum officinale
 Taraxacum officinale,
@@ -555,4 +559,3 @@ Vulpia octoflora,
 Vulpia spp,
 Wood,litter
 ZIPA,Zigadenus paniculatus 
-,missing

@@ -1,260 +1,561 @@
-species,update,duration,duration2,type,type2,c3c4,notes
-Brassicaceae,Brassica spp,annual,,forb,,,not sure of duration
-Alyssum alyssoides,,annual,biennial,forb,,,
-Alyssum desertorum,,annual,,forb,,,
-Ambrosia psilostachya,,annual,perennial,forb,,,
-Androsace occidentalis,,annual,,forb,,,
-Androsace spp,,annual,,forb,,,
-Annual forb,,annual,,forb,,,
-Arenaria serpyllifolia,,annual,,forb,,,
-Buglossoides arvensis,,annual,,forb,,,
-Camelina microcarpa,,annual,biennial,forb,,,
-Ceratocephala testiculata,,annual,,forb,,,
-Collinsia parviflora,,annual,,forb,,,
-Collomia linearis,,annual,,forb,,,
-Cordylanthus parviflorus,,annual,,forb,,,
-Cordylanthus spp,,annual,,forb,,,
-Descurainia pinnata,,annual,biennial,forb,,,
-Descurainia sophia,,annual,biennial,forb,,,
-Draba verna,,annual,,forb,,,
-Eriastrum sparsiflorum,,annual,,forb,,,
-Eriastrum spp,,annual,,forb,,,
-Erodium cicutarium,,annual,biennial,forb,,,
-Euphorbia spathulata,,annual,perennial,forb,,,
-Hedeoma hispida,,annual,,forb,,,
-Helianthus annuus,,annual,,forb,,,
-Holosteum umbellatum,,annual,,forb,,,
-HOUM,Holosteum umbellatum,annual,,forb,,,
-Lactuca serriola,,annual,biennial,forb,,,
-Lappula occidentalis,,annual,biennial,forb,,,
-Lappula occidentalis var occidentalis,Lappula occidentalis,annual,biennial,forb,,,
-Lappula redowskii,,annual,biennial,forb,,,
-Lappula spp,,annual,biennial,forb,,,
-Linanthus septentrionalis,,annual,,forb,,,
-Logfia arvense,Logfia arvensis,annual,,forb,,,
-Logfia arvensis,,annual,,forb,,,
-Medicago lupulina,,annual,perennial,forb,,,
-Medicago sativa,,annual,perennial,forb,,,
-Melilotus officinalis,,annual,biennial,forb,,,
-Microsteris gracilis,,annual,,forb,,,
-Myosotis micrantha,,annual,,forb,,,
-Myosotis stricta,,annual,,forb,,,
-Orthocarpus tenuifolius,,annual,,forb,,,
-Plantago patagonica,,annual,,forb,,,
-Polygonum aviculare,,annual,perennial,forb,,,
-Polygonum douglasii,,annual,,forb,,,
-Sisymbrium altissimum,,annual,biennial,forb,,,
-Tragopogon dubius,,annual,biennial,forb,,,
-unk ann forb,unknown annual forb,annual,,forb,,,
-Veronica peregrina,,annual,,forb,,,
-Veronica verna,,annual,,forb,,,
-Vicia villosa,,annual,biennial,forb,vine,,
-Aegilops cylindrica,,annual,,grass,,,
-Annual grass,,annual,,grass,,,
-Apera interrupta,,annual,,grass,,,
-Bromus arvensis,,annual,,grass,,,
-Bromus japonicus,,annual,,grass,,,
-Bromus tectorum,,annual,,grass,,,
-Hordeum pusillum,,annual,,grass,,,
-Taeniatherum caput-medusae,,annual,,grass,,,
-Vulpia octoflora,,annual,,grass,,,
-Vulpia spp,,annual,,grass,,,
-Arabis,Arabis spp,biennial,perennial,forb,,,
-Arabis puberula,,biennial,perennial,forb,,,
-Arabis sp.,Arabis spp,biennial,perennial,forb,,,
-ARPU,Arabis puberula,biennial,perennial,forb,,,
-Boechera retrofracta,,biennial,perennial,forb,,,
-Centaurea stoebe,,biennial,perennial,forb,,,
-Sphaeralcea coccinea,,biennial,perennial,forb,subshrub,,
-Eriogonum spp,Eriogonum spp,perennial,,forb,subshrub,,possibly classify as shrub?
-CYMOP?,Cymopterus spp,perennial,,forb,,,should doublecheck
-Achillea millefolium,,perennial,,forb,,,
-AGGL,Agoseris glauca,perennial,,forb,shrub,,
-Allium spp,,perennial,,forb,,,
-Allium textile,,perennial,,forb,,,
-Antenarria spp,Anternnaria spp,perennial,,forb,subshrub,,
-Antennaria dimorpha,,perennial,,forb,subshrub,,
-Antennaria species,Anternnaria spp,perennial,,forb,subshrub,,
-Arnica fulgens,,perennial,,forb,,,
-Artemisia dracunculus,,perennial,,forb,subshrub,,
-Asclepias pumila,,perennial,,forb,,,
-Astragalus americanus,,perennial,,forb,,,
-Astragalus filipes,,perennial,,forb,,,
-Astragalus inflexus,,perennial,,forb,,,
-Astragalus lentiginosus,,perennial,,forb,,,
-Astragalus missouriensis,,perennial,,forb,subshrub,,
-Astragalus sp.,Astragalus spp,perennial,,forb,,,
-Astragulus inflexus,Astragalus inflexus,perennial,,forb,subshrub,,
-Balsamorhiza sagitata,Balsamorhiza sagittata,perennial,,forb,,,
-Balsamorhiza sagittata,,perennial,,forb,,,
-Balsmahoriza sagittata,Balsamorhiza sagittata,perennial,,forb,,,
-Brodiaea douglasii,,perennial,,forb,,,
-Castilleja angustifolia,,perennial,,forb,subshrub,,
-Castilleja thompsonii,,perennial,,forb,,,
-Comandra umbellata,,perennial,,forb,subshrub,,
-Convolvulus arvensis,,perennial,,forb,vine,,
-Convolvulus spp,,perennial,,forb,vine,,
-Crepis acuminata,,perennial,,forb,,,
-Echinacea angustifolia,,perennial,,forb,,,
-Erigeron compositus,,perennial,,forb,,,
-Erigeron corymbosus,,perennial,,forb,,,
-Erigeron pumilus,,perennial,,forb,subshrub,,
-Erigeron speciosus,,perennial,,forb,subshrub,,
-Eriogonum heracleoides,,perennial,,forb,subshrub,,
-Eriogonum shrub,Eriogonum spp,perennial,,forb,subshrub,,
-Euphorbia esula,,perennial,,forb,,,
-Gaillardia aristata,,perennial,,forb,,,
-Gaillardia pinnatifida,,perennial,,forb,subshrub,,
-Geranium spp,,perennial,,forb,,,
-Gutierrezia sarothrae,,perennial,,forb,shrub,,
-Heterotheca villosa,,perennial,,forb,,,
-Lepidium,Lepidium spp,perennial,,forb,,,
-Leucocrinum montanum,,perennial,,forb,,,
-Lewisia rediviva,,perennial,,forb,,,
-Liatrus punctata,Liatris punctata,perennial,,forb,,,
-Linanthus pungens,,perennial,,forb,subshrub,,
-Linum lewisii,,perennial,,forb,subshrub,,
-Linum perenne,,perennial,,forb,subshrub,,
-Lithophragma parviflorum,,perennial,,forb,,,
-Lithospemum incisum,Lithospermum incisum,perennial,,forb,,,
-Lithospermum ruderale,,perennial,,forb,,,
-Lomatium foeniculaceum,,perennial,,forb,,,
-Lomatium triternatum,,perennial,,forb,,,
-Lupinus sericeus,,perennial,,forb,subshrub,,
-Oenothera suffrutescens,,perennial,,forb,subshrub,,
-Oligoneuron rigidum,,perennial,,forb,,,
-Perennial forb,unknown perennial forb,perennial,,forb,,,
-Phlox andicola,,perennial,,forb,,,
-Phlox hoodii,,perennial,,forb,,,
-Phlox longifolia,,perennial,,forb,subshrub,,
-Pleiacanthus spinosus,,perennial,,forb,subshrub,,
-Psoralidium tenuiflorum,,perennial,,forb,,,
-Ratibida columnifera,,perennial,,forb,,,
-Solidago missouriensis,,perennial,,forb,,,
-Solidago ridiga,Solidago rigida,perennial,,forb,,,
-Symphyotrichum ericoides,,perennial,,forb,,,
-Symphyotrichum oblongifolium,,perennial,,forb,,,
-Taraxacum officinale,,perennial,,forb,,,
-Tradescantia bracteata,,perennial,,forb,,,
-unk per forb,unknown perennial forb,perennial,,forb,,,
-Viola nuttallii,,perennial,,forb,,,
-Poa secunda (dead),dead,perennial,,grass,,c3,not sure how dead plant is classified
-Achnatherum thurberianum,,perennial,,grass,,c3,
-Agropyron cristatum,,perennial,,grass,,c3,
-Agropyron smithii,,perennial,,grass,,c3,
-Bouteloua curtipendula,,perennial,,grass,,c4,
-Bouteloua dactyloides,,perennial,,grass,,c4,
-Bouteloua gracilis,,perennial,,grass,,c4,
-Carex,Carex spp,perennial,,grass,,c3,
-Carex duriuscula,,perennial,,grass,,c3,
-Carex filifolia,,perennial,,grass,,c3,
-Carex sp.,Carex spp,perennial,,grass,,c3,
-Carex spp,,perennial,,grass,,c3,
-Elymus elymoides,,perennial,,grass,,c4,
-Festuca campestris,,perennial,,grass,,c3,
-Festuca idahoensis,,perennial,,grass,,c3,
-Hesperostipa comata,,perennial,,grass,,c3,
-Koeleria macrantha,,perennial,,grass,,c3,
-Koeleria micrantha,Koeleria macrantha,perennial,,grass,,c3,
-Nassella viridula,,perennial,,grass,,c3,
-Pascopyrum smithii,,perennial,,grass,,c3,
-Perennial grass,unknown perennial grass,perennial,,grass,,unknown,
-Perennial short grass,unknown perennial grass,perennial,,grass,,unknown,
-Perennial tall grass,unknown perennial grass,perennial,,grass,,unknown,
-Pleuraphis jamesii,,perennial,,grass,,c4,
-Poa bulbosa,,perennial,,grass,,c3,
-Poa pratensis,,perennial,,grass,,c3,
-Poa sandbergii,,perennial,,grass,,c3,
-Poa secunda,,perennial,,grass,,c3,
-POPR,Poa pratensis,perennial,,grass,,c3,
-Pseudoroegnaria spicata,Pseudoroegneria spicata,perennial,,grass,,c3,
-Pseudoroegneria spicata,,perennial,,grass,,c3,
-Sporobolus,Sporobolus spp,perennial,,grass,,c4,
-Sporobolus cryptandrus,,perennial,,grass,,c4,
-Stipa comata,Hesperostipa comata,perennial,,grass,,c3,
-Thinopyrum intermedium,,perennial,,grass,,c3,
-CRIN,Crategus spp,perennial,,shrub,tree,,should doublecheck
-LUAR,Lupinus arboreus,perennial,,shrub,subshrub,,should doublecheck
-Artemisia tridentata,,perennial,,shrub,,,
-Artemisia tridentata wyomingensis,,perennial,,shrub,,,
-Atriplex confertifolia,,perennial,,shrub,subshrub,,
-Chrysothamnus viscidiflorus,,perennial,,shrub,,,
-Ephedra viridis,,perennial,,shrub,,,
-Ericameria nauseosum,Ericameria nauseosa,perennial,,shrub,subshrub,,
-Lonicera arizonica,,perennial,,shrub,vine,,
-Opuntia polyacantha,,perennial,,shrub,,,
-Rhus trilobata,,perennial,,shrub,,,
-Tetradymia canescens,,perennial,,shrub,subshrub,,
-Artemisia fridiga,Artemisia frigida,perennial,,subshrub,,,
-Artemisia frigida,,perennial,,subshrub,,,
-Tree,unknown tree,perennial,,tree,,,
-Lupinus spp,,perennial,,,,,not sure of type
-Astragalus convallarius,,perennial ,,forb,,,
-Standing dead,dead,,,dead,,,
-bristly linear forb,unknown forb,,,forb,,,not sure of duration
-bristly linear leaved unknown forb,unknown forb,,,forb,,,not sure of duration
-Euphorbia,Euphorbia spp,,,forb,,,not sure of duration
-Exotic forb,,,,forb,,,not sure of duration
-Forb,unknown forb,,,forb,,,not sure of duration
-FORB,unknown forb,,,forb,,,not sure of duration
-Sphaeralcea spp,,,,forb,,,not sure of duration
-unk forb,unknown forb,,,forb,,,not sure of duration
-UNKFB1,unknown forb,,,forb,,,not sure of duration
-UNKFB3,unknown forb,,,forb,,,not sure of duration
-unknown forb,,,,forb,,,not sure of duration
-"unknown forb, hairy, linear leaves, no flowers",unknown forb,,,forb,,,not sure of duration
-Exotic grass,,,,grass,,,not sure of duration
-UNKGS1,unknown grass,,,grass,,,not sure of duration
-UNKGS2,unknown grass,,,grass,,,not sure of duration
-Moss,moss,,,moss,,,
-MOSS,moss,,,moss,,,
-animal droppings,scat,,,non-plant,,,
-Animal scat,scat,,,non-plant,,,
-Animal Scat,scat,,,non-plant,,,
-Bare,bare,,,non-plant,,,
-bare soil,bare,,,non-plant,,,
-Bare soil,bare,,,non-plant,,,
-Biocrust,biocrust,,,non-plant,,,
-Biocrust - Early,biocrust,,,non-plant,,,
-Biocrust - Late,biocrust,,,non-plant,,,
-biocrust early,biocrust,,,non-plant,,,
-biocrust late,biocrust,,,non-plant,,,
-Biocrust late,biocrust,,,non-plant,,,
-Dark cyanobacteria,cyanobacteria,,,non-plant,,,
-Dung,scat,,,non-plant,,,
-Early successional biocrust,biocrust,,,non-plant,,,
-late successional biocrust,biocrust,,,non-plant,,,
-Late successional biocrust,biocrust,,,non-plant,,,
-Lichen,,,,non-plant,,,
-Light cyanobacteria,cyanobacteria,,,non-plant,,,
-litter,,,,non-plant,,,
-Litter,litter,,,non-plant,,,
-Mushroom,,,,non-plant,,,
-rock,,,,non-plant,,,
-Rock,rock,,,non-plant,,,
-Soil,soil,,,non-plant,,,
-Wood,litter,,,non-plant,,,
-Shrub,unknown shrub,,,shrub,,,not sure of duration
-not found,unknown,,,unknown,,,
-Pink,unknown,,,unknown,,,
-ANDI,,,,,,,not sure based on USDA database
-ANMI,,,,,,,not sure based on USDA database
-ASSC,,,,,,,not sure based on USDA database
-Draba repens,,,,,,,not sure based on USDA database
-EPBR,Epilobium spp,,,,,,not sure based on USDA database
-ERCO,,,,,,,not sure based on USDA database
-ERFI,,,,,,,not sure based on USDA database
-ERPU,,,,,,,not sure based on USDA database
-GADE,,,,,,,not sure based on USDA database
-LARA,,,,,,,not sure based on USDA database
-LEPU,,,,,,,not sure based on USDA database
-LESB,,,,,,,not sure based on USDA database
-LSB,,,,,,,not sure based on USDA database
-PHAC,,,,,,,not sure based on USDA database
-SATR,,,,,,,not sure based on USDA database
-SEIN,,,,,,,not sure based on USDA database
-SPCR,,,,,,,not sure based on USDA database
-ZIPA,,,,,,,not sure based on USDA database
-Draba spp,,,,,,,not sure of duration
-soil,,,,,,,
-Unknown pink,unknown,,,,,,
+"species","update"
+"","missing"
+" bare","bare"
+" Fallopia convolvulus","Fallopia convolvulus"
+" litter","litter"
+" moss","biocrust"
+" Symphyotrichum porteri","Symphyotrichum porteri"
+" Symphyotrichum porteri","Symphyotrichum porteri"
+"Achillea millefolium",""
+"Achillea millefolium ","Achillea millefolium"
+"Achillea.millefolia","Achillea millefolium"
+"Achnatherum thurberianum",""
+"ACMI","Achillea millefolium"
+"ACMI ","Achillea millefolium"
+"Aegilops cylindrica",""
+"AGCR","Agropyron cristatum"
+"AGGL","Agoseris glauca"
+"AGRO","Agropyron cristatum"
+"Agropyron cristatum",""
+"Agropyron smithii",""
+"AGSM","Agropyron smithii"
+"ALDE","Alyssum desertorum"
+"alfalfa","Medicago sativa"
+"Allium spp",""
+"Allium textile",""
+"ALSI","Allium simillimum"
+"Alyssum alyssoides",""
+"Alyssum desertorum",""
+"Alyssum desertorum ","Alyssum desertorum"
+"Alyssum spp.","Alyssum spp."
+"Alyssum.simplex","Alyssum simplex"
+"Amaranthus albus",""
+"Ambrosia psilostachya",""
+"ANDI","Antennaria dimorpha"
+"ANDI2","Antennaria dimorpha"
+"Androsace occidentalis",""
+"Androsace spp",""
+"animal droppings","scat"
+"Animal scat","scat"
+"Animal Scat","scat"
+"ANMI","Antennaria microphylla"
+"annual Brassicacae","Brassica annual spp"
+"annual cryptantha Spp.","annual forb"
+"annual Cryptantha Spp.","annual forb"
+"annual eriogonum Spp. ","annual forb"
+"annual Eriogonum Spp. ","annual forb"
+"Annual forb","annual forb"
+"Annual grass","annual grass"
+"annual Linanthus","annual forb"
+"annual mentzelia Spp.","annual forb"
+"annual Mentzelia Spp.","annual forb"
+"annual mustard","annual forb"
+"Antenarria spp","Antennaria spp"
+"Antennaria dimorpha",""
+"Antennaria rosea",""
+"Antennaria species","Antennaria spp"
+"Antennaria spp","Antennaria spp"
+"Antennaria.monocephala","Antennaria monocephala"
+"anthill","bare"
+"Apera interrupta",""
+"Arabis","Arabis spp"
+"Arabis puberula",""
+"Arabis sp.","Arabis spp"
+"Arenaria serpyllifolia",""
+"Aristida purpurea",""
+"Arnica cordifolia",""
+"Arnica fulgens",""
+"ARPU","Arabis puberula"
+"Artemisia dracunculus",""
+"Artemisia fridiga","Artemisia frigida"
+"Artemisia frigida","Artemisia frigida"
+"Artemisia tridentata",""
+"Artemisia tridentata wyomingensis","Artemisia tridentata"
+"Artemisia.frigida","Artemisia frigida"
+"Artemisia.ludovisiana","Artemisia ludovisiana"
+"ARTR","Artemisia tridentata"
+"Asclepias pumila",""
+"ASCO","Astragalus convallarius"
+"ASFI","Astragalus filipes"
+"ASLE","Astragalus lentiginosus"
+"ASPU","Astragalus purshii"
+"ASSC","Astragalus sclerocarpus"
+"ASSP (Astragalus sp)","Astragalus spp"
+"Astragalus americanus",""
+"Astragalus convallarius",""
+"Astragalus convularius","Astragalus convallarius"
+"Astragalus filipes",""
+"Astragalus filipes/miser","Astragalus filipes"
+"Astragalus inflexus",""
+"Astragalus lentiginosus",""
+"Astragalus missouriensis",""
+"Astragalus sp.","Astragalus spp"
+"Astragulus inflexus","Astragalus inflexus"
+"Astralagus drummondii",""
+"Atriplex canescens",""
+"Atriplex confertifolia",""
+"Balsamorhiza","Balsamorhiza sagittata"
+"Balsamorhiza sagitata","Balsamorhiza sagittata"
+"Balsamorhiza sagittata",""
+"Balsmahoriza sagittata","Balsamorhiza sagittata"
+"Barbarea orthoceras",""
+"bare","bare"
+"Bare","bare"
+"BARE","bare"
+"bare ","bare"
+"Bare ","bare"
+"bare (dog disturbance)","bare"
+"bare soil","bare"
+"Bare soil","bare"
+"BARE0","bare"
+"BASA","Balsamorhiza sagittata"
+"Berteroa incana",""
+"BIND","Convolvulus arvensis"
+"biocrust","biocrust"
+"Biocrust","biocrust"
+"Biocrust - Early","biocrust"
+"Biocrust - Late","biocrust"
+"biocrust early","biocrust"
+"Biocrust early","biocrust"
+"biocrust late","biocrust"
+"Biocrust late","biocrust"
+"Boechera retrofracta",""
+"Bouteloua curtipendula",""
+"Bouteloua dactyloides",""
+"Bouteloua gracilis",""
+"Bouteloua gracilis ","Bouteloua gracilis"
+"Brassicaceae","Brassicaceae spp"
+"bristly linear forb","unknown forb"
+"bristly linear leaved unknown forb","unknown forb"
+"BRJA","Bromus japonicus"
+"Brodiaea douglasii",""
+"Brome","Bromus spp"
+"Bromus arvensis",""
+"Bromus inermis",""
+"Bromus japonicus",""
+"Bromus tectorum",""
+"BRTE","Bromus tectorum"
+"Buglossoides arvensis",""
+"CAAN","Camissonia andina"
+"Cacti","Cacti spp"
+"calacortus","Calochortus spp"
+"calicortus","Calochortus spp"
+"Calochortus","Calochortus spp"
+"CAM12","Camelina microcarpa"
+"CAMA","Calochortus macrocarpus"
+"Camelina microcarpa",""
+"Camisonia","Camissonia spp"
+"Carex","Carex spp"
+"Carex duriuscula",""
+"Carex filifolia",""
+"Carex filifolia ","Carex filifolia"
+"Carex sp","Carex spp"
+"Carex sp.","Carex spp"
+"Carex spp",""
+"Carex.spp.","Carex spp"
+"Carex/Cyperus sp.","Carex spp"
+"Castilleja angustifolia",""
+"Castilleja thompsonii",""
+"Centaurea stoebe",""
+"Ceratocephala testiculata",""
+"Chamaesyce glyptosperma",""
+"Chenopodium leptoph.","Chenopodium leptophyllum"
+"Chenopodium leptophyllum",""
+"Chenopodium sp.","Chenopodium spp"
+"CHLE","Chenopodium leptophyllum"
+"CHNA","Chrysothamnus nauseosus"
+"Chrysothamnus viscidiflorus",""
+"CHVI","Chrysothamnus viscidiflorus"
+"CHVY","Chrysothamnus viscidiflorus"
+"Cirsium arvense",""
+"Cirsium undulatum",""
+"Collinsia parviflora",""
+"Collomia linearis",""
+"Comandra umbellata",""
+"Commandra umbellata","Comandra umbellata"
+"Convolvulus arvensis",""
+"Convolvulus spp",""
+"Conyza canadensis",""
+"COPA","Collinsia parviflora"
+"COPA (Collinsia parviflora)","Collinsia parviflora"
+"COPA3","Collinsia parviflora"
+"CORA5","Cordylanthus ramosus"
+"Cordylanthus parviflorus",""
+"Cordylanthus spp",""
+"Coryphantha vivipara",""
+"COSP","Cordylanthus spp"
+"COUM","Comandra umbellata"
+"CRAC","Crepis acuminata"
+"Crepis","Crepis acuminata"
+"Crepis accumenata","Crepis acuminata"
+"Crepis acuminata",""
+"CRIN","Crepis intermedia"
+"CRIN4","Crepis intermedia"
+"crust","biocrust"
+"Cryptantha minima",""
+"Crypthantha sp.","Cryptantha spp"
+"Crypthantha sp. ","Cryptantha spp"
+"CYMOP?","Cymopterus spp"
+"Dactylis glomerata",""
+"Dark cyanobacteria","biocrust"
+"dead Bouteloua gracilis crown","litter"
+"dead Opuntia polyacantha","litter"
+"DEPI","Descurainia pinnata"
+"Descurainia pinnata",""
+"Descurainia sophia",""
+"Descurania.sophia","Descurainia sophia"
+"Dieteria canescens/bigelovii","Dieteria spp"
+"Draba nemorosa",""
+"Draba repens",""
+"Draba reptans","Draba repens"
+"Draba spp",""
+"Draba verna",""
+"dung","scat"
+"Dung","scat"
+"early crust","biocrust"
+"Early successional biocrust","biocrust"
+"Early successional biocrust ","biocrust"
+"eb","biocrust"
+"EB","biocrust"
+"Echinacea angustifolia",""
+"EFRI","Erigeron filifolius"
+"EHLO","Phlox longifolia"
+"ELEL","Elymus elymoides"
+"Elymus elymoides",""
+"EPBR","Epilobium brachycarpum"
+"Ephedra viridis",""
+"EPVI","Ephedra viridis"
+"ERAP","Erigeron aphanactis"
+"ERAR","Erigeron aphanactis"
+"ERCI","Erodium cicutarium"
+"ERCO","Erigeron corymbosus"
+"ERCO6","Erigeron coulteri"
+"ERFI","Eriastrum filifolium"
+"Eriastrum sparsiflorum",""
+"Eriastrum spp",""
+"Ericameria nauseosum","Ericameria nauseosa"
+"Erigeron compositus",""
+"Erigeron corymbosus",""
+"Erigeron pumilus",""
+"Erigeron speciosus",""
+"Eriogonum effusum",""
+"Eriogonum heracleoides",""
+"Eriogonum shrub","Eriogonum spp"
+"Eriogonum sp (ERSP)","Eriogonum spp"
+"Eriogonum spp","Eriogonum spp"
+"Erodium cicutarium",""
+"ERPU","Erigeron pumilis"
+"ERSP","Eriogonum spp"
+"ES biocrust","biocrust"
+"Escobaria vivipara",""
+"Euphorbia","Euphorbia spp"
+"Euphorbia esula",""
+"Euphorbia spathulata",""
+"Exotic forb","unknown forb"
+"Exotic grass","unknown grass"
+"Fallopia convolvulus",""
+"FEID","Festuca idahoensis"
+"Festuca campestris",""
+"Festuca idahoensis",""
+"Festuca.idahoensis","Festuca idahoensis"
+"forb","unknown forb"
+"Forb","unknown forb"
+"FORB","unknown forb"
+"forb 1","unknown perennial forb"
+"forb 2","unknown perennial forb"
+"forb 3","unknown perennial forb"
+"forb 4","unknown perennial forb"
+"forb 5","unknown perennial forb"
+"forb 6","unknown perennial forb"
+"forb 7","unknown perennial forb"
+"forb 8","unknown perennial forb"
+"forb 9","unknown perennial forb"
+"forb1","unknown perennial forb"
+"forb2","unknown perennial forb"
+"forb3","unknown perennial forb"
+"forb4","unknown perennial forb"
+"GADE","Gayophytum decipiens"
+"Gaillardia aristata",""
+"Gaillardia pinnatifida",""
+"Galium spurium",""
+"Geranium","Geranium spp"
+"Geranium spp",""
+"Gnaphalium sp.","Gnaphalium spp"
+"Gnaphalium sp. ","Gnaphalium spp"
+"Grass","unknown grass"
+"grass 1","unknown perennial grass"
+"Grass 1","unknown perennial grass"
+"grass 2","unknown perennial grass"
+"grass 3","unknown perennial grass"
+"grass1","unknown perennial grass"
+"gravel","bare"
+"Gravel","bare"
+"Gutierrezia sarothrae",""
+"HECO","Hesperostipa comata"
+"Hedeoma hispida",""
+"Helianthus annuus",""
+"Helianthus petiolaris",""
+"Hesperostipa comata",""
+"Heterotheca villosa",""
+"Hilaria jamesii",""
+"Holosteum umbellatum",""
+"Hordeum pusillum",""
+"HOUM","Holosteum umbellatum"
+"KOCR","Koeleria macrantha"
+"Koeleria","Koeleria macrantha"
+"Koeleria macrantha",""
+"Koeleria micrantha","Koeleria macrantha"
+"Lactuca serriola",""
+"Lappula","Lappula occidentalis"
+"Lappula ","Lappula occidentalis"
+"Lappula occidentalis",""
+"Lappula occidentalis var occidentalis","Lappula occidentalis"
+"Lappula redowskii",""
+"Lappula spp",""
+"LARA","Lagophylla ramosissima"
+"LARE","Lappula redowskii"
+"LARE - Lappula red.","Lappula redowskii"
+"LASE","Lactuca serriola"
+"LASP","Lappula spp"
+"late biocr","biocrust"
+"late succ biocrust","biocrust"
+"late succ. crust","biocrust"
+"late succ. crust (?)","biocrust"
+"late successional biocrust","biocrust"
+"Late successional biocrust","biocrust"
+"lb","biocrust"
+"LB","biocrust"
+"Lepidium","Lepidium spp"
+"Lepidium densiflorum",""
+"LEPU","Lepidium pubecarpum"
+"LESB","biocrust"
+"Leucocrinum montanum",""
+"Lewisia rediviva",""
+"Liatrus punctata","Liatris punctata"
+"lichen","biocrust"
+"Lichen","biocrust"
+"lichen ","biocrust"
+"Light cyanobacteria","biocrust"
+"LILE","Linum lewisii"
+"Linanthus pungens",""
+"Linanthus septentrionalis",""
+"Linaria dalmatica",""
+"Linum","Linum lewisii"
+"Linum ","Linum lewisii"
+"Linum lewisii",""
+"Linum perenne",""
+"LISE","Linanthus septentrionalis"
+"Lithophragma parviflorum",""
+"Lithospemum incisum","Lithospermum incisum"
+"Lithospermum ruderale",""
+"litter",""
+"Litter","litter"
+"LITTER","litter"
+"Litter ","litter"
+"Logfia arvense","Logfia arvensis"
+"Logfia arvensis",""
+"Lomatium foeniculaceum",""
+"Lomatium triternatum",""
+"Lonicera arizonica",""
+"LOTR2","Lomatium triternatum"
+"LSB","biocrust"
+"LUAR","Lupinus arboreus"
+"Lupine sp.",NA
+"Lupinus","Lupinus spp"
+"Lupinus argenteus",""
+"Lupinus sericeus",""
+"Lupinus sp","Lupinus spp"
+"Lupinus sp.","Lupinus spp"
+"Lupinus spp",""
+"Lygodesmia juncea",""
+"manure","scat"
+"Medicago lupulina",""
+"Medicago sativa",""
+"Melilotus officinalis",""
+"Mertensia lanceolata",""
+"Microsteris gracilis",""
+"MIGR","Microsteris gracilis"
+"Mirabilis linearis",""
+"missing",""
+"Missing","missing"
+"moss","biocrust"
+"Moss","biocrust"
+"MOSS","biocrust"
+"moss (LSB)","biocrust"
+"mushroom","biocrust"
+"Mushroom","biocrust"
+"Myosotis micrantha",""
+"Myosotis stricta",""
+"N/A","missing"
+"Nasella viridula","Nassella viridula"
+"Nassella viridula",""
+"neighbor Bromus tectorum","Bromus tectorum"
+"NOSP","Nothocalais spp"
+"not found","missing"
+"Nothocalais","Nothocalais spp"
+"Nothocalais trox.","Nothocalais troximoides"
+"Nothocalis","Nothocalais spp"
+"ob","biocrust"
+"Oenothera suffrutescens",""
+"Oligoneuron rigidum",""
+"Opuntia","Opuntia spp"
+"Opuntia polyacantha",""
+"Orthocarpus tenuifolius",""
+"Pascopyrum smithii","Agropyron smithii"
+"Penstemon virens",""
+"Perennial forb","unknown perennial forb"
+"Perennial grass","unknown perennial grass"
+"Perennial short grass","unknown perennial grass"
+"Perennial tall grass","unknown perennial grass"
+"PHAC","Phlox aculeata"
+"PHHO","Phlox hoodii"
+"Phleum pratense",""
+"PHLO","Phlox longifolia"
+"Phlox andicola",""
+"Phlox hoodii",""
+"Phlox longifolia",""
+"Picradeniopsis oppositifolia",""
+"Pink","unknown forb"
+"Pinus ponderosa",""
+"Pinus ponderosa stump","litter"
+"Plantago patagonica",""
+"Plantago patagonica ","Plantago patagonica"
+"planted Bromus tectorum","cut_this_record"
+"Pleiacanthus spinosus",""
+"Pleuraphis jamesii",""
+"Pleuraphis jamesii ",NA
+"PLSP","Pleiacanthus spinosus"
+"Poa bulbosa",""
+"Poa pratensis",""
+"Poa sandbergii",""
+"Poa secunda",""
+"Poa secunda (dead)","litter"
+"Poa sp.","Poa spp"
+"POAV","Polygonum aviculare"
+"POBU","Poa bulbosa"
+"PODO","Polygonum douglasii"
+"Polygonum aviculare",""
+"Polygonum douglasii",""
+"Polygonum spp.","Polygonum spp."
+"POPR","Poa pratensis"
+"Portulaca oleracea",""
+"pose","Poa secunda"
+"POSE","Poa secunda"
+"PRAN","Prunus andersonii"
+"Pseudoroegnaria spicata","Pseudoroegneria spicata"
+"Pseudoroegneria spicata",""
+"Pseudoroegneria.spicata","Pseudoroegneria spicata"
+"Psoralidium tenuiflorum",""
+"PSSP","Pseudoroegneria spicata"
+"PSSP6","Pseudoroegneria spicata"
+"Purshia tridentata",""
+"rabbit feces","scat"
+"Rabbit feces","scat"
+"RATE","Ceratocephala testiculata"
+"Ratibida columnifera",""
+"Rhus trilobata",""
+"Ribes cereum",""
+"rock","rock"
+"Rock","rock"
+"ROCK","rock"
+"rock ","rock"
+"Rock ","rock"
+"Rocks","rock"
+"Rosa sp.","Rose spp"
+"Rubus idaeus",""
+"Salsola tragus",""
+"SATR","Salsola tragus"
+"Schedonnardus paniculatus",""
+"SEIN","Senecio integerrimus"
+"Shrub","unknown shrub"
+"SIAL","Sisymbrium altissimum"
+"Sisymbrium altissimum",""
+"Sisymbrium.altimissimum","Sisymbrium altissimum"
+"soil","bare"
+"Soil","bare"
+"Solanum triflorum",""
+"Solidago missouriensis",""
+"Solidago ridiga","Solidago rigida"
+"Solidago speciosa",""
+"SPCR","Sporobolus cryptandrus"
+"Sphaeralcea coccinea",""
+"Sphaeralcea spp",""
+"Sphaercia.coccinea","Sphaeralcea coccinea"
+"Spider hole",NA
+"Sporobolus","Sporobolus spp"
+"Sporobolus cryptandrus",""
+"Sporobulus cryptandrus","Sporobolus cryptandrus"
+"SPSP","Sphaeralcea spp"
+"standing dead","litter"
+"Standing dead","litter"
+"standing dead Opuntia polyacantha","litter"
+"Stipa comata","Hesperostipa comata"
+"Stipa sp","Stipa spp"
+"Stipa sp ","Stipa spp"
+"stipa.comata","Hesperostipa comata"
+"stump","litter"
+"Symphoricarpos albus",""
+"Symphyotrichum ericoides",""
+"Symphyotrichum laeve",""
+"Symphyotrichum oblongifolium",""
+"Symphyotrichum porteri",""
+"Taeniatherum caput-medusae",""
+"TAOF","Taraxacum officinale"
+"Taraxacum officinale",""
+"Taraxacum.officinalis","Taraxacum officinale"
+"TECA","Tetradymia canescens"
+"TECA (Tetrademia canescens)","Tetradymia canescens"
+"Tetradymia","Tetradymia canescens"
+"Tetradymia canescens",""
+"Thinopyrum intermedium",""
+"Thlaspi arvense",""
+"Tradescantia bracteata",""
+"Tradescantia occidentalis",""
+"Tragapogon.dubius","Tragopogon dubius"
+"Tragopogon dubius",""
+"TRDU","Tragopogon dubius"
+"Tree","unknown tree"
+"UNCH","unknown perennial forb"
+"unk ann forb","unknown annual forb"
+"unk forb","unknown forb"
+"unk per forb","unknown perennial forb"
+"UNKFB1","unknown forb"
+"UNKFB3","unknown forb"
+"UNKGS1","unknown grass"
+"UNKGS2","unknown grass"
+"unknown 2","unknown"
+"unknown annual","unknown annual forb"
+"unknown annual forb",""
+"unknown annual forb (colomia?)","unknown annual forb"
+"unknown annual grass",""
+"unknown aster","unknown perennial forb"
+"unknown Asteraceae","unknown forb"
+"unknown forb",""
+"Unknown forb","unknown forb"
+"unknown forb 3","unknown forb"
+"unknown forb, hairy, linear leaves, no flowers","unknown forb"
+"Unknown forb2","unknown forb"
+"unknown grass 1","unknown grass"
+"unknown grass 4","unknown grass"
+"unknown peren. forb","unknown perennial forb"
+"unknown perennial Boraginaceae","unknown perennial forb"
+"unknown perennial forb","unknown perennial forb"
+"Unknown pink","unknown"
+"unknown seedling forb","unknown forb"
+"UNPF","unknown perennial forb"
+"Verbascum thapsis","Verbascum thapsus"
+"Verbascum thapsus",""
+"Verbena bracteata",""
+"Veronica peregrina",""
+"Veronica verna",""
+"Vicia villosa",""
+"VINE","Viola nuttallii"
+"VINU","Viola nuttallii"
+"VINU - Viola nuttalii","Viola nuttallii"
+"Viola","Viola spp"
+"Viola nuttallii",""
+"Viola sp. (perenn.)","Viola spp"
+"Vulpia octoflora",""
+"Vulpia spp",""
+"Wood","litter"
+"ZIPA","Zigadenus paniculatus "
