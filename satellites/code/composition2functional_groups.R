@@ -279,11 +279,6 @@ comp_ftypes3[is.na(comp_ftypes3)] <- 0
 
 ### save same BRTE data to file
 
-# brte cover by toothpick
-brte <- comp_all %>% filter(species=="Bromus tectorum") %>%
-        dplyr::select(SiteCode,Year,Transect,Treatment,Distance,species, cover)
-write.csv(brte,"../deriveddata/brte_cover_byplant.csv",row.names=F)
-
 # calculate mean BRTE cover by site, year, and treatment
 brte <- comp_all %>% filter(species=="Bromus tectorum") %>%
   group_by(SiteCode,Year,Treatment) %>%
@@ -295,7 +290,14 @@ brte <- reshape(brte, direction = "wide",
 names(brte) <- gsub("cover.","",names(brte))
 
 write.csv(brte,"../deriveddata/brte_cover_siteyeartrt.csv",row.names=F)
-rm(brte)
+
+# brte cover by toothpick
+brte <- comp_all %>% filter(species=="Bromus tectorum") %>%
+  group_by(SiteCode,Year,Treatment,Transect, Distance) %>%
+  summarize(cover = mean(cover)) 
+write.csv(brte,"../deriveddata/brte_cover_byplant.csv",row.names=F)
+
+# rm(brte)
 
 rm(comp_all)
 
