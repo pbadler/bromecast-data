@@ -277,7 +277,8 @@ harvestSS %>%
 # Create data subset 4: harvested seeds where all were counted
 harvestSS %>% 
   filter(complete.cases(seed_count_whole)) %>% 
-  mutate(seed_count_total = seed_count_whole) -> calib_data_whole
+  mutate(seed_count_total = seed_count_whole,
+         inflor_mass = seed_mass_whole) -> calib_data_whole
 
 # Create data subset 5
 harvestSS %>% 
