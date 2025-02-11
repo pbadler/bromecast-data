@@ -172,6 +172,15 @@ ss_clean_phenology %>%
 phen_harvest_ss %>% 
   merge(ss_last_phen) -> phen_harvest_ss
 
+# Add emergence identifier as well
+ss_clean_phenology %>% 
+  filter(live == "Y") %>% 
+  select(plantID, live) %>% 
+  distinct() %>% pull(plantID) -> emerged_ids_ss
+
+phen_harvest_ss %>% 
+  mutate(emergence = ifelse(plantID %in% emerged_ids_ss, "Y", "N")) -> phen_harvest_ss
+
 # Collect all notes from phenology dataset to make sure they are included
 ss_clean_phenology %>% 
   select(plantID, note_standard) %>% 
@@ -206,7 +215,7 @@ phen_harvest_ss %>%
         # Basics
   select(plantID, site, year, density, albedo, block, plot, x, y, genotype, 
          # Phenology
-         first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
+         emergence, first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
          # Harvest
          live_harvest, v_harvest, tillers, biomass_whole, inflor_mass, note_standard_harvest) -> to_merge_ss
 
@@ -363,6 +372,15 @@ ch_clean_phenology %>%
 phen_harvest_ch %>% 
   merge(ch_last_phen) -> phen_harvest_ch
 
+# Add emergence identifier as well
+ch_clean_phenology %>% 
+  filter(live == "Y") %>% 
+  select(plantID, live) %>% 
+  distinct() %>% pull(plantID) -> emerged_ids_ch
+
+phen_harvest_ch %>% 
+  mutate(emergence = ifelse(plantID %in% emerged_ids_ch, "Y", "N")) -> phen_harvest_ch
+
 # Collect all notes from phenology dataset to make sure they are included
 ch_clean_phenology %>% 
   select(plantID, note_standard) %>% 
@@ -402,7 +420,7 @@ phen_harvest_ch %>%
   # Basics
   select(plantID, site, year, density, albedo, block, plot, x, y, genotype,
          # Phenology
-         first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
+         emergence, first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
          # Harvest
          live_harvest, v_harvest, tillers, biomass_whole, inflor_mass, note_standard_harvest) -> to_merge_ch
 
@@ -560,6 +578,15 @@ wi_clean_phenology %>%
 phen_harvest_wi %>% 
   merge(wi_last_phen) -> phen_harvest_wi
 
+# Add emergence identifier as well
+wi_clean_phenology %>% 
+  filter(live == "Y") %>% 
+  select(plantID, live) %>% 
+  distinct() %>% pull(plantID) -> emerged_ids_wi
+
+phen_harvest_wi %>% 
+  mutate(emergence = ifelse(plantID %in% emerged_ids_wi, "Y", "N")) -> phen_harvest_wi
+
 # Collect all notes from phenology dataset to make sure they are included
 wi_clean_phenology %>% 
   select(plantID, note_standard) %>% 
@@ -599,7 +626,7 @@ phen_harvest_wi %>%
   # Basics
   select(plantID, site, year, density, albedo, block, plot, x, y, genotype,
          # Phenology
-         first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
+         emergence, first_flower = jday, v_phen = v, last_phen_status, note_standard_phen,
          # Harvest
          live_harvest, v_harvest, tillers, biomass_whole, inflor_mass, note_standard_harvest) -> to_merge_wi
 

@@ -207,10 +207,20 @@ phen %>%
   slice_max(jday) %>% 
   ungroup() %>% 
   select(plantID, last_phen_status = live)-> last_phen
-
+  
 # Add last phenology status to data sheet
 flower_phen %>% 
   merge(last_phen, all.x = T) -> flower_phen
+
+# Also add column if plant ever emerged
+phen %>% 
+  filter(live == "Y") %>% 
+  select(plantID, live) %>% 
+  distinct() %>% 
+  pull(plantID) -> alive_once_ids
+
+flower_phen %>% 
+  mutate(emergence = ifelse(plantID %in% alive_once_ids, "Y", "N")) -> flower_phen
 
 # Remove intermediate datasets for phenology
 rm(list=setdiff(ls(), c("flower_phen", "cg_2023")))
@@ -715,7 +725,7 @@ full_data %>%
 full_data %>% 
   mutate(year = 2022, growout = NA) %>% 
   select(plantID, site, year, density, albedo = gravel, block, plot, x, y,
-         genotype, first_flower, v_phen, last_phen_status, note_standard_phen = note_standard,
+         genotype, emergence, first_flower, v_phen, last_phen_status, note_standard_phen = note_standard,
          live_harvest = live, v_harvest = v, tillers, biomass_whole, inflor_mass,
          seed_count_total, note_standard_harvest) %>% 
   mutate(tillers = ifelse(is.na(tillers), 0, tillers),
