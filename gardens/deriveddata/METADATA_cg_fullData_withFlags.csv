@@ -8,6 +8,7 @@ plot = spatial block nested within block (1-4 categorical; density x albedo trea
 x = x-coordinate of spatial location of plant within a plot (high density treatment [1:10]; low density treatment [1:20])
 y = y-coordinate of spatial location of plant within a plot (high density treatment [1:10]; low density treatment [1:5])
 genotype = numeric code for genotype
+emergence = did the plant emerge at any point during the experiment? (Y or N)
 first_flower = date of first observation of plant flowering
 v_phen = phenological status at date of first flowering (FG = florets green, FP = florets purple, FB = florets brown, FX = flowered but color not observed prior to harvesting)
 last_phen_status = phenological status of the plant for the last phenology check prior to harvest (V0 = emerged, V1 = one fully developed leaf, V2 = two fully developed leaves, V3 = three fully developed leaves, V3+ = more than three fully developed leaves, BS = florets visible in sheath but not fully developed, FG = florets have emerged and are green, FP = florets emerged and are purple, FB = florets have emerged and are brown, FX = florets have emerged but color was not noted prior to harvest)
