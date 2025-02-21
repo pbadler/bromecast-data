@@ -345,6 +345,9 @@ harvest %>%
   filter(site == "BoiseLow") %>% 
   mutate(id = paste(plot, density, albedo, x, y, sep = "_")) -> harvestWI
 
+# Fix entry error
+harvestWI[which(harvestWI$plot == 4.4 & harvestWI$x == 14 & harvestWI$y == 2),"seed_count_sub"] <- 50
+
 # Remove duplicates for 9 entries
 harvestWI %>% 
   distinct() -> harvestWI
