@@ -14,10 +14,6 @@ cg_full <- read_csv("gardens/deriveddata/cg_fullData_withFlags.csv")
 cg_full %>%
   filter(!grepl("smut", note_standard_phen) &
            !grepl("smut", note_standard_harvest) &
-           !grepl("herbivory", note_standard_phen) &
-           !grepl("herbivory", note_standard_harvest) &
-           !grepl("physical_damage", note_standard_phen) &
-           !grepl("physical_damage", note_standard_harvest) &
            !grepl("seed_drop", note_standard_phen) &
            !grepl("seed_drop", note_standard_harvest) &
            !grepl("wrong_spp", note_standard_phen) &

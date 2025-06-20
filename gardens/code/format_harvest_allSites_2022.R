@@ -238,6 +238,9 @@ harvest %>%
   filter(site == "SheepStation") %>% 
   mutate(id = paste(plot, density, albedo, x, y, sep = "_")) -> harvestSS
 
+# Fix data entry issue
+harvestSS[which(harvestSS$biomass_sub == 0.47),"biomass_sub"] <- 0.05
+
 # Create data subset 1: plants that did not survive to harvest
 harvestSS %>% 
   filter(is.na(seed_count_sub) & is.na(biomass_whole) & is.na(seed_count_sub)) %>% 
@@ -347,6 +350,7 @@ harvest %>%
 
 # Fix entry error
 harvestWI[which(harvestWI$plot == 4.4 & harvestWI$x == 14 & harvestWI$y == 2),"seed_count_sub"] <- 50
+harvestWI[which(harvestWI$plot == 4.4 & harvestWI$x == 12 & harvestWI$y == 3),"seed_mass_sub"] <- 0.07
 
 # Remove duplicates for 9 entries
 harvestWI %>% 
